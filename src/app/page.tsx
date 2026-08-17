@@ -673,19 +673,39 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         <div className="light-beam top-0 right-[20%] w-[2px] h-[60%] opacity-50" />
       </div>
 
-      {/* Vapor particles */}
-      <div className="absolute bottom-0 left-0 right-0 h-64 z-[1] pointer-events-none">
+      {/* Rising steam/vapor particles */}
+      <div className="absolute bottom-0 left-0 right-0 h-[400px] z-[1] pointer-events-none overflow-hidden">
         <div
-          className="vapor-particle absolute bottom-0 left-[10%] w-48 h-48 rounded-full bg-[#C68E4E]/8 blur-3xl"
+          className="vapor-1 absolute bottom-0 left-[8%] w-52 h-52 rounded-full bg-[#C68E4E]/[0.07] blur-3xl"
           style={{ animationDelay: '0s' }}
         />
         <div
-          className="vapor-particle absolute bottom-0 left-[40%] w-64 h-64 rounded-full bg-[#C68E4E]/5 blur-3xl"
+          className="vapor-2 absolute bottom-0 left-[25%] w-72 h-72 rounded-full bg-white/[0.04] blur-[40px]"
+          style={{ animationDelay: '1.5s' }}
+        />
+        <div
+          className="vapor-3 absolute bottom-0 left-[45%] w-64 h-64 rounded-full bg-[#C68E4E]/[0.06] blur-3xl"
+          style={{ animationDelay: '0.5s' }}
+        />
+        <div
+          className="vapor-4 absolute bottom-0 left-[60%] w-48 h-48 rounded-full bg-white/[0.05] blur-[35px]"
+          style={{ animationDelay: '3s' }}
+        />
+        <div
+          className="vapor-1 absolute bottom-0 left-[75%] w-56 h-56 rounded-full bg-[#C68E4E]/[0.05] blur-3xl"
           style={{ animationDelay: '2s' }}
         />
         <div
-          className="vapor-particle absolute bottom-0 right-[15%] w-56 h-56 rounded-full bg-[#C68E4E]/6 blur-3xl"
+          className="vapor-3 absolute bottom-0 left-[90%] w-44 h-44 rounded-full bg-white/[0.03] blur-[30px]"
           style={{ animationDelay: '4s' }}
+        />
+        <div
+          className="vapor-2 absolute bottom-0 left-[35%] w-40 h-40 rounded-full bg-[#C68E4E]/[0.04] blur-3xl"
+          style={{ animationDelay: '5s' }}
+        />
+        <div
+          className="vapor-4 absolute bottom-0 left-[55%] w-60 h-60 rounded-full bg-white/[0.04] blur-[40px]"
+          style={{ animationDelay: '1s' }}
         />
       </div>
 

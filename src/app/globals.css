@@ -151,20 +151,97 @@
 }
 
 /* Vapor/steam effect */
-@keyframes vapor {
-  0%, 100% {
+@keyframes vapor-1 {
+  0% {
     opacity: 0;
-    transform: translateY(0) scale(1);
+    transform: translateY(0) translateX(0) scale(0.8);
+  }
+  10% {
+    opacity: 0.4;
   }
   50% {
-    opacity: 0.3;
-    transform: translateY(-20px) scale(1.05);
+    opacity: 0.25;
+    transform: translateY(-120px) translateX(30px) scale(1.2);
+  }
+  80% {
+    opacity: 0.08;
+    transform: translateY(-220px) translateX(-10px) scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-300px) translateX(20px) scale(1.8);
   }
 }
 
-.vapor-particle {
-  animation: vapor 6s ease-in-out infinite;
+@keyframes vapor-2 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) scale(0.7);
+  }
+  15% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.2;
+    transform: translateY(-100px) translateX(-25px) scale(1.1);
+  }
+  85% {
+    opacity: 0.06;
+    transform: translateY(-200px) translateX(15px) scale(1.4);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-280px) translateX(-20px) scale(1.6);
+  }
 }
+
+@keyframes vapor-3 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) scale(0.9);
+  }
+  8% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 0.2;
+    transform: translateY(-80px) translateX(20px) scale(1.15);
+  }
+  70% {
+    opacity: 0.1;
+    transform: translateY(-180px) translateX(-30px) scale(1.35);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-320px) translateX(10px) scale(1.7);
+  }
+}
+
+@keyframes vapor-4 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) scale(0.6);
+  }
+  12% {
+    opacity: 0.28;
+  }
+  55% {
+    opacity: 0.15;
+    transform: translateY(-90px) translateX(-15px) scale(1);
+  }
+  90% {
+    opacity: 0.05;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-260px) translateX(25px) scale(1.5);
+  }
+}
+
+.vapor-1 { animation: vapor-1 8s ease-out infinite; }
+.vapor-2 { animation: vapor-2 10s ease-out infinite; }
+.vapor-3 { animation: vapor-3 7s ease-out infinite; }
+.vapor-4 { animation: vapor-4 9s ease-out infinite; }
 
 /* Scroll indicator animation */
 @keyframes scrollDown {

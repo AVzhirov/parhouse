@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import {
   Phone,
@@ -370,7 +370,21 @@ const CATALOG_TYPES = ['Все', ...Array.from(new Set(CATALOG_ITEMS.map((item) 
 
 function useOnScreen(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true) // true for SSR
+  const hasChecked = useRef(false)
+
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (!hasChecked.current) {
+      hasChecked.current = true
+      const rect = el.getBoundingClientRect()
+      if (rect.top > window.innerHeight) {
+        setVisible(false)
+      }
+    }
+  }, [])
+
   useEffect(() => {
     const el = ref.current
     if (!el) return
@@ -381,6 +395,7 @@ function useOnScreen(threshold = 0.15) {
     obs.observe(el)
     return () => obs.disconnect()
   }, [threshold])
+
   return { ref, visible }
 }
 
@@ -421,8 +436,8 @@ function SectionHeading({ label, title, visible, delay = 0 }: { label: string; t
   return (
     <div className="text-center mb-16">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={visible ? { opacity: 1, y: 0 } : {}}
+        initial={false}
+        animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6, delay }}
         className="flex items-center justify-center gap-4 mb-5"
       >
@@ -433,16 +448,16 @@ function SectionHeading({ label, title, visible, delay = 0 }: { label: string; t
         <div className="w-10 h-px bg-gradient-to-l from-transparent to-[#C68E4E]" />
       </motion.div>
       <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        animate={visible ? { opacity: 1, y: 0 } : {}}
+        initial={false}
+        animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6, delay: delay + 0.1 }}
         className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.04em] uppercase text-white"
       >
         {title}
       </motion.h2>
       <motion.div
-        initial={{ scaleX: 0 }}
-        animate={visible ? { scaleX: 1 } : {}}
+        initial={false}
+        animate={visible ? { scaleX: 1 } : { scaleX: 0 }}
         transition={{ duration: 0.8, delay: delay + 0.25 }}
         className="mt-5 mx-auto w-20 h-[2px] bg-[#C68E4E] origin-center"
       />
@@ -717,7 +732,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         <div className="max-w-4xl">
           {/* Tagline */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
             className="flex items-center gap-3 mb-6"
@@ -730,7 +745,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
           {/* Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
             className="text-lg sm:text-xl lg:text-2xl text-[#D0D6DC] max-w-2xl leading-relaxed font-light"
@@ -744,7 +759,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
           {/* CTA Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
             className="mt-10 flex flex-col sm:flex-row gap-4"
@@ -771,7 +786,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
       {/* Scroll indicator */}
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
@@ -811,8 +826,8 @@ function ProcessTimeline({ compact = false }: { compact?: boolean }) {
             {PROCESS_STEPS.map((step, idx) => (
               <motion.div
                 key={step.num}
-                initial={{ opacity: 0, y: 30 }}
-                animate={visible ? { opacity: 1, y: 0 } : {}}
+                initial={false}
+                animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ duration: 0.6, delay: 0.15 * idx + 0.3 }}
                 className="flex flex-col items-center text-center"
               >
@@ -834,8 +849,8 @@ function ProcessTimeline({ compact = false }: { compact?: boolean }) {
           {PROCESS_STEPS.map((step, idx) => (
             <motion.div
               key={step.num}
-              initial={{ opacity: 0, x: -20 }}
-              animate={visible ? { opacity: 1, x: 0 } : {}}
+              initial={false}
+              animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
               transition={{ duration: 0.5, delay: 0.12 * idx + 0.3 }}
               className="flex gap-6 relative"
             >
@@ -907,8 +922,8 @@ function AdvantagesCompact() {
         {ADVANTAGES.map((item, idx) => (
           <motion.div
             key={item.title}
-            initial={{ opacity: 0, y: 30 }}
-            animate={visible ? { opacity: 1, y: 0 } : {}}
+            initial={false}
+            animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.6, delay: 0.15 * idx }}
             className="glass-card group rounded-lg p-6 lg:p-8 hover:border-[#C68E4E]/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_12px_48px_rgba(198,142,78,0.12)]"
           >
@@ -944,8 +959,8 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
           {featured.map((project, idx) => (
             <motion.div
               key={project.slug}
-              initial={{ opacity: 0, y: 30 }}
-              animate={visible ? { opacity: 1, y: 0 } : {}}
+              initial={false}
+              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.6, delay: 0.1 * idx }}
               className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
               onClick={() => onNavigate('projects')}
@@ -976,8 +991,8 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
         </div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={visible ? { opacity: 1 } : {}}
+          initial={false}
+          animate={visible ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-12 text-center"
         >
@@ -1010,8 +1025,8 @@ function ReviewsSection() {
           {REVIEWS.map((review, idx) => (
             <motion.div
               key={review.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={visible ? { opacity: 1, y: 0 } : {}}
+              initial={false}
+              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.6, delay: 0.15 * idx }}
               className="glass-card rounded-lg p-6 lg:p-8"
             >
@@ -1063,8 +1078,8 @@ function FAQSection() {
             return (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={visible ? { opacity: 1, y: 0 } : {}}
+                initial={false}
+                animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, delay: 0.08 * idx }}
                 className="glass-card rounded-lg overflow-hidden"
               >
@@ -1121,8 +1136,8 @@ function CTABanner() {
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={visible ? { opacity: 1, y: 0 } : {}}
+          initial={false}
+          animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.04em] uppercase text-white mb-6">
@@ -1172,8 +1187,8 @@ function CatalogPage() {
       <div ref={ref} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="Продукция" title="Каталог бань" visible={visible} />
         <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={visible ? { opacity: 1, y: 0 } : {}}
+          initial={false}
+          animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center text-[#B0B8C0] max-w-xl mx-auto mb-12"
         >
@@ -1414,8 +1429,8 @@ function ProjectsPage() {
           {PROJECTS.map((project, idx) => (
             <motion.div
               key={project.slug}
-              initial={{ opacity: 0, y: 30 }}
-              animate={visible ? { opacity: 1, y: 0 } : {}}
+              initial={false}
+              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.6, delay: 0.06 * idx }}
               onClick={() => setSelectedProject(project)}
               className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
@@ -1662,8 +1677,8 @@ function AboutHero() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Image */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={visible ? { opacity: 1, x: 0 } : {}}
+            initial={false}
+            animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
             transition={{ duration: 0.8 }}
             className="relative rounded-lg overflow-hidden h-[400px] lg:h-[500px] border-2 border-[#C68E4E]/20"
           >
@@ -1678,8 +1693,8 @@ function AboutHero() {
 
           {/* Text */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={visible ? { opacity: 1, x: 0 } : {}}
+            initial={false}
+            animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="flex items-center gap-3 mb-4">
@@ -1737,8 +1752,8 @@ function AboutStats() {
           {stats.map((stat, idx) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={visible ? { opacity: 1, y: 0 } : {}}
+              initial={false}
+              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.12 * idx }}
               className="text-center border-t-2 border-[#C68E4E]/30 pt-6"
             >
@@ -1768,8 +1783,8 @@ function AboutMaterials() {
           {MATERIALS.map((material, idx) => (
             <motion.div
               key={material.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={visible ? { opacity: 1, y: 0 } : {}}
+              initial={false}
+              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.6, delay: 0.15 * idx }}
               className="glass-card group rounded-lg p-6 lg:p-8 hover:border-[#C68E4E]/50 transition-all duration-500 hover:-translate-y-1"
             >
@@ -1804,8 +1819,8 @@ function AboutValues() {
           {VALUES.map((value, idx) => (
             <motion.div
               key={value.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={visible ? { opacity: 1, y: 0 } : {}}
+              initial={false}
+              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.6, delay: 0.15 * idx }}
               className="glass-card rounded-lg p-6 lg:p-8 text-center"
             >
@@ -1855,8 +1870,8 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Contact info */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={visible ? { opacity: 1, x: 0 } : {}}
+            initial={false}
+            animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
@@ -1942,8 +1957,8 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
           {/* Right: Contact Form + Map */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={visible ? { opacity: 1, x: 0 } : {}}
+            initial={false}
+            animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="space-y-8"
           >
@@ -2395,7 +2410,7 @@ export default function Home() {
             <motion.div
               key="home"
               variants={pageVariants}
-              initial="initial"
+              initial={false}
               animate="animate"
               exit="exit"
               transition={pageTransition}
@@ -2408,7 +2423,7 @@ export default function Home() {
             <motion.div
               key="catalog"
               variants={pageVariants}
-              initial="initial"
+              initial={false}
               animate="animate"
               exit="exit"
               transition={pageTransition}
@@ -2421,7 +2436,7 @@ export default function Home() {
             <motion.div
               key="projects"
               variants={pageVariants}
-              initial="initial"
+              initial={false}
               animate="animate"
               exit="exit"
               transition={pageTransition}
@@ -2434,7 +2449,7 @@ export default function Home() {
             <motion.div
               key="about"
               variants={pageVariants}
-              initial="initial"
+              initial={false}
               animate="animate"
               exit="exit"
               transition={pageTransition}
@@ -2447,7 +2462,7 @@ export default function Home() {
             <motion.div
               key="contacts"
               variants={pageVariants}
-              initial="initial"
+              initial={false}
               animate="animate"
               exit="exit"
               transition={pageTransition}
@@ -2460,7 +2475,7 @@ export default function Home() {
             <motion.div
               key="privacy"
               variants={pageVariants}
-              initial="initial"
+              initial={false}
               animate="animate"
               exit="exit"
               transition={pageTransition}

@@ -354,7 +354,7 @@ function HeroSection() {
           src="https://vk.com/video_ext.php?oid=-232348817&id=456239044&hd=2&autoplay=1&loop=1&muted=1&background=1"
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
           allowFullScreen
-          className="absolute top-0 left-0 w-full h-full pointer-events-none"
+          className="absolute top-0 left-0 w-full h-full pointer-events-none lg:w-[200vw] lg:h-[200vh] lg:-left-[50vw] lg:-top-[50vh]"
           style={{ border: 0 }}
           title="ПАР ХАУС — бани и сауны"
         />

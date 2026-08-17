@@ -1948,7 +1948,7 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             className="space-y-8"
           >
             {/* Contact Form */}
-            <ContactForm />
+            <ContactForm onNavigate={onNavigate} />
 
             {/* Yandex Map */}
             <div
@@ -1976,7 +1976,7 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 }
 
 /* ─── Contact Form (Inline) ─── */
-function ContactForm() {
+function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
   const [submitted, setSubmitted] = useState(false)
 

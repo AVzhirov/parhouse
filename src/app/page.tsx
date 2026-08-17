@@ -122,6 +122,59 @@ const PROJECTS = [
   },
 ]
 
+/* ───────────────────────── SHARED HOOK ───────────────────────── */
+
+function useOnScreen(threshold = 0.15) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setVisible(true) },
+      { threshold }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [threshold])
+  return { ref, visible }
+}
+
+/* ───────────────────────── SECTION HEADING ───────────────────────── */
+
+function SectionHeading({ label, title, visible, delay = 0 }: { label: string; title: string; visible: boolean; delay?: number }) {
+  return (
+    <div className="text-center mb-16">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={visible ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay }}
+        className="flex items-center justify-center gap-4 mb-5"
+      >
+        <div className="w-10 h-px bg-gradient-to-r from-transparent to-[#C68E4E]" />
+        <span className="text-[#C68E4E] text-xs sm:text-sm tracking-[0.35em] uppercase font-semibold">
+          {label}
+        </span>
+        <div className="w-10 h-px bg-gradient-to-l from-transparent to-[#C68E4E]" />
+      </motion.div>
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        animate={visible ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: delay + 0.1 }}
+        className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.04em] uppercase text-white"
+      >
+        {title}
+      </motion.h2>
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={visible ? { scaleX: 1 } : {}}
+        transition={{ duration: 0.8, delay: delay + 0.25 }}
+        className="mt-5 mx-auto w-20 h-[2px] bg-[#C68E4E] origin-center"
+      />
+    </div>
+  )
+}
+
 /* ───────────────────────── COMPONENTS ───────────────────────── */
 
 function Header() {
@@ -138,21 +191,21 @@ function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'glass py-3'
+          ? 'glass py-3 shadow-[0_2px_20px_rgba(0,0,0,0.6)]'
           : 'bg-transparent py-5'
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="flex items-center gap-3 group">
-          <div className="relative w-10 h-10 rounded-sm bg-ph-gold/20 border border-ph-gold/40 flex items-center justify-center group-hover:bg-ph-gold/30 transition-colors">
-            <span className="text-ph-gold font-bold text-lg leading-none">П</span>
+          <div className="relative w-10 h-10 rounded-sm bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center group-hover:border-[#C68E4E] group-hover:bg-[#C68E4E]/30 transition-colors">
+            <span className="text-[#C68E4E] font-bold text-lg leading-none">П</span>
           </div>
           <div className="flex flex-col">
             <span className="text-white font-bold text-base tracking-[0.2em] uppercase leading-none">
               Пар Хаус
             </span>
-            <span className="text-ph-silver/60 text-[10px] tracking-[0.15em] uppercase mt-0.5">
+            <span className="text-[#A0AAB2] text-[10px] tracking-[0.15em] uppercase mt-0.5">
               Production
             </span>
           </div>
@@ -164,10 +217,10 @@ function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="text-ph-silver hover:text-ph-gold text-sm tracking-[0.15em] uppercase transition-colors duration-300 relative group"
+              className="text-[#C0C8D0] hover:text-[#C68E4E] text-sm tracking-[0.15em] uppercase transition-colors duration-300 relative group"
             >
               {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-ph-gold transition-all duration-300 group-hover:w-full" />
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#C68E4E] transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
         </nav>
@@ -176,24 +229,23 @@ function Header() {
         <div className="flex items-center gap-4">
           <a
             href="tel:+79048220007"
-            className="hidden sm:flex items-center gap-2 text-ph-silver hover:text-ph-gold transition-colors duration-300"
+            className="hidden sm:flex items-center gap-2 text-[#C0C8D0] hover:text-[#C68E4E] transition-colors duration-300"
           >
             <Phone className="w-4 h-4" />
             <span className="text-sm font-medium">+7 (904) 822-00-07</span>
           </a>
           <a
             href="#catalog"
-            className="relative p-2 text-ph-silver hover:text-ph-gold transition-colors duration-300"
+            className="relative p-2 text-[#C0C8D0] hover:text-[#C68E4E] transition-colors duration-300"
           >
             <ShoppingBag className="w-5 h-5" />
           </a>
-          {/* Mobile menu toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 text-ph-silver hover:text-ph-gold transition-colors"
+            className="lg:hidden p-2 text-[#C0C8D0] hover:text-[#C68E4E] transition-colors"
             aria-label="Меню"
           >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -213,14 +265,14 @@ function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-ph-silver hover:text-ph-gold text-sm tracking-[0.15em] uppercase transition-colors py-2"
+                  className="text-[#C0C8D0] hover:text-[#C68E4E] text-sm tracking-[0.15em] uppercase transition-colors py-2"
                 >
                   {link.label}
                 </a>
               ))}
               <a
                 href="tel:+79048220007"
-                className="flex items-center gap-2 text-ph-gold text-sm font-medium pt-2 border-t border-white/10"
+                className="flex items-center gap-2 text-[#C68E4E] text-sm font-medium pt-2 border-t border-[#C68E4E]/20"
               >
                 <Phone className="w-4 h-4" />
                 +7 (904) 822-00-07
@@ -250,34 +302,33 @@ function HeroSection() {
       className="relative min-h-screen flex flex-col justify-center overflow-hidden"
     >
       {/* Background image with parallax */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        style={{ y: bgY }}
-      >
+      <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
           style={{ backgroundImage: "url('/hero-bg-wood.png')" }}
         />
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/70 via-[#1A1A1A]/50 to-[#1A1A1A]" />
-        {/* Light beam effects */}
-        <div className="light-beam top-0 left-[15%] w-[2px] h-[70%]" />
-        <div className="light-beam top-0 left-[45%] w-[1px] h-[50%] opacity-50" />
-        <div className="light-beam top-0 right-[20%] w-[1.5px] h-[60%] opacity-30" />
+        {/* Lighter overlay so the wood texture is visible */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/50 via-[#1A1A1A]/30 to-[#1A1A1A]" />
+        {/* Side vignettes for drama */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#1A1A1A_100%)]" />
+        {/* Light beams */}
+        <div className="light-beam top-0 left-[15%] w-[3px] h-[70%]" />
+        <div className="light-beam top-0 left-[45%] w-[2px] h-[50%] opacity-70" />
+        <div className="light-beam top-0 right-[20%] w-[2px] h-[60%] opacity-50" />
       </motion.div>
 
       {/* Vapor particles */}
       <div className="absolute bottom-0 left-0 right-0 h-64 z-[1] pointer-events-none">
         <div
-          className="vapor-particle absolute bottom-0 left-[10%] w-48 h-48 rounded-full bg-ph-gold/5 blur-3xl"
+          className="vapor-particle absolute bottom-0 left-[10%] w-48 h-48 rounded-full bg-[#C68E4E]/8 blur-3xl"
           style={{ animationDelay: '0s' }}
         />
         <div
-          className="vapor-particle absolute bottom-0 left-[40%] w-64 h-64 rounded-full bg-ph-gold/3 blur-3xl"
+          className="vapor-particle absolute bottom-0 left-[40%] w-64 h-64 rounded-full bg-[#C68E4E]/5 blur-3xl"
           style={{ animationDelay: '2s' }}
         />
         <div
-          className="vapor-particle absolute bottom-0 right-[15%] w-56 h-56 rounded-full bg-ph-gold/4 blur-3xl"
+          className="vapor-particle absolute bottom-0 right-[15%] w-56 h-56 rounded-full bg-[#C68E4E]/6 blur-3xl"
           style={{ animationDelay: '4s' }}
         />
       </div>
@@ -295,8 +346,8 @@ function HeroSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex items-center gap-3 mb-8"
           >
-            <div className="w-12 h-px bg-ph-gold" />
-            <span className="text-ph-gold text-xs sm:text-sm tracking-[0.3em] uppercase font-medium">
+            <div className="w-14 h-[2px] bg-[#C68E4E]" />
+            <span className="text-[#C68E4E] text-xs sm:text-sm tracking-[0.3em] uppercase font-semibold">
               Производство бань и саун
             </span>
           </motion.div>
@@ -311,7 +362,7 @@ function HeroSection() {
             <span className="block text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-[0.08em] uppercase text-white leading-[0.9]">
               ПАР
             </span>
-            <span className="block text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-[0.08em] uppercase text-ph-gold leading-[0.9] mt-1">
+            <span className="block text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-[0.08em] uppercase text-[#C68E4E] leading-[0.9] mt-1">
               ХАУС
             </span>
           </motion.h1>
@@ -321,7 +372,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-8 text-lg sm:text-xl lg:text-2xl text-ph-silver/90 max-w-2xl leading-relaxed font-light"
+            className="mt-8 text-lg sm:text-xl lg:text-2xl text-[#D0D6DC] max-w-2xl leading-relaxed font-light"
           >
             Строим бани, которые дышат.
             <br className="hidden sm:block" />
@@ -339,7 +390,7 @@ function HeroSection() {
           >
             <Button
               size="lg"
-              className="bg-ph-gold hover:bg-ph-gold-hover text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
+              className="bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,142,78,0.4)]"
               onClick={() => document.getElementById('calc-dialog-trigger')?.click()}
             >
               Рассчитать проект
@@ -348,7 +399,7 @@ function HeroSection() {
             <Button
               variant="outline"
               size="lg"
-              className="border-ph-gold/40 hover:border-ph-gold hover:bg-ph-gold/10 text-ph-gold font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300"
+              className="border-[#C68E4E]/50 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300"
               onClick={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Смотреть каталог
@@ -364,11 +415,11 @@ function HeroSection() {
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
       >
-        <span className="text-ph-silver/40 text-[10px] tracking-[0.3em] uppercase">
+        <span className="text-[#C68E4E]/50 text-[10px] tracking-[0.3em] uppercase">
           Scroll
         </span>
         <div className="scroll-indicator">
-          <ChevronDown className="w-5 h-5 text-ph-gold/60" />
+          <ChevronDown className="w-5 h-5 text-[#C68E4E]/70" />
         </div>
       </motion.div>
     </section>
@@ -377,128 +428,66 @@ function HeroSection() {
 
 /* ─── ADVANTAGES ─── */
 function AdvantagesSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true)
-      },
-      { threshold: 0.2 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
+  const { ref, visible } = useOnScreen(0.2)
 
   return (
-    <section ref={ref} className="relative py-24 lg:py-32 overflow-hidden">
-      {/* Subtle background from hero */}
-      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-20" style={{ backgroundImage: "url('/hero-bg-wood.png')" }} />
-      <div className="absolute inset-0 bg-[#1A1A1A]/90" />
+    <section ref={ref} className="relative py-24 lg:py-32 bg-[#222222]">
+      {/* Top gold divider line */}
+      <div className="section-divider absolute top-0 left-0 right-0" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="flex items-center justify-center gap-3 mb-4"
-          >
-            <div className="w-8 h-px bg-ph-gold" />
-            <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
-              Почему мы
-            </span>
-            <div className="w-8 h-px bg-ph-gold" />
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.05em] uppercase text-white"
-          >
-            Преимущества
-          </motion.h2>
-        </div>
+        <SectionHeading label="Почему мы" title="Преимущества" visible={visible} />
 
-        {/* Glassmorphism cards */}
+        {/* Glassmorphism cards with strong borders */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {ADVANTAGES.map((item, idx) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 30 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              animate={visible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.15 * idx }}
-              className="glass-light group rounded-lg p-6 lg:p-8 hover:border-ph-gold/20 transition-all duration-500 hover:-translate-y-1"
+              className="glass-card group rounded-lg p-6 lg:p-8 hover:border-[#C68E4E]/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_12px_48px_rgba(198,142,78,0.12)]"
             >
-              <div className="w-14 h-14 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center mb-6 group-hover:bg-ph-gold/20 transition-colors duration-300">
-                <item.icon className="w-7 h-7 text-ph-gold" />
+              <div className="w-14 h-14 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center mb-6 group-hover:bg-[#C68E4E]/25 group-hover:border-[#C68E4E]/50 transition-colors duration-300">
+                <item.icon className="w-7 h-7 text-[#C68E4E]" />
               </div>
-              <h3 className="text-white font-bold text-base tracking-[0.05em] uppercase mb-3">
+              <h3 className="text-white font-bold text-base tracking-[0.04em] uppercase mb-3">
                 {item.title}
               </h3>
-              <p className="text-ph-silver/70 text-sm leading-relaxed">
+              <p className="text-[#B0B8C0] text-sm leading-relaxed">
                 {item.description}
               </p>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Bottom gold divider line */}
+      <div className="section-divider absolute bottom-0 left-0 right-0" />
     </section>
   )
 }
 
 /* ─── CATALOG ─── */
 function CatalogSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true)
-      },
-      { threshold: 0.1 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
+  const { ref, visible } = useOnScreen(0.1)
 
   return (
     <section ref={ref} id="catalog" className="relative py-24 lg:py-32 bg-[#1A1A1A]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="flex items-center justify-center gap-3 mb-4"
-          >
-            <div className="w-8 h-px bg-ph-gold" />
-            <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
-              Продукция
-            </span>
-            <div className="w-8 h-px bg-ph-gold" />
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.05em] uppercase text-white"
-          >
-            Каталог бань
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-ph-silver/60 max-w-xl mx-auto"
-          >
-            Каждая баня — уникальный проект, созданный с учётом ваших пожеланий и особенностей участка
-          </motion.p>
-        </div>
+        <SectionHeading
+          label="Продукция"
+          title="Каталог бань"
+          visible={visible}
+        />
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={visible ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-center text-[#B0B8C0] max-w-xl mx-auto mb-12"
+        >
+          Каждая баня — уникальный проект, созданный с учётом ваших пожеланий и особенностей участка
+        </motion.p>
 
         {/* Product grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -506,37 +495,37 @@ function CatalogSection() {
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 30 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              animate={visible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 * idx }}
-              className="group glass-light rounded-lg overflow-hidden hover:border-ph-gold/20 transition-all duration-500"
+              className="group bg-[#242424] rounded-lg overflow-hidden border border-[#333333] hover:border-[#C68E4E]/40 transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]"
             >
               <div className="relative h-56 sm:h-64 overflow-hidden">
                 <div
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                   style={{ backgroundImage: `url('${item.image}')` }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#242424] via-transparent to-transparent" />
                 <div className="absolute top-4 left-4">
-                  <span className="inline-block px-3 py-1 text-[10px] tracking-[0.2em] uppercase font-medium bg-ph-gold/90 text-white rounded-sm">
+                  <span className="inline-block px-3 py-1.5 text-[11px] tracking-[0.15em] uppercase font-bold bg-[#C68E4E] text-white">
                     {item.type}
                   </span>
                 </div>
                 <div className="absolute bottom-4 right-4">
-                  <span className="text-2xl font-bold text-ph-gold">
+                  <span className="text-2xl font-bold text-[#C68E4E] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                     {item.price}
                   </span>
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-white font-bold text-lg tracking-[0.03em] uppercase mb-2">
+                <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase mb-2">
                   {item.name}
                 </h3>
-                <p className="text-ph-silver/50 text-sm mb-4">Размер: {item.size}</p>
+                <p className="text-[#8090A0] text-sm mb-4">Размер: {item.size}</p>
                 <div className="flex flex-wrap gap-2 mb-5">
                   {item.features.map((feature) => (
                     <span
                       key={feature}
-                      className="text-[11px] tracking-[0.1em] uppercase text-ph-silver/70 border border-white/10 px-2.5 py-1 rounded-sm"
+                      className="text-[11px] tracking-[0.08em] uppercase text-[#B0B8C0] bg-[#1A1A1A] border border-[#3A3A3A] px-2.5 py-1 rounded-sm"
                     >
                       {feature}
                     </span>
@@ -544,7 +533,7 @@ function CatalogSection() {
                 </div>
                 <Button
                   variant="outline"
-                  className="w-full border-ph-gold/30 hover:border-ph-gold hover:bg-ph-gold/10 text-ph-gold text-xs tracking-[0.15em] uppercase rounded-none h-10 transition-all duration-300"
+                  className="w-full border-[#C68E4E]/40 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] text-xs tracking-[0.15em] uppercase rounded-none h-10 transition-all duration-300"
                   onClick={() => document.getElementById('calc-dialog-trigger')?.click()}
                 >
                   Заказать
@@ -561,73 +550,37 @@ function CatalogSection() {
 
 /* ─── PROJECTS ─── */
 function ProjectsSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true)
-      },
-      { threshold: 0.1 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
+  const { ref, visible } = useOnScreen(0.1)
 
   return (
-    <section ref={ref} id="projects" className="relative py-24 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-10" style={{ backgroundImage: "url('/hero-bg-sauna.png')" }} />
-      <div className="absolute inset-0 bg-[#1A1A1A]/95" />
+    <section ref={ref} id="projects" className="relative py-24 lg:py-32 bg-[#222222]">
+      <div className="section-divider absolute top-0 left-0 right-0" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="flex items-center justify-center gap-3 mb-4"
-          >
-            <div className="w-8 h-px bg-ph-gold" />
-            <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
-              Портфолио
-            </span>
-            <div className="w-8 h-px bg-ph-gold" />
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.05em] uppercase text-white"
-          >
-            Наши проекты
-          </motion.h2>
-        </div>
+        <SectionHeading label="Портфолио" title="Наши проекты" visible={visible} />
 
-        {/* Projects grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {PROJECTS.map((project, idx) => (
             <motion.div
               key={project.title}
               initial={{ opacity: 0, y: 30 }}
-              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+              animate={visible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.15 * idx }}
-              className="group relative rounded-lg overflow-hidden h-80 sm:h-96"
+              className="group relative rounded-lg overflow-hidden h-80 sm:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500"
             >
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                 style={{ backgroundImage: `url('${project.image}')` }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/50 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6">
-                <span className="text-ph-gold text-xs tracking-[0.2em] uppercase mb-2 block">
+                <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold mb-2 px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
                   {project.year}
                 </span>
-                <h3 className="text-white font-bold text-lg tracking-[0.03em] uppercase mb-2">
+                <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase mb-2">
                   {project.title}
                 </h3>
-                <p className="text-ph-silver/60 text-sm">
+                <p className="text-[#C0C8D0] text-sm">
                   {project.description}
                 </p>
               </div>
@@ -635,25 +588,15 @@ function ProjectsSection() {
           ))}
         </div>
       </div>
+
+      <div className="section-divider absolute bottom-0 left-0 right-0" />
     </section>
   )
 }
 
 /* ─── ABOUT ─── */
 function AboutSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true)
-      },
-      { threshold: 0.2 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
+  const { ref, visible } = useOnScreen(0.2)
 
   return (
     <section ref={ref} id="about" className="relative py-24 lg:py-32 bg-[#1A1A1A]">
@@ -662,58 +605,59 @@ function AboutSection() {
           {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
-            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+            animate={visible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className="relative rounded-lg overflow-hidden h-[400px] lg:h-[500px]"
+            className="relative rounded-lg overflow-hidden h-[400px] lg:h-[500px] border-2 border-[#C68E4E]/20"
           >
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: "url('/hero-bg-sauna.png')" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/60 to-transparent" />
+            {/* Gold accent corner */}
+            <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#C68E4E]/40" />
+            <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-[#C68E4E]/40" />
           </motion.div>
 
           {/* Text */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
-            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+            animate={visible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-px bg-ph-gold" />
-              <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
+              <div className="w-8 h-[2px] bg-[#C68E4E]" />
+              <span className="text-[#C68E4E] text-xs tracking-[0.3em] uppercase font-semibold">
                 О производстве
               </span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-[0.03em] uppercase text-white mb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-[0.02em] uppercase text-white mb-6">
               Традиции русского
               <br />
-              <span className="text-ph-gold">мастерства</span>
+              <span className="text-[#C68E4E]">мастерства</span>
             </h2>
-            <p className="text-ph-silver/70 leading-relaxed mb-6">
+            <p className="text-[#B0B8C0] leading-relaxed mb-6">
               «ПАР ХАУС» — это современное производство бань и саун в Омске. Мы
               объединяем вековые традиции русского банного дела с передовыми
               инженерными решениями и технологиями обработки дерева.
             </p>
-            <p className="text-ph-silver/70 leading-relaxed mb-8">
+            <p className="text-[#B0B8C0] leading-relaxed mb-8">
               Используем только термически модифицированную древесину —
               термоясень, лиственницу и карельскую берёзу. Каждая деталь
               изготавливается на собственном производстве с контролем качества на
               каждом этапе.
             </p>
             <div className="grid grid-cols-3 gap-6">
-              <div>
-                <div className="text-3xl font-bold text-ph-gold mb-1">8+</div>
-                <div className="text-ph-silver/50 text-sm">Лет опыта</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-ph-gold mb-1">200+</div>
-                <div className="text-ph-silver/50 text-sm">Проектов</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-ph-gold mb-1">100%</div>
-                <div className="text-ph-silver/50 text-sm">Натуральное</div>
-              </div>
+              {[
+                { num: '8+', label: 'Лет опыта' },
+                { num: '200+', label: 'Проектов' },
+                { num: '100%', label: 'Натуральное' },
+              ].map((stat) => (
+                <div key={stat.label} className="border-t-2 border-[#C68E4E]/30 pt-4">
+                  <div className="text-3xl font-bold text-[#C68E4E] mb-1">{stat.num}</div>
+                  <div className="text-[#8090A0] text-sm">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>
@@ -724,67 +668,44 @@ function AboutSection() {
 
 /* ─── CONTACTS ─── */
 function ContactsSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const { ref, visible } = useOnScreen(0.1)
   const [mapLoaded, setMapLoaded] = useState(false)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
           setMapLoaded(true)
         }
       },
       { threshold: 0.1 }
     )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
+    obs.observe(el)
+    return () => obs.disconnect()
   }, [])
 
   return (
-    <section ref={ref} id="contacts" className="relative py-24 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-10" style={{ backgroundImage: "url('/hero-bg-wood.png')" }} />
-      <div className="absolute inset-0 bg-[#1A1A1A]/95" />
+    <section ref={ref} id="contacts" className="relative py-24 lg:py-32 bg-[#222222]">
+      <div className="section-divider absolute top-0 left-0 right-0" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="flex items-center justify-center gap-3 mb-4"
-          >
-            <div className="w-8 h-px bg-ph-gold" />
-            <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
-              Связаться с нами
-            </span>
-            <div className="w-8 h-px bg-ph-gold" />
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.05em] uppercase text-white"
-          >
-            Контакты
-          </motion.h2>
-        </div>
+        <SectionHeading label="Связаться с нами" title="Контакты" visible={visible} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Contact info */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
-            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+            animate={visible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-6"
           >
             {/* Phone */}
-            <div className="glass-light rounded-lg p-6">
+            <div className="glass-card rounded-lg p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center shrink-0">
-                  <Phone className="w-5 h-5 text-ph-gold" />
+                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+                  <Phone className="w-5 h-5 text-[#C68E4E]" />
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
@@ -792,11 +713,11 @@ function ContactsSection() {
                   </h3>
                   <a
                     href="tel:+79048220007"
-                    className="text-ph-gold text-xl font-semibold hover:underline decoration-ph-gold/30"
+                    className="text-[#C68E4E] text-xl font-semibold hover:underline underline-offset-4 decoration-[#C68E4E]/30"
                   >
                     +7 (904) 822-00-07
                   </a>
-                  <p className="text-ph-silver/50 text-sm mt-1">
+                  <p className="text-[#8090A0] text-sm mt-1">
                     Звоните бесплатно, консультация по проекту
                   </p>
                 </div>
@@ -804,16 +725,16 @@ function ContactsSection() {
             </div>
 
             {/* Address */}
-            <div className="glass-light rounded-lg p-6">
+            <div className="glass-card rounded-lg p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center shrink-0">
-                  <MapPin className="w-5 h-5 text-ph-gold" />
+                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5 text-[#C68E4E]" />
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
                     Адрес производства
                   </h3>
-                  <p className="text-ph-silver/80 text-base">
+                  <p className="text-[#D0D6DC] text-base">
                     г. Омск, пос. Дружино,
                     <br />
                     ул. Тополиная, 31
@@ -823,31 +744,31 @@ function ContactsSection() {
             </div>
 
             {/* Hours */}
-            <div className="glass-light rounded-lg p-6">
+            <div className="glass-card rounded-lg p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center shrink-0">
-                  <Clock className="w-5 h-5 text-ph-gold" />
+                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+                  <Clock className="w-5 h-5 text-[#C68E4E]" />
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
                     Режим работы
                   </h3>
-                  <p className="text-ph-silver/80 text-base">
+                  <p className="text-[#D0D6DC] text-base">
                     Пн—Пт: 9:00 — 18:00
                     <br />
                     Сб: 10:00 — 16:00
                     <br />
-                    Вс: выходной
+                    <span className="text-[#C68E4E] font-medium">Вс: выходной</span>
                   </p>
                 </div>
               </div>
             </div>
 
             {/* Email */}
-            <div className="glass-light rounded-lg p-6">
+            <div className="glass-card rounded-lg p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center shrink-0">
-                  <Mail className="w-5 h-5 text-ph-gold" />
+                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+                  <Mail className="w-5 h-5 text-[#C68E4E]" />
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
@@ -855,7 +776,7 @@ function ContactsSection() {
                   </h3>
                   <a
                     href="mailto:info@parhouse55.ru"
-                    className="text-ph-gold text-base hover:underline decoration-ph-gold/30"
+                    className="text-[#C68E4E] text-base hover:underline underline-offset-4 decoration-[#C68E4E]/30"
                   >
                     info@parhouse55.ru
                   </a>
@@ -867,9 +788,9 @@ function ContactsSection() {
           {/* Yandex Map */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
-            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+            animate={visible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="rounded-lg overflow-hidden h-full min-h-[400px] lg:min-h-0 border border-white/10"
+            className="rounded-lg overflow-hidden h-full min-h-[400px] lg:min-h-0 border-2 border-[#333] hover:border-[#C68E4E]/30 transition-colors duration-500"
           >
             {mapLoaded && (
               <iframe
@@ -910,7 +831,6 @@ function CalcDialog() {
 
   return (
     <>
-      {/* Hidden trigger for programmatic click */}
       <button
         id="calc-dialog-trigger"
         onClick={() => setOpen(true)}
@@ -921,30 +841,30 @@ function CalcDialog() {
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="bg-[#1A1A1A] border border-white/10 text-white sm:max-w-lg rounded-lg">
+        <DialogContent className="bg-[#1E1E1E] border border-[#C68E4E]/20 text-white sm:max-w-lg rounded-lg shadow-[0_0_80px_rgba(198,142,78,0.1)]">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold tracking-[0.05em] uppercase">
+            <DialogTitle className="text-2xl font-bold tracking-[0.05em] uppercase text-white">
               Рассчитать проект
             </DialogTitle>
-            <DialogDescription className="text-ph-silver/60">
+            <DialogDescription className="text-[#8090A0]">
               Оставьте заявку и мы перезвоним вам в течение 30 минут
             </DialogDescription>
           </DialogHeader>
 
           {submitted ? (
             <div className="py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-ph-gold/20 border border-ph-gold/40 flex items-center justify-center mx-auto mb-4">
-                <Star className="w-8 h-8 text-ph-gold" />
+              <div className="w-16 h-16 rounded-full bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center mx-auto mb-4">
+                <Star className="w-8 h-8 text-[#C68E4E]" />
               </div>
-              <p className="text-ph-gold font-semibold text-lg">Заявка отправлена!</p>
-              <p className="text-ph-silver/50 text-sm mt-1">
+              <p className="text-[#C68E4E] font-semibold text-lg">Заявка отправлена!</p>
+              <p className="text-[#8090A0] text-sm mt-1">
                 Мы свяжемся с вами в ближайшее время
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-ph-silver text-sm">
+                <Label htmlFor="name" className="text-[#B0B8C0] text-sm">
                   Ваше имя
                 </Label>
                 <Input
@@ -955,11 +875,11 @@ function CalcDialog() {
                     setFormData((p) => ({ ...p, name: e.target.value }))
                   }
                   placeholder="Иван Иванов"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-ph-silver/30 focus:border-ph-gold/50 rounded-none"
+                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone" className="text-ph-silver text-sm">
+                <Label htmlFor="phone" className="text-[#B0B8C0] text-sm">
                   Телефон
                 </Label>
                 <Input
@@ -971,11 +891,11 @@ function CalcDialog() {
                     setFormData((p) => ({ ...p, phone: e.target.value }))
                   }
                   placeholder="+7 (___) ___-__-__"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-ph-silver/30 focus:border-ph-gold/50 rounded-none"
+                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="message" className="text-ph-silver text-sm">
+                <Label htmlFor="message" className="text-[#B0B8C0] text-sm">
                   Комментарий
                 </Label>
                 <Textarea
@@ -986,12 +906,12 @@ function CalcDialog() {
                   }
                   placeholder="Опишите вашу идею бани..."
                   rows={3}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-ph-silver/30 focus:border-ph-gold/50 rounded-none resize-none"
+                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none resize-none"
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full bg-ph-gold hover:bg-ph-gold-hover text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
+                className="w-full bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
               >
                 Отправить заявку
                 <ArrowRight className="ml-2 w-4 h-4" />
@@ -1007,37 +927,35 @@ function CalcDialog() {
 /* ─── FOOTER ─── */
 function Footer() {
   return (
-    <footer className="relative border-t border-white/5 bg-[#111111]">
+    <footer className="relative border-t-2 border-[#C68E4E]/15 bg-[#141414]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-sm bg-ph-gold/20 border border-ph-gold/40 flex items-center justify-center">
-                <span className="text-ph-gold font-bold text-sm leading-none">
-                  П
-                </span>
+              <div className="w-8 h-8 rounded-sm bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center">
+                <span className="text-[#C68E4E] font-bold text-sm leading-none">П</span>
               </div>
-              <span className="text-white font-bold text-sm tracking-[0.2em] uppercase">
+              <span className="text-white font-bold text-sm tracking-[#C68E4E] uppercase">
                 Пар Хаус
               </span>
             </div>
-            <p className="text-ph-silver/50 text-sm leading-relaxed">
+            <p className="text-[#8090A0] text-sm leading-relaxed">
               Производство и монтаж бань и саун под ключ в Омске и Омской области.
             </p>
           </div>
 
           {/* Navigation */}
           <div>
-            <h4 className="text-white font-bold text-xs tracking-[0.2em] uppercase mb-4">
+            <h4 className="text-[#C68E4E] font-bold text-xs tracking-[0.2em] uppercase mb-4">
               Навигация
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="text-ph-silver/50 hover:text-ph-gold text-sm transition-colors duration-300"
+                    className="text-[#909AA4] hover:text-[#C68E4E] text-sm transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -1048,14 +966,14 @@ function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-white font-bold text-xs tracking-[0.2em] uppercase mb-4">
+            <h4 className="text-[#C68E4E] font-bold text-xs tracking-[0.2em] uppercase mb-4">
               Услуги
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {['Бани под ключ', 'Сауны', 'Проектирование', 'Ремонт бань'].map(
                 (item) => (
                   <li key={item}>
-                    <span className="text-ph-silver/50 text-sm">{item}</span>
+                    <span className="text-[#909AA4] text-sm">{item}</span>
                   </li>
                 )
               )}
@@ -1064,33 +982,31 @@ function Footer() {
 
           {/* Contacts */}
           <div>
-            <h4 className="text-white font-bold text-xs tracking-[0.2em] uppercase mb-4">
+            <h4 className="text-[#C68E4E] font-bold text-xs tracking-[0.2em] uppercase mb-4">
               Контакты
             </h4>
             <div className="space-y-3">
               <a
                 href="tel:+79048220007"
-                className="flex items-center gap-2 text-ph-gold text-sm hover:underline"
+                className="flex items-center gap-2 text-[#C68E4E] text-sm hover:underline underline-offset-4"
               >
                 <Phone className="w-3.5 h-3.5" />
                 +7 (904) 822-00-07
               </a>
-              <div className="flex items-start gap-2 text-ph-silver/50 text-sm">
+              <div className="flex items-start gap-2 text-[#909AA4] text-sm">
                 <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" />
-                <span>
-                  г. Омск, пос. Дружино, ул. Тополиная, 31
-                </span>
+                <span>г. Омск, пос. Дружино, ул. Тополиная, 31</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-ph-silver/30 text-xs tracking-wider">
+        <div className="mt-12 pt-6 border-t border-[#C68E4E]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-[#606870] text-xs tracking-wider">
             © {new Date().getFullYear()} ПАР ХАУС. Все права защищены.
           </p>
-          <p className="text-ph-silver/20 text-xs">
+          <p className="text-[#505860] text-xs">
             Производство бань и саун в Омске
           </p>
         </div>

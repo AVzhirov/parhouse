@@ -115,17 +115,27 @@
 
 /* Glassmorphism utility */
 .glass {
-  background: rgba(42, 42, 42, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(42, 42, 42, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
 .glass-light {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(198, 142, 78, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.glass-card {
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(198, 142, 78, 0.25);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(198, 142, 78, 0.08);
 }
 
 /* Light beam effect */
@@ -133,8 +143,8 @@
   position: absolute;
   background: linear-gradient(
     180deg,
-    rgba(198, 142, 78, 0.08) 0%,
-    rgba(198, 142, 78, 0.02) 50%,
+    rgba(198, 142, 78, 0.15) 0%,
+    rgba(198, 142, 78, 0.05) 40%,
     transparent 100%
   );
   pointer-events: none;
@@ -178,8 +188,14 @@
 
 /* Hero text glow */
 .text-gold-glow {
-  text-shadow: 0 0 40px rgba(198, 142, 78, 0.3),
-    0 0 80px rgba(198, 142, 78, 0.1);
+  text-shadow: 0 0 60px rgba(198, 142, 78, 0.5),
+    0 0 120px rgba(198, 142, 78, 0.2);
+}
+
+/* Section gold divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(198, 142, 78, 0.4) 50%, transparent 100%);
 }
 
 /* Smooth scroll */

@@ -1,0 +1,1120 @@
+     1→'use client'
+     2→
+     3→import { useState, useEffect, useRef, useCallback } from 'react'
+     4→import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+     5→import {
+     6→  Phone,
+     7→  ShoppingBag,
+     8→  Factory,
+     9→  ShieldCheck,
+    10→  Wrench,
+    11→  Box,
+    12→  ChevronDown,
+    13→  MapPin,
+    14→  Clock,
+    15→  Mail,
+    16→  Menu,
+    17→  X,
+    18→  ArrowRight,
+    19→  Star,
+    20→} from 'lucide-react'
+    21→import { Button } from '@/components/ui/button'
+    22→import {
+    23→  Dialog,
+    24→  DialogContent,
+    25→  DialogHeader,
+    26→  DialogTitle,
+    27→  DialogDescription,
+    28→} from '@/components/ui/dialog'
+    29→import { Input } from '@/components/ui/input'
+    30→import { Textarea } from '@/components/ui/textarea'
+    31→import { Label } from '@/components/ui/label'
+    32→
+    33→/* ───────────────────────── DATA ───────────────────────── */
+    34→
+    35→const NAV_LINKS = [
+    36→  { label: 'Каталог', href: '#catalog' },
+    37→  { label: 'Проекты', href: '#projects' },
+    38→  { label: 'О производстве', href: '#about' },
+    39→  { label: 'Контакты', href: '#contacts' },
+    40→]
+    41→
+    42→const ADVANTAGES = [
+    43→  {
+    44→    icon: Factory,
+    45→    title: 'Собственное производство',
+    46→    description: 'Полный цикл от заготовки до финальной сборки на нашем заводе в Омске',
+    47→  },
+    48→  {
+    49→    icon: ShieldCheck,
+    50→    title: 'Гарантия 5 лет',
+    51→    description: 'На все конструкции и инженерные системы предоставляем расширенную гарантию',
+    52→  },
+    53→  {
+    54→    icon: Wrench,
+    55→    title: 'Монтаж под ключ',
+    56→    description: 'Бережная установка с соблюдением всех технологических норм',
+    57→  },
+    58→  {
+    59→    icon: Box,
+    60→    title: 'Проектирование 3D',
+    61→    description: 'Детальная визуализация вашей бани до начала строительства',
+    62→  },
+    63→]
+    64→
+    65→const CATALOG_ITEMS = [
+    66→  {
+    67→    id: 1,
+    68→    name: 'Баня «Карельская»',
+    69→    type: 'Барельефная',
+    70→    price: 'от 650 000 ₽',
+    71→    size: '4×6 м',
+    72→    image: '/hero-bg-sauna.png',
+    73→    features: ['Термоясень', 'Печь-каменка', 'Терраса', 'Комната отдыха'],
+    74→  },
+    75→  {
+    76→    id: 2,
+    77→    name: 'Баня «Сибирская»',
+    78→    type: 'Брусчатая',
+    79→    price: 'от 520 000 ₽',
+    80→    size: '3×5 м',
+    81→    image: '/sauna-barrel.png',
+    82→    features: ['Профилированный брус', 'Парная + помывочная', 'Веранда'],
+    83→  },
+    84→  {
+    85→    id: 3,
+    86→    name: 'Баня «Имперская»',
+    87→    type: 'Рубленая',
+    88→    price: 'от 1 200 000 ₽',
+    89→    size: '6×8 м',
+    90→    image: '/hero-bg-wood.png',
+    91→    features: ['Цельный лес', 'Бассейн', 'Бильярдная', 'Терраса 2 этаж'],
+    92→  },
+    93→  {
+    94→    id: 4,
+    95→    name: 'Баня «Мини»',
+    96→    type: 'Компактная',
+    97→    price: 'от 380 000 ₽',
+    98→    size: '2.5×3.5 м',
+    99→    image: '/hero-bg-wood.png',
+   100→    features: ['Термодерево', 'Печь Harvia', 'Минималистичный дизайн'],
+   101→  },
+   102→]
+   103→
+   104→const PROJECTS = [
+   105→  {
+   106→    title: 'Баня в пос. Дружино',
+   107→    description: 'Проект бани «Карельская» с панорамным остеклением и террасой',
+   108→    image: '/hero-bg-sauna.png',
+   109→    year: '2024',
+   110→  },
+   111→  {
+   112→    title: 'Сауна в д. Новоомская',
+   113→    description: 'Компактная сауна с внутренним оформлением из термодерева',
+   114→    image: '/hero-bg-wood.png',
+   115→    year: '2024',
+   116→  },
+   117→  {
+   118→    title: 'Баня-барельеф в Омске',
+   119→    description: 'Флагманский проект с комнатой отдыха второго уровня',
+   120→    image: '/sauna-barrel.png',
+   121→    year: '2023',
+   122→  },
+   123→]
+   124→
+   125→/* ───────────────────────── COMPONENTS ───────────────────────── */
+   126→
+   127→function Header() {
+   128→  const [scrolled, setScrolled] = useState(false)
+   129→  const [mobileOpen, setMobileOpen] = useState(false)
+   130→
+   131→  useEffect(() => {
+   132→    const handler = () => setScrolled(window.scrollY > 50)
+   133→    window.addEventListener('scroll', handler, { passive: true })
+   134→    return () => window.removeEventListener('scroll', handler)
+   135→  }, [])
+   136→
+   137→  return (
+   138→    <header
+   139→      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+   140→        scrolled
+   141→          ? 'glass py-3'
+   142→          : 'bg-transparent py-5'
+   143→      }`}
+   144→    >
+   145→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+   146→        {/* Logo */}
+   147→        <a href="#" className="flex items-center gap-3 group">
+   148→          <div className="relative w-10 h-10 rounded-sm bg-ph-gold/20 border border-ph-gold/40 flex items-center justify-center group-hover:bg-ph-gold/30 transition-colors">
+   149→            <span className="text-ph-gold font-bold text-lg leading-none">П</span>
+   150→          </div>
+   151→          <div className="flex flex-col">
+   152→            <span className="text-white font-bold text-base tracking-[0.2em] uppercase leading-none">
+   153→              Пар Хаус
+   154→            </span>
+   155→            <span className="text-ph-silver/60 text-[10px] tracking-[0.15em] uppercase mt-0.5">
+   156→              Production
+   157→            </span>
+   158→          </div>
+   159→        </a>
+   160→
+   161→        {/* Desktop Nav */}
+   162→        <nav className="hidden lg:flex items-center gap-8">
+   163→          {NAV_LINKS.map((link) => (
+   164→            <a
+   165→              key={link.href}
+   166→              href={link.href}
+   167→              className="text-ph-silver hover:text-ph-gold text-sm tracking-[0.15em] uppercase transition-colors duration-300 relative group"
+   168→            >
+   169→              {link.label}
+   170→              <span className="absolute -bottom-1 left-0 w-0 h-px bg-ph-gold transition-all duration-300 group-hover:w-full" />
+   171→            </a>
+   172→          ))}
+   173→        </nav>
+   174→
+   175→        {/* Right icons */}
+   176→        <div className="flex items-center gap-4">
+   177→          <a
+   178→            href="tel:+79048220007"
+   179→            className="hidden sm:flex items-center gap-2 text-ph-silver hover:text-ph-gold transition-colors duration-300"
+   180→          >
+   181→            <Phone className="w-4 h-4" />
+   182→            <span className="text-sm font-medium">+7 (904) 822-00-07</span>
+   183→          </a>
+   184→          <a
+   185→            href="#catalog"
+   186→            className="relative p-2 text-ph-silver hover:text-ph-gold transition-colors duration-300"
+   187→          >
+   188→            <ShoppingBag className="w-5 h-5" />
+   189→          </a>
+   190→          {/* Mobile menu toggle */}
+   191→          <button
+   192→            onClick={() => setMobileOpen(!mobileOpen)}
+   193→            className="lg:hidden p-2 text-ph-silver hover:text-ph-gold transition-colors"
+   194→            aria-label="Меню"
+   195→          >
+   196→            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+   197→          </button>
+   198→        </div>
+   199→      </div>
+   200→
+   201→      {/* Mobile menu */}
+   202→      <AnimatePresence>
+   203→        {mobileOpen && (
+   204→          <motion.div
+   205→            initial={{ opacity: 0, height: 0 }}
+   206→            animate={{ opacity: 1, height: 'auto' }}
+   207→            exit={{ opacity: 0, height: 0 }}
+   208→            className="lg:hidden glass overflow-hidden"
+   209→          >
+   210→            <nav className="flex flex-col px-4 py-4 gap-4">
+   211→              {NAV_LINKS.map((link) => (
+   212→                <a
+   213→                  key={link.href}
+   214→                  href={link.href}
+   215→                  onClick={() => setMobileOpen(false)}
+   216→                  className="text-ph-silver hover:text-ph-gold text-sm tracking-[0.15em] uppercase transition-colors py-2"
+   217→                >
+   218→                  {link.label}
+   219→                </a>
+   220→              ))}
+   221→              <a
+   222→                href="tel:+79048220007"
+   223→                className="flex items-center gap-2 text-ph-gold text-sm font-medium pt-2 border-t border-white/10"
+   224→              >
+   225→                <Phone className="w-4 h-4" />
+   226→                +7 (904) 822-00-07
+   227→              </a>
+   228→            </nav>
+   229→          </motion.div>
+   230→        )}
+   231→      </AnimatePresence>
+   232→    </header>
+   233→  )
+   234→}
+   235→
+   236→/* ─── HERO ─── */
+   237→function HeroSection() {
+   238→  const ref = useRef<HTMLElement>(null)
+   239→  const { scrollYProgress } = useScroll({
+   240→    target: ref,
+   241→    offset: ['start start', 'end start'],
+   242→  })
+   243→  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
+   244→  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
+   245→
+   246→  return (
+   247→    <section
+   248→      ref={ref}
+   249→      id="hero"
+   250→      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+   251→    >
+   252→      {/* Background image with parallax */}
+   253→      <motion.div
+   254→        className="absolute inset-0 z-0"
+   255→        style={{ y: bgY }}
+   256→      >
+   257→        <div
+   258→          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+   259→          style={{ backgroundImage: "url('/hero-bg-wood.png')" }}
+   260→        />
+   261→        {/* Dark overlay */}
+   262→        <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/70 via-[#1A1A1A]/50 to-[#1A1A1A]" />
+   263→        {/* Light beam effects */}
+   264→        <div className="light-beam top-0 left-[15%] w-[2px] h-[70%]" />
+   265→        <div className="light-beam top-0 left-[45%] w-[1px] h-[50%] opacity-50" />
+   266→        <div className="light-beam top-0 right-[20%] w-[1.5px] h-[60%] opacity-30" />
+   267→      </motion.div>
+   268→
+   269→      {/* Vapor particles */}
+   270→      <div className="absolute bottom-0 left-0 right-0 h-64 z-[1] pointer-events-none">
+   271→        <div
+   272→          className="vapor-particle absolute bottom-0 left-[10%] w-48 h-48 rounded-full bg-ph-gold/5 blur-3xl"
+   273→          style={{ animationDelay: '0s' }}
+   274→        />
+   275→        <div
+   276→          className="vapor-particle absolute bottom-0 left-[40%] w-64 h-64 rounded-full bg-ph-gold/3 blur-3xl"
+   277→          style={{ animationDelay: '2s' }}
+   278→        />
+   279→        <div
+   280→          className="vapor-particle absolute bottom-0 right-[15%] w-56 h-56 rounded-full bg-ph-gold/4 blur-3xl"
+   281→          style={{ animationDelay: '4s' }}
+   282→        />
+   283→      </div>
+   284→
+   285→      {/* Content */}
+   286→      <motion.div
+   287→        style={{ opacity }}
+   288→        className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-24"
+   289→      >
+   290→        <div className="max-w-4xl">
+   291→          {/* Tagline */}
+   292→          <motion.div
+   293→            initial={{ opacity: 0, y: 20 }}
+   294→            animate={{ opacity: 1, y: 0 }}
+   295→            transition={{ duration: 0.8, delay: 0.2 }}
+   296→            className="flex items-center gap-3 mb-8"
+   297→          >
+   298→            <div className="w-12 h-px bg-ph-gold" />
+   299→            <span className="text-ph-gold text-xs sm:text-sm tracking-[0.3em] uppercase font-medium">
+   300→              Производство бань и саун
+   301→            </span>
+   302→          </motion.div>
+   303→
+   304→          {/* Main heading */}
+   305→          <motion.h1
+   306→            initial={{ opacity: 0, y: 30 }}
+   307→            animate={{ opacity: 1, y: 0 }}
+   308→            transition={{ duration: 0.8, delay: 0.4 }}
+   309→            className="text-gold-glow"
+   310→          >
+   311→            <span className="block text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-[0.08em] uppercase text-white leading-[0.9]">
+   312→              ПАР
+   313→            </span>
+   314→            <span className="block text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-[0.08em] uppercase text-ph-gold leading-[0.9] mt-1">
+   315→              ХАУС
+   316→            </span>
+   317→          </motion.h1>
+   318→
+   319→          {/* Subtitle */}
+   320→          <motion.p
+   321→            initial={{ opacity: 0, y: 20 }}
+   322→            animate={{ opacity: 1, y: 0 }}
+   323→            transition={{ duration: 0.8, delay: 0.6 }}
+   324→            className="mt-8 text-lg sm:text-xl lg:text-2xl text-ph-silver/90 max-w-2xl leading-relaxed font-light"
+   325→          >
+   326→            Строим бани, которые дышат.
+   327→            <br className="hidden sm:block" />
+   328→            <span className="text-white font-normal">
+   329→              {' '}Инженерные решения для русского пара.
+   330→            </span>
+   331→          </motion.p>
+   332→
+   333→          {/* CTA Buttons */}
+   334→          <motion.div
+   335→            initial={{ opacity: 0, y: 20 }}
+   336→            animate={{ opacity: 1, y: 0 }}
+   337→            transition={{ duration: 0.8, delay: 0.8 }}
+   338→            className="mt-10 flex flex-col sm:flex-row gap-4"
+   339→          >
+   340→            <Button
+   341→              size="lg"
+   342→              className="bg-ph-gold hover:bg-ph-gold-hover text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
+   343→              onClick={() => document.getElementById('calc-dialog-trigger')?.click()}
+   344→            >
+   345→              Рассчитать проект
+   346→              <ArrowRight className="ml-2 w-4 h-4" />
+   347→            </Button>
+   348→            <Button
+   349→              variant="outline"
+   350→              size="lg"
+   351→              className="border-ph-gold/40 hover:border-ph-gold hover:bg-ph-gold/10 text-ph-gold font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300"
+   352→              onClick={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })}
+   353→            >
+   354→              Смотреть каталог
+   355→            </Button>
+   356→          </motion.div>
+   357→        </div>
+   358→      </motion.div>
+   359→
+   360→      {/* Scroll indicator */}
+   361→      <motion.div
+   362→        initial={{ opacity: 0 }}
+   363→        animate={{ opacity: 1 }}
+   364→        transition={{ delay: 1.5, duration: 1 }}
+   365→        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+   366→      >
+   367→        <span className="text-ph-silver/40 text-[10px] tracking-[0.3em] uppercase">
+   368→          Scroll
+   369→        </span>
+   370→        <div className="scroll-indicator">
+   371→          <ChevronDown className="w-5 h-5 text-ph-gold/60" />
+   372→        </div>
+   373→      </motion.div>
+   374→    </section>
+   375→  )
+   376→}
+   377→
+   378→/* ─── ADVANTAGES ─── */
+   379→function AdvantagesSection() {
+   380→  const ref = useRef<HTMLDivElement>(null)
+   381→  const [isVisible, setIsVisible] = useState(false)
+   382→
+   383→  useEffect(() => {
+   384→    const observer = new IntersectionObserver(
+   385→      ([entry]) => {
+   386→        if (entry.isIntersecting) setIsVisible(true)
+   387→      },
+   388→      { threshold: 0.2 }
+   389→    )
+   390→    if (ref.current) observer.observe(ref.current)
+   391→    return () => observer.disconnect()
+   392→  }, [])
+   393→
+   394→  return (
+   395→    <section ref={ref} className="relative py-24 lg:py-32 overflow-hidden">
+   396→      {/* Subtle background from hero */}
+   397→      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-20" style={{ backgroundImage: "url('/hero-bg-wood.png')" }} />
+   398→      <div className="absolute inset-0 bg-[#1A1A1A]/90" />
+   399→
+   400→      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   401→        {/* Section header */}
+   402→        <div className="text-center mb-16">
+   403→          <motion.div
+   404→            initial={{ opacity: 0, y: 20 }}
+   405→            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   406→            transition={{ duration: 0.6 }}
+   407→            className="flex items-center justify-center gap-3 mb-4"
+   408→          >
+   409→            <div className="w-8 h-px bg-ph-gold" />
+   410→            <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
+   411→              Почему мы
+   412→            </span>
+   413→            <div className="w-8 h-px bg-ph-gold" />
+   414→          </motion.div>
+   415→          <motion.h2
+   416→            initial={{ opacity: 0, y: 20 }}
+   417→            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   418→            transition={{ duration: 0.6, delay: 0.1 }}
+   419→            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.05em] uppercase text-white"
+   420→          >
+   421→            Преимущества
+   422→          </motion.h2>
+   423→        </div>
+   424→
+   425→        {/* Glassmorphism cards */}
+   426→        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+   427→          {ADVANTAGES.map((item, idx) => (
+   428→            <motion.div
+   429→              key={item.title}
+   430→              initial={{ opacity: 0, y: 30 }}
+   431→              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   432→              transition={{ duration: 0.6, delay: 0.15 * idx }}
+   433→              className="glass-light group rounded-lg p-6 lg:p-8 hover:border-ph-gold/20 transition-all duration-500 hover:-translate-y-1"
+   434→            >
+   435→              <div className="w-14 h-14 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center mb-6 group-hover:bg-ph-gold/20 transition-colors duration-300">
+   436→                <item.icon className="w-7 h-7 text-ph-gold" />
+   437→              </div>
+   438→              <h3 className="text-white font-bold text-base tracking-[0.05em] uppercase mb-3">
+   439→                {item.title}
+   440→              </h3>
+   441→              <p className="text-ph-silver/70 text-sm leading-relaxed">
+   442→                {item.description}
+   443→              </p>
+   444→            </motion.div>
+   445→          ))}
+   446→        </div>
+   447→      </div>
+   448→    </section>
+   449→  )
+   450→}
+   451→
+   452→/* ─── CATALOG ─── */
+   453→function CatalogSection() {
+   454→  const ref = useRef<HTMLDivElement>(null)
+   455→  const [isVisible, setIsVisible] = useState(false)
+   456→
+   457→  useEffect(() => {
+   458→    const observer = new IntersectionObserver(
+   459→      ([entry]) => {
+   460→        if (entry.isIntersecting) setIsVisible(true)
+   461→      },
+   462→      { threshold: 0.1 }
+   463→    )
+   464→    if (ref.current) observer.observe(ref.current)
+   465→    return () => observer.disconnect()
+   466→  }, [])
+   467→
+   468→  return (
+   469→    <section ref={ref} id="catalog" className="relative py-24 lg:py-32 bg-[#1A1A1A]">
+   470→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   471→        {/* Section header */}
+   472→        <div className="text-center mb-16">
+   473→          <motion.div
+   474→            initial={{ opacity: 0, y: 20 }}
+   475→            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   476→            transition={{ duration: 0.6 }}
+   477→            className="flex items-center justify-center gap-3 mb-4"
+   478→          >
+   479→            <div className="w-8 h-px bg-ph-gold" />
+   480→            <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
+   481→              Продукция
+   482→            </span>
+   483→            <div className="w-8 h-px bg-ph-gold" />
+   484→          </motion.div>
+   485→          <motion.h2
+   486→            initial={{ opacity: 0, y: 20 }}
+   487→            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   488→            transition={{ duration: 0.6, delay: 0.1 }}
+   489→            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.05em] uppercase text-white"
+   490→          >
+   491→            Каталог бань
+   492→          </motion.h2>
+   493→          <motion.p
+   494→            initial={{ opacity: 0, y: 20 }}
+   495→            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   496→            transition={{ duration: 0.6, delay: 0.2 }}
+   497→            className="mt-4 text-ph-silver/60 max-w-xl mx-auto"
+   498→          >
+   499→            Каждая баня — уникальный проект, созданный с учётом ваших пожеланий и особенностей участка
+   500→          </motion.p>
+   501→        </div>
+   502→
+   503→        {/* Product grid */}
+   504→        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+   505→          {CATALOG_ITEMS.map((item, idx) => (
+   506→            <motion.div
+   507→              key={item.id}
+   508→              initial={{ opacity: 0, y: 30 }}
+   509→              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   510→              transition={{ duration: 0.6, delay: 0.1 * idx }}
+   511→              className="group glass-light rounded-lg overflow-hidden hover:border-ph-gold/20 transition-all duration-500"
+   512→            >
+   513→              <div className="relative h-56 sm:h-64 overflow-hidden">
+   514→                <div
+   515→                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+   516→                  style={{ backgroundImage: `url('${item.image}')` }}
+   517→                />
+   518→                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent" />
+   519→                <div className="absolute top-4 left-4">
+   520→                  <span className="inline-block px-3 py-1 text-[10px] tracking-[0.2em] uppercase font-medium bg-ph-gold/90 text-white rounded-sm">
+   521→                    {item.type}
+   522→                  </span>
+   523→                </div>
+   524→                <div className="absolute bottom-4 right-4">
+   525→                  <span className="text-2xl font-bold text-ph-gold">
+   526→                    {item.price}
+   527→                  </span>
+   528→                </div>
+   529→              </div>
+   530→              <div className="p-6">
+   531→                <h3 className="text-white font-bold text-lg tracking-[0.03em] uppercase mb-2">
+   532→                  {item.name}
+   533→                </h3>
+   534→                <p className="text-ph-silver/50 text-sm mb-4">Размер: {item.size}</p>
+   535→                <div className="flex flex-wrap gap-2 mb-5">
+   536→                  {item.features.map((feature) => (
+   537→                    <span
+   538→                      key={feature}
+   539→                      className="text-[11px] tracking-[0.1em] uppercase text-ph-silver/70 border border-white/10 px-2.5 py-1 rounded-sm"
+   540→                    >
+   541→                      {feature}
+   542→                    </span>
+   543→                  ))}
+   544→                </div>
+   545→                <Button
+   546→                  variant="outline"
+   547→                  className="w-full border-ph-gold/30 hover:border-ph-gold hover:bg-ph-gold/10 text-ph-gold text-xs tracking-[0.15em] uppercase rounded-none h-10 transition-all duration-300"
+   548→                  onClick={() => document.getElementById('calc-dialog-trigger')?.click()}
+   549→                >
+   550→                  Заказать
+   551→                  <ArrowRight className="ml-2 w-3.5 h-3.5" />
+   552→                </Button>
+   553→              </div>
+   554→            </motion.div>
+   555→          ))}
+   556→        </div>
+   557→      </div>
+   558→    </section>
+   559→  )
+   560→}
+   561→
+   562→/* ─── PROJECTS ─── */
+   563→function ProjectsSection() {
+   564→  const ref = useRef<HTMLDivElement>(null)
+   565→  const [isVisible, setIsVisible] = useState(false)
+   566→
+   567→  useEffect(() => {
+   568→    const observer = new IntersectionObserver(
+   569→      ([entry]) => {
+   570→        if (entry.isIntersecting) setIsVisible(true)
+   571→      },
+   572→      { threshold: 0.1 }
+   573→    )
+   574→    if (ref.current) observer.observe(ref.current)
+   575→    return () => observer.disconnect()
+   576→  }, [])
+   577→
+   578→  return (
+   579→    <section ref={ref} id="projects" className="relative py-24 lg:py-32 overflow-hidden">
+   580→      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-10" style={{ backgroundImage: "url('/hero-bg-sauna.png')" }} />
+   581→      <div className="absolute inset-0 bg-[#1A1A1A]/95" />
+   582→
+   583→      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   584→        {/* Section header */}
+   585→        <div className="text-center mb-16">
+   586→          <motion.div
+   587→            initial={{ opacity: 0, y: 20 }}
+   588→            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   589→            transition={{ duration: 0.6 }}
+   590→            className="flex items-center justify-center gap-3 mb-4"
+   591→          >
+   592→            <div className="w-8 h-px bg-ph-gold" />
+   593→            <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
+   594→              Портфолио
+   595→            </span>
+   596→            <div className="w-8 h-px bg-ph-gold" />
+   597→          </motion.div>
+   598→          <motion.h2
+   599→            initial={{ opacity: 0, y: 20 }}
+   600→            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   601→            transition={{ duration: 0.6, delay: 0.1 }}
+   602→            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.05em] uppercase text-white"
+   603→          >
+   604→            Наши проекты
+   605→          </motion.h2>
+   606→        </div>
+   607→
+   608→        {/* Projects grid */}
+   609→        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+   610→          {PROJECTS.map((project, idx) => (
+   611→            <motion.div
+   612→              key={project.title}
+   613→              initial={{ opacity: 0, y: 30 }}
+   614→              animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   615→              transition={{ duration: 0.6, delay: 0.15 * idx }}
+   616→              className="group relative rounded-lg overflow-hidden h-80 sm:h-96"
+   617→            >
+   618→              <div
+   619→                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+   620→                style={{ backgroundImage: `url('${project.image}')` }}
+   621→              />
+   622→              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/40 to-transparent" />
+   623→              <div className="absolute bottom-0 left-0 right-0 p-6">
+   624→                <span className="text-ph-gold text-xs tracking-[0.2em] uppercase mb-2 block">
+   625→                  {project.year}
+   626→                </span>
+   627→                <h3 className="text-white font-bold text-lg tracking-[0.03em] uppercase mb-2">
+   628→                  {project.title}
+   629→                </h3>
+   630→                <p className="text-ph-silver/60 text-sm">
+   631→                  {project.description}
+   632→                </p>
+   633→              </div>
+   634→            </motion.div>
+   635→          ))}
+   636→        </div>
+   637→      </div>
+   638→    </section>
+   639→  )
+   640→}
+   641→
+   642→/* ─── ABOUT ─── */
+   643→function AboutSection() {
+   644→  const ref = useRef<HTMLDivElement>(null)
+   645→  const [isVisible, setIsVisible] = useState(false)
+   646→
+   647→  useEffect(() => {
+   648→    const observer = new IntersectionObserver(
+   649→      ([entry]) => {
+   650→        if (entry.isIntersecting) setIsVisible(true)
+   651→      },
+   652→      { threshold: 0.2 }
+   653→    )
+   654→    if (ref.current) observer.observe(ref.current)
+   655→    return () => observer.disconnect()
+   656→  }, [])
+   657→
+   658→  return (
+   659→    <section ref={ref} id="about" className="relative py-24 lg:py-32 bg-[#1A1A1A]">
+   660→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   661→        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+   662→          {/* Image */}
+   663→          <motion.div
+   664→            initial={{ opacity: 0, x: -30 }}
+   665→            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+   666→            transition={{ duration: 0.8 }}
+   667→            className="relative rounded-lg overflow-hidden h-[400px] lg:h-[500px]"
+   668→          >
+   669→            <div
+   670→              className="absolute inset-0 bg-cover bg-center"
+   671→              style={{ backgroundImage: "url('/hero-bg-sauna.png')" }}
+   672→            />
+   673→            <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/50 to-transparent" />
+   674→          </motion.div>
+   675→
+   676→          {/* Text */}
+   677→          <motion.div
+   678→            initial={{ opacity: 0, x: 30 }}
+   679→            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+   680→            transition={{ duration: 0.8, delay: 0.2 }}
+   681→          >
+   682→            <div className="flex items-center gap-3 mb-4">
+   683→              <div className="w-8 h-px bg-ph-gold" />
+   684→              <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
+   685→                О производстве
+   686→              </span>
+   687→            </div>
+   688→            <h2 className="text-3xl sm:text-4xl font-bold tracking-[0.03em] uppercase text-white mb-6">
+   689→              Традиции русского
+   690→              <br />
+   691→              <span className="text-ph-gold">мастерства</span>
+   692→            </h2>
+   693→            <p className="text-ph-silver/70 leading-relaxed mb-6">
+   694→              «ПАР ХАУС» — это современное производство бань и саун в Омске. Мы
+   695→              объединяем вековые традиции русского банного дела с передовыми
+   696→              инженерными решениями и технологиями обработки дерева.
+   697→            </p>
+   698→            <p className="text-ph-silver/70 leading-relaxed mb-8">
+   699→              Используем только термически модифицированную древесину —
+   700→              термоясень, лиственницу и карельскую берёзу. Каждая деталь
+   701→              изготавливается на собственном производстве с контролем качества на
+   702→              каждом этапе.
+   703→            </p>
+   704→            <div className="grid grid-cols-3 gap-6">
+   705→              <div>
+   706→                <div className="text-3xl font-bold text-ph-gold mb-1">8+</div>
+   707→                <div className="text-ph-silver/50 text-sm">Лет опыта</div>
+   708→              </div>
+   709→              <div>
+   710→                <div className="text-3xl font-bold text-ph-gold mb-1">200+</div>
+   711→                <div className="text-ph-silver/50 text-sm">Проектов</div>
+   712→              </div>
+   713→              <div>
+   714→                <div className="text-3xl font-bold text-ph-gold mb-1">100%</div>
+   715→                <div className="text-ph-silver/50 text-sm">Натуральное</div>
+   716→              </div>
+   717→            </div>
+   718→          </motion.div>
+   719→        </div>
+   720→      </div>
+   721→    </section>
+   722→  )
+   723→}
+   724→
+   725→/* ─── CONTACTS ─── */
+   726→function ContactsSection() {
+   727→  const ref = useRef<HTMLDivElement>(null)
+   728→  const [isVisible, setIsVisible] = useState(false)
+   729→  const [mapLoaded, setMapLoaded] = useState(false)
+   730→
+   731→  useEffect(() => {
+   732→    const observer = new IntersectionObserver(
+   733→      ([entry]) => {
+   734→        if (entry.isIntersecting) {
+   735→          setIsVisible(true)
+   736→          setMapLoaded(true)
+   737→        }
+   738→      },
+   739→      { threshold: 0.1 }
+   740→    )
+   741→    if (ref.current) observer.observe(ref.current)
+   742→    return () => observer.disconnect()
+   743→  }, [])
+   744→
+   745→  return (
+   746→    <section ref={ref} id="contacts" className="relative py-24 lg:py-32 overflow-hidden">
+   747→      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-10" style={{ backgroundImage: "url('/hero-bg-wood.png')" }} />
+   748→      <div className="absolute inset-0 bg-[#1A1A1A]/95" />
+   749→
+   750→      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   751→        {/* Section header */}
+   752→        <div className="text-center mb-16">
+   753→          <motion.div
+   754→            initial={{ opacity: 0, y: 20 }}
+   755→            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   756→            transition={{ duration: 0.6 }}
+   757→            className="flex items-center justify-center gap-3 mb-4"
+   758→          >
+   759→            <div className="w-8 h-px bg-ph-gold" />
+   760→            <span className="text-ph-gold text-xs tracking-[0.3em] uppercase">
+   761→              Связаться с нами
+   762→            </span>
+   763→            <div className="w-8 h-px bg-ph-gold" />
+   764→          </motion.div>
+   765→          <motion.h2
+   766→            initial={{ opacity: 0, y: 20 }}
+   767→            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+   768→            transition={{ duration: 0.6, delay: 0.1 }}
+   769→            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.05em] uppercase text-white"
+   770→          >
+   771→            Контакты
+   772→          </motion.h2>
+   773→        </div>
+   774→
+   775→        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+   776→          {/* Contact info */}
+   777→          <motion.div
+   778→            initial={{ opacity: 0, x: -30 }}
+   779→            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+   780→            transition={{ duration: 0.8 }}
+   781→            className="space-y-8"
+   782→          >
+   783→            {/* Phone */}
+   784→            <div className="glass-light rounded-lg p-6">
+   785→              <div className="flex items-start gap-4">
+   786→                <div className="w-12 h-12 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center shrink-0">
+   787→                  <Phone className="w-5 h-5 text-ph-gold" />
+   788→                </div>
+   789→                <div>
+   790→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
+   791→                    Телефон
+   792→                  </h3>
+   793→                  <a
+   794→                    href="tel:+79048220007"
+   795→                    className="text-ph-gold text-xl font-semibold hover:underline decoration-ph-gold/30"
+   796→                  >
+   797→                    +7 (904) 822-00-07
+   798→                  </a>
+   799→                  <p className="text-ph-silver/50 text-sm mt-1">
+   800→                    Звоните бесплатно, консультация по проекту
+   801→                  </p>
+   802→                </div>
+   803→              </div>
+   804→            </div>
+   805→
+   806→            {/* Address */}
+   807→            <div className="glass-light rounded-lg p-6">
+   808→              <div className="flex items-start gap-4">
+   809→                <div className="w-12 h-12 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center shrink-0">
+   810→                  <MapPin className="w-5 h-5 text-ph-gold" />
+   811→                </div>
+   812→                <div>
+   813→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
+   814→                    Адрес производства
+   815→                  </h3>
+   816→                  <p className="text-ph-silver/80 text-base">
+   817→                    г. Омск, пос. Дружино,
+   818→                    <br />
+   819→                    ул. Тополиная, 31
+   820→                  </p>
+   821→                </div>
+   822→              </div>
+   823→            </div>
+   824→
+   825→            {/* Hours */}
+   826→            <div className="glass-light rounded-lg p-6">
+   827→              <div className="flex items-start gap-4">
+   828→                <div className="w-12 h-12 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center shrink-0">
+   829→                  <Clock className="w-5 h-5 text-ph-gold" />
+   830→                </div>
+   831→                <div>
+   832→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
+   833→                    Режим работы
+   834→                  </h3>
+   835→                  <p className="text-ph-silver/80 text-base">
+   836→                    Пн—Пт: 9:00 — 18:00
+   837→                    <br />
+   838→                    Сб: 10:00 — 16:00
+   839→                    <br />
+   840→                    Вс: выходной
+   841→                  </p>
+   842→                </div>
+   843→              </div>
+   844→            </div>
+   845→
+   846→            {/* Email */}
+   847→            <div className="glass-light rounded-lg p-6">
+   848→              <div className="flex items-start gap-4">
+   849→                <div className="w-12 h-12 rounded-sm bg-ph-gold/10 border border-ph-gold/20 flex items-center justify-center shrink-0">
+   850→                  <Mail className="w-5 h-5 text-ph-gold" />
+   851→                </div>
+   852→                <div>
+   853→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
+   854→                    Email
+   855→                  </h3>
+   856→                  <a
+   857→                    href="mailto:info@parhouse55.ru"
+   858→                    className="text-ph-gold text-base hover:underline decoration-ph-gold/30"
+   859→                  >
+   860→                    info@parhouse55.ru
+   861→                  </a>
+   862→                </div>
+   863→              </div>
+   864→            </div>
+   865→          </motion.div>
+   866→
+   867→          {/* Yandex Map */}
+   868→          <motion.div
+   869→            initial={{ opacity: 0, x: 30 }}
+   870→            animate={isVisible ? { opacity: 1, x: 0 } : {}}
+   871→            transition={{ duration: 0.8, delay: 0.2 }}
+   872→            className="rounded-lg overflow-hidden h-full min-h-[400px] lg:min-h-0 border border-white/10"
+   873→          >
+   874→            {mapLoaded && (
+   875→              <iframe
+   876→                src="https://yandex.ru/map-widget/v1/?ll=73.3705%2C55.0971&z=13&text=%D0%9E%D0%BC%D1%81%D0%BA%2C%20%D0%94%D1%80%D1%83%D0%B6%D0%B8%D0%BD%D0%BE%2C%20%D0%A2%D0%BE%D0%BF%D0%BE%D0%BB%D0%B8%D0%BD%D0%B0%D1%8F%2031"
+   877→                width="100%"
+   878→                height="100%"
+   879→                style={{ minHeight: '400px' }}
+   880→                frameBorder="0"
+   881→                title="Яндекс Карта — ПАР ХАУС"
+   882→                className="grayscale hover:grayscale-0 transition-all duration-500"
+   883→              />
+   884→            )}
+   885→          </motion.div>
+   886→        </div>
+   887→      </div>
+   888→    </section>
+   889→  )
+   890→}
+   891→
+   892→/* ─── CALC DIALOG ─── */
+   893→function CalcDialog() {
+   894→  const [open, setOpen] = useState(false)
+   895→  const [formData, setFormData] = useState({ name: '', phone: '', message: '' })
+   896→  const [submitted, setSubmitted] = useState(false)
+   897→
+   898→  const handleSubmit = useCallback(
+   899→    (e: React.FormEvent) => {
+   900→      e.preventDefault()
+   901→      setSubmitted(true)
+   902→      setTimeout(() => {
+   903→        setOpen(false)
+   904→        setSubmitted(false)
+   905→        setFormData({ name: '', phone: '', message: '' })
+   906→      }, 2000)
+   907→    },
+   908→    []
+   909→  )
+   910→
+   911→  return (
+   912→    <>
+   913→      {/* Hidden trigger for programmatic click */}
+   914→      <button
+   915→        id="calc-dialog-trigger"
+   916→        onClick={() => setOpen(true)}
+   917→        className="sr-only"
+   918→        aria-label="Открыть форму расчёта"
+   919→      >
+   920→        trigger
+   921→      </button>
+   922→
+   923→      <Dialog open={open} onOpenChange={setOpen}>
+   924→        <DialogContent className="bg-[#1A1A1A] border border-white/10 text-white sm:max-w-lg rounded-lg">
+   925→          <DialogHeader>
+   926→            <DialogTitle className="text-2xl font-bold tracking-[0.05em] uppercase">
+   927→              Рассчитать проект
+   928→            </DialogTitle>
+   929→            <DialogDescription className="text-ph-silver/60">
+   930→              Оставьте заявку и мы перезвоним вам в течение 30 минут
+   931→            </DialogDescription>
+   932→          </DialogHeader>
+   933→
+   934→          {submitted ? (
+   935→            <div className="py-12 text-center">
+   936→              <div className="w-16 h-16 rounded-full bg-ph-gold/20 border border-ph-gold/40 flex items-center justify-center mx-auto mb-4">
+   937→                <Star className="w-8 h-8 text-ph-gold" />
+   938→              </div>
+   939→              <p className="text-ph-gold font-semibold text-lg">Заявка отправлена!</p>
+   940→              <p className="text-ph-silver/50 text-sm mt-1">
+   941→                Мы свяжемся с вами в ближайшее время
+   942→              </p>
+   943→            </div>
+   944→          ) : (
+   945→            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+   946→              <div className="space-y-2">
+   947→                <Label htmlFor="name" className="text-ph-silver text-sm">
+   948→                  Ваше имя
+   949→                </Label>
+   950→                <Input
+   951→                  id="name"
+   952→                  required
+   953→                  value={formData.name}
+   954→                  onChange={(e) =>
+   955→                    setFormData((p) => ({ ...p, name: e.target.value }))
+   956→                  }
+   957→                  placeholder="Иван Иванов"
+   958→                  className="bg-white/5 border-white/10 text-white placeholder:text-ph-silver/30 focus:border-ph-gold/50 rounded-none"
+   959→                />
+   960→              </div>
+   961→              <div className="space-y-2">
+   962→                <Label htmlFor="phone" className="text-ph-silver text-sm">
+   963→                  Телефон
+   964→                </Label>
+   965→                <Input
+   966→                  id="phone"
+   967→                  type="tel"
+   968→                  required
+   969→                  value={formData.phone}
+   970→                  onChange={(e) =>
+   971→                    setFormData((p) => ({ ...p, phone: e.target.value }))
+   972→                  }
+   973→                  placeholder="+7 (___) ___-__-__"
+   974→                  className="bg-white/5 border-white/10 text-white placeholder:text-ph-silver/30 focus:border-ph-gold/50 rounded-none"
+   975→                />
+   976→              </div>
+   977→              <div className="space-y-2">
+   978→                <Label htmlFor="message" className="text-ph-silver text-sm">
+   979→                  Комментарий
+   980→                </Label>
+   981→                <Textarea
+   982→                  id="message"
+   983→                  value={formData.message}
+   984→                  onChange={(e) =>
+   985→                    setFormData((p) => ({ ...p, message: e.target.value }))
+   986→                  }
+   987→                  placeholder="Опишите вашу идею бани..."
+   988→                  rows={3}
+   989→                  className="bg-white/5 border-white/10 text-white placeholder:text-ph-silver/30 focus:border-ph-gold/50 rounded-none resize-none"
+   990→                />
+   991→              </div>
+   992→              <Button
+   993→                type="submit"
+   994→                className="w-full bg-ph-gold hover:bg-ph-gold-hover text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
+   995→              >
+   996→                Отправить заявку
+   997→                <ArrowRight className="ml-2 w-4 h-4" />
+   998→              </Button>
+   999→            </form>
+  1000→          )}
+  1001→        </DialogContent>
+  1002→      </Dialog>
+  1003→    </>
+  1004→  )
+  1005→}
+  1006→
+  1007→/* ─── FOOTER ─── */
+  1008→function Footer() {
+  1009→  return (
+  1010→    <footer className="relative border-t border-white/5 bg-[#111111]">
+  1011→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+  1012→        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+  1013→          {/* Logo & Description */}
+  1014→          <div className="sm:col-span-2 lg:col-span-1">
+  1015→            <div className="flex items-center gap-3 mb-4">
+  1016→              <div className="w-8 h-8 rounded-sm bg-ph-gold/20 border border-ph-gold/40 flex items-center justify-center">
+  1017→                <span className="text-ph-gold font-bold text-sm leading-none">
+  1018→                  П
+  1019→                </span>
+  1020→              </div>
+  1021→              <span className="text-white font-bold text-sm tracking-[0.2em] uppercase">
+  1022→                Пар Хаус
+  1023→              </span>
+  1024→            </div>
+  1025→            <p className="text-ph-silver/50 text-sm leading-relaxed">
+  1026→              Производство и монтаж бань и саун под ключ в Омске и Омской области.
+  1027→            </p>
+  1028→          </div>
+  1029→
+  1030→          {/* Navigation */}
+  1031→          <div>
+  1032→            <h4 className="text-white font-bold text-xs tracking-[0.2em] uppercase mb-4">
+  1033→              Навигация
+  1034→            </h4>
+  1035→            <ul className="space-y-2">
+  1036→              {NAV_LINKS.map((link) => (
+  1037→                <li key={link.href}>
+  1038→                  <a
+  1039→                    href={link.href}
+  1040→                    className="text-ph-silver/50 hover:text-ph-gold text-sm transition-colors duration-300"
+  1041→                  >
+  1042→                    {link.label}
+  1043→                  </a>
+  1044→                </li>
+  1045→              ))}
+  1046→            </ul>
+  1047→          </div>
+  1048→
+  1049→          {/* Services */}
+  1050→          <div>
+  1051→            <h4 className="text-white font-bold text-xs tracking-[0.2em] uppercase mb-4">
+  1052→              Услуги
+  1053→            </h4>
+  1054→            <ul className="space-y-2">
+  1055→              {['Бани под ключ', 'Сауны', 'Проектирование', 'Ремонт бань'].map(
+  1056→                (item) => (
+  1057→                  <li key={item}>
+  1058→                    <span className="text-ph-silver/50 text-sm">{item}</span>
+  1059→                  </li>
+  1060→                )
+  1061→              )}
+  1062→            </ul>
+  1063→          </div>
+  1064→
+  1065→          {/* Contacts */}
+  1066→          <div>
+  1067→            <h4 className="text-white font-bold text-xs tracking-[0.2em] uppercase mb-4">
+  1068→              Контакты
+  1069→            </h4>
+  1070→            <div className="space-y-3">
+  1071→              <a
+  1072→                href="tel:+79048220007"
+  1073→                className="flex items-center gap-2 text-ph-gold text-sm hover:underline"
+  1074→              >
+  1075→                <Phone className="w-3.5 h-3.5" />
+  1076→                +7 (904) 822-00-07
+  1077→              </a>
+  1078→              <div className="flex items-start gap-2 text-ph-silver/50 text-sm">
+  1079→                <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+  1080→                <span>
+  1081→                  г. Омск, пос. Дружино, ул. Тополиная, 31
+  1082→                </span>
+  1083→              </div>
+  1084→            </div>
+  1085→          </div>
+  1086→        </div>
+  1087→
+  1088→        {/* Bottom bar */}
+  1089→        <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+  1090→          <p className="text-ph-silver/30 text-xs tracking-wider">
+  1091→            © {new Date().getFullYear()} ПАР ХАУС. Все права защищены.
+  1092→          </p>
+  1093→          <p className="text-ph-silver/20 text-xs">
+  1094→            Производство бань и саун в Омске
+  1095→          </p>
+  1096→        </div>
+  1097→      </div>
+  1098→    </footer>
+  1099→  )
+  1100→}
+  1101→
+  1102→/* ───────────────────────── MAIN PAGE ───────────────────────── */
+  1103→
+  1104→export default function Home() {
+  1105→  return (
+  1106→    <div className="min-h-screen flex flex-col bg-[#1A1A1A]">
+  1107→      <Header />
+  1108→      <main className="flex-1">
+  1109→        <HeroSection />
+  1110→        <AdvantagesSection />
+  1111→        <CatalogSection />
+  1112→        <ProjectsSection />
+  1113→        <AboutSection />
+  1114→        <ContactsSection />
+  1115→      </main>
+  1116→      <Footer />
+  1117→      <CalcDialog />
+  1118→    </div>
+  1119→  )
+  1120→}

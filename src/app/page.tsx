@@ -354,7 +354,7 @@ function HeroSection() {
           src="https://vk.com/video_ext.php?oid=-232348817&id=456239044&hd=2&autoplay=1&loop=1&muted=1&background=1"
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
           allowFullScreen
-          className="absolute inset-0 w-[180%] h-[180%] -top-[40%] -left-[40%] pointer-events-none"
+          className="absolute top-0 left-0 w-full h-full pointer-events-none"
           style={{ border: 0 }}
           title="ПАР ХАУС — бани и сауны"
         />
@@ -390,20 +390,6 @@ function HeroSection() {
         className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-24"
       >
         <div className="max-w-4xl">
-          {/* Logo in hero */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="mb-8"
-          >
-            <img
-              src="/logo.png"
-              alt="ПАР ХАУС"
-              className="h-24 sm:h-32 lg:h-40 w-auto object-contain mix-blend-screen brightness-110 drop-shadow-[0_0_60px_rgba(198,142,78,0.3)]"
-            />
-          </motion.div>
-
           {/* Tagline */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -202,3 +202,41 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* WhatsApp pulse ring animation */
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.whatsapp-pulse {
+  position: relative;
+}
+.whatsapp-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: #25D366;
+  animation: pulse-ring 2s ease-out infinite;
+  z-index: -1;
+}
+
+/* FAQ accordion */
+.faq-content {
+  overflow: hidden;
+}
+
+/* Custom scrollbar for horizontal scroll */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Timeline connector */
+.timeline-line {
+  background: linear-gradient(90deg, rgba(198,142,78,0.1) 0%, rgba(198,142,78,0.4) 50%, rgba(198,142,78,0.1) 100%);
+}

@@ -123,3 +123,38 @@ Stage Summary:
 - 10 real projects from VK with actual photos and descriptions
 - Clickable project cards opening full-screen detail pages
 - Gallery with navigation, thumbnails, project info, and CTA
+
+---
+Task ID: 2
+Agent: main
+Task: SPA multi-page architecture with 5 virtual pages and new features
+
+Work Log:
+- Transformed single-page scroll site into SPA with 5 virtual pages (home, catalog, projects, about, contacts)
+- Added SPA routing with `useState<PageId>` and `AnimatePresence` page transitions (fadeIn/translateY 0.35s)
+- Updated NAV_LINKS to map to PageId instead of href anchors
+- Header now receives `currentPage` and `onNavigate` props, always glass on non-home pages
+- Active nav link has gold color and persistent underline indicator
+- Mobile menu closes after navigation
+- Scroll progress bar (2px gold, z-[60]) on home page using `useScroll({ target: mainRef })`
+- Created Home page: Hero + Advantages (compact 4-col) + Featured Projects (3 best) + Process Timeline + Reviews (3 cards) + FAQ (6 accordion) + CTA Banner
+- Created Catalog page: filter buttons by type, product grid with AnimatePresence layout animation, CatalogDetailModal with full image/info/CTA
+- Created Projects page: full 10-project grid with existing ProjectDetailPage overlay preserved
+- Created About page: hero with image, animated stats counters (useCountUp hook), Materials section (4 cards), Process Timeline (reused), Values section (3 cards)
+- Created Contacts page: contact info cards, inline ContactForm with 152-ФЗ consent, Yandex Map with lazy loading, social links (VK, WhatsApp)
+- Added BackToTop button (gold circle, appears after 600px scroll) and WhatsApp floating button (green with pulse animation)
+- Footer nav links now use `onNavigate` instead of href
+- PrivacyPolicySection and CalcDialog preserved exactly
+- Added new CSS: pulse-ring animation, whatsapp-pulse class, faq-content, scrollbar-hide, timeline-line
+- ESLint passes with zero errors
+- Dev server compiles cleanly with 200 responses
+
+Stage Summary:
+- Complete SPA architecture implemented in page.tsx (~1500 lines)
+- 5 virtual pages with smooth AnimatePresence transitions
+- All existing data (CATALOG_ITEMS, PROJECTS, ADVANTAGES, NAV_LINKS) preserved
+- All existing functionality (CalcDialog, PrivacyPolicy, ProjectDetailPage, 152-ФЗ) preserved
+- Design system unchanged: bg-[#1A1A1A], gold #C68E4E, glass-card, glass, section-divider
+- VK video iframe hero with scaling trick preserved
+- mix-blend-screen on logos on dark BG preserved
+- Security features (iframe sandbox, referrerPolicy) preserved

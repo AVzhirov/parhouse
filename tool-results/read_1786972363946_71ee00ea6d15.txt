@@ -1,0 +1,1399 @@
+   108→  {
+   109→    id: 5,
+   110→    name: 'Мобильный офис',
+   111→    type: 'Мобильное здание',
+   112→    price: '290 000 ₽',
+   113→    size: 'Мобильный',
+   114→    image: '/product-5.jpg',
+   115→    description: 'Мобильный офис на базе каркасной технологии. Быстрое развёртывание, транспортируется на любой участок.',
+   116→    features: ['Мобильный', 'Каркасный', 'Транспортируемый'],
+   117→  },
+   118→  {
+   119→    id: 6,
+   120→    name: 'Баня 4×2',
+   121→    type: 'Каркасная баня',
+   122→    price: '320 000 ₽',
+   123→    size: '4×2 м',
+   124→    image: '/product-6.jpg',
+   125→    description: 'Компактная баня 4 на 2 метра — бюджетное решение для тех, кому нужна качественная парная на небольшом участке.',
+   126→    features: ['Компактная', 'Бюджетная', 'Каркасная'],
+   127→  },
+   128→  {
+   129→    id: 7,
+   130→    name: 'Дачный домик',
+   131→    type: 'Дачный домик',
+   132→    price: '550 000 ₽',
+   133→    size: 'Стандартный',
+   134→    image: '/product-7.jpg',
+   135→    description: 'Удобный дачный домик для сезонного проживания. Каркасная технология обеспечивает быстрое строительство и отличную теплоизоляцию.',
+   136→    features: ['Сезонный', 'Каркасный', 'Теплоизоляция'],
+   137→  },
+   138→  {
+   139→    id: 8,
+   140→    name: 'Каркасная баня 2,5×4',
+   141→    type: 'Каркасная баня',
+   142→    price: '450 000 ₽',
+   143→    size: '2,5×4 м',
+   144→    image: '/product-8.jpg',
+   145→    description: 'Каркасная баня с размерами 2,5 на 4 метра. Продуманная внутренняя планировка с парной и зоной отдыха.',
+   146→    features: ['Парная', 'Зона отдыха', 'Каркасная'],
+   147→  },
+   148→  {
+   149→    id: 9,
+   150→    name: 'Баня 3,9×2,15',
+   151→    type: 'Каркасная баня',
+   152→    price: '350 000 ₽',
+   153→    size: '3,9×2,15 м',
+   154→    image: '/product-9.jpg',
+   155→    description: 'Баня 3,9 на 2,15 м — одно из самых популярных решений. Оптимальное сочетание цены, размеров и функциональности.',
+   156→    features: ['Парная', 'Компактная', 'Популярная'],
+   157→  },
+   158→]
+   159→
+   160→const PROJECTS = [
+   161→  {
+   162→    slug: 'dachny-domik-46-terasa',
+   163→    title: 'Дачный домик 4×6 с террасой',
+   164→    description: 'Дачный домик 4х6 с террасой — это классика, которая дает хороший простор для планировки. Главное преимущество — с террасой полезная площадь визуально и функционально расширяется, а само строение выглядит законченным.',
+   165→    image: '/projects/dachny-domik-46-terasa/main.jpg',
+   166→    year: '2024',
+   167→    price: '650 000 ₽',
+   168→    gallery: [
+   169→      '/projects/dachny-domik-46-terasa/main.jpg',
+   170→      '/projects/dachny-domik-46-terasa/gallery-1.jpg',
+   171→      '/projects/dachny-domik-46-terasa/gallery-2.jpg',
+   172→      '/projects/dachny-domik-46-terasa/gallery-3.jpg',
+   173→      '/projects/dachny-domik-46-terasa/gallery-4.jpg',
+   174→      '/projects/dachny-domik-46-terasa/gallery-5.jpg',
+   175→    ],
+   176→  },
+   177→  {
+   178→    slug: 'karkasnaya-banya-55-25',
+   179→    title: 'Каркасная баня 5,5×2,5',
+   180→    description: 'Каркасная баня 5×2,5 с панорамными окнами, с тёплым полом.',
+   181→    image: '/projects/karkasnaya-banya-55-25/main.jpg',
+   182→    year: '2024',
+   183→    price: '780 000 ₽',
+   184→    gallery: [
+   185→      '/projects/karkasnaya-banya-55-25/main.jpg',
+   186→      '/projects/karkasnaya-banya-55-25/gallery-1.jpg',
+   187→      '/projects/karkasnaya-banya-55-25/gallery-2.jpg',
+   188→      '/projects/karkasnaya-banya-55-25/gallery-3.jpg',
+   189→      '/projects/karkasnaya-banya-55-25/gallery-4.jpg',
+   190→      '/projects/karkasnaya-banya-55-25/gallery-5.jpg',
+   191→    ],
+   192→  },
+   193→  {
+   194→    slug: 'mini-parnaya-elektrokamenka',
+   195→    title: 'Мини парная с электрокаменкой 4×2,4',
+   196→    description: 'Мини парная с электрокаменкой и небольшим предбанником, специальное панорамное остекление прямо в парной. Уютная МИНИ баня — отличный вариант для мини отелей или компактного места.',
+   197→    image: '/projects/mini-parnaya-elektrokamenka/main.jpg',
+   198→    year: '2024',
+   199→    price: '445 000 ₽',
+   200→    gallery: [
+   201→      '/projects/mini-parnaya-elektrokamenka/main.jpg',
+   202→      '/projects/mini-parnaya-elektrokamenka/gallery-1.jpg',
+   203→      '/projects/mini-parnaya-elektrokamenka/gallery-2.jpg',
+   204→      '/projects/mini-parnaya-elektrokamenka/gallery-3.jpg',
+   205→      '/projects/mini-parnaya-elektrokamenka/gallery-4.jpg',
+   206→      '/projects/mini-parnaya-elektrokamenka/gallery-5.jpg',
+   207→    ],
+   208→  },
+   209→  {
+   210→    slug: 'banya-39-teplym-polom',
+   211→    title: 'Баня 3,9×2,15 с тёплым полом',
+   212→    description: 'Горячая новинка осени — баня 3,9×2,15 с тёплым полом в комнате отдыха. Продуманное до мелочей пространство для здоровья и удовольствия. Качество исполнения и smart-решения.',
+   213→    image: '/projects/banya-39-teplym-polom/main.jpg',
+   214→    year: '2024',
+   215→    price: '380 000 ₽',
+   216→    gallery: [
+   217→      '/projects/banya-39-teplym-polom/main.jpg',
+   218→      '/projects/banya-39-teplym-polom/gallery-1.jpg',
+   219→      '/projects/banya-39-teplym-polom/gallery-2.jpg',
+   220→      '/projects/banya-39-teplym-polom/gallery-3.jpg',
+   221→      '/projects/banya-39-teplym-polom/gallery-4.jpg',
+   222→      '/projects/banya-39-teplym-polom/gallery-5.jpg',
+   223→    ],
+   224→  },
+   225→  {
+   226→    slug: 'mobilny-ofis',
+   227→    title: 'Мобильный офис',
+   228→    description: 'Мобильный офис продаж размер 3,5×2,5 для круглогодичного использования.',
+   229→    image: '/projects/mobilny-ofis/main.jpg',
+   230→    year: '2024',
+   231→    price: '290 000 ₽',
+   232→    gallery: [
+   233→      '/projects/mobilny-ofis/main.jpg',
+   234→      '/projects/mobilny-ofis/gallery-1.jpg',
+   235→      '/projects/mobilny-ofis/gallery-2.jpg',
+   236→      '/projects/mobilny-ofis/gallery-3.jpg',
+   237→      '/projects/mobilny-ofis/gallery-4.jpg',
+   238→      '/projects/mobilny-ofis/gallery-5.jpg',
+   239→    ],
+   240→  },
+   241→  {
+   242→    slug: 'banya-42',
+   243→    title: 'Баня 4×2',
+   244→    description: 'Баня 4×2 из профилированного мини бруса.',
+   245→    image: '/projects/banya-42/main.jpg',
+   246→    year: '2024',
+   247→    price: '320 000 ₽',
+   248→    gallery: [
+   249→      '/projects/banya-42/main.jpg',
+   250→      '/projects/banya-42/gallery-1.jpg',
+   251→      '/projects/banya-42/gallery-2.jpg',
+   252→      '/projects/banya-42/gallery-3.jpg',
+   253→      '/projects/banya-42/gallery-4.jpg',
+   254→    ],
+   255→  },
+   256→  {
+   257→    slug: 'dachny-domik-64',
+   258→    title: 'Дачный домик 6×4',
+   259→    description: 'Дачный домик 6×4, собран из профилированного кедрового мини бруса.',
+   260→    image: '/projects/dachny-domik-64/main.jpg',
+   261→    year: '2024',
+   262→    price: '550 000 ₽',
+   263→    gallery: [
+   264→      '/projects/dachny-domik-64/main.jpg',
+   265→      '/projects/dachny-domik-64/gallery-1.jpg',
+   266→      '/projects/dachny-domik-64/gallery-2.jpg',
+   267→      '/projects/dachny-domik-64/gallery-3.jpg',
+   268→    ],
+   269→  },
+   270→  {
+   271→    slug: 'karkasnaya-banya-25-4',
+   272→    title: 'Каркасная баня 2,5×4',
+   273→    description: 'Каркасная баня 2,5×4 под ключ.',
+   274→    image: '/projects/karkasnaya-banya-25-4/main.jpg',
+   275→    year: '2024',
+   276→    price: '450 000 ₽',
+   277→    gallery: [
+   278→      '/projects/karkasnaya-banya-25-4/main.jpg',
+   279→      '/projects/karkasnaya-banya-25-4/gallery-1.jpg',
+   280→      '/projects/karkasnaya-banya-25-4/gallery-2.jpg',
+   281→      '/projects/karkasnaya-banya-25-4/gallery-3.jpg',
+   282→      '/projects/karkasnaya-banya-25-4/gallery-4.jpg',
+   283→      '/projects/karkasnaya-banya-25-4/gallery-5.jpg',
+   284→    ],
+   285→  },
+   286→  {
+   287→    slug: 'banya-39-215',
+   288→    title: 'Баня 3,9×2,15',
+   289→    description: 'Баня 3,9×2,15 из сухого профилированного кедрового мини бруса, парилка обшита осиновой вагонкой. Печь «Русь», бак 50л из нержавейки, дымоход «Термофор» 0,8мм. Установка по противопожарным нормам. Электрика медным проводом в кабель канале. Обработка пропиткой, водоотведение. Мебель и камни в подарок.',
+   290→    image: '/projects/banya-39-215/main.jpg',
+   291→    year: '2024',
+   292→    price: '350 000 ₽',
+   293→    gallery: [
+   294→      '/projects/banya-39-215/main.jpg',
+   295→      '/projects/banya-39-215/gallery-1.jpg',
+   296→      '/projects/banya-39-215/gallery-2.jpg',
+   297→      '/projects/banya-39-215/gallery-3.jpg',
+   298→      '/projects/banya-39-215/gallery-4.jpg',
+   299→    ],
+   300→  },
+   301→  {
+   302→    slug: 'banya-brus-52-24',
+   303→    title: 'Баня из профилированного бруса 5×2,4',
+   304→    description: 'Баня 5×2,4 на 3 отделения, высота потолка 2,10м, ширина парилки 2,25м. Выдвижной нижний полок, мойка из лиственницы. Печь «Русь», бак 50л из нержавейки, дымоход «Термофор» 0,8мм. Электрика медным проводом в кабель канале, двойная пропитка. Мебель и камни в подарок.',
+   305→    image: '/projects/banya-brus-52-24/main.jpg',
+   306→    year: '2024',
+   307→    price: '480 000 ₽',
+   308→    gallery: [
+   309→      '/projects/banya-brus-52-24/main.jpg',
+   310→      '/projects/banya-brus-52-24/gallery-1.jpg',
+   311→      '/projects/banya-brus-52-24/gallery-2.jpg',
+   312→      '/projects/banya-brus-52-24/gallery-3.jpg',
+   313→      '/projects/banya-brus-52-24/gallery-4.jpg',
+   314→      '/projects/banya-brus-52-24/gallery-5.jpg',
+   315→    ],
+   316→  },
+   317→]
+   318→
+   319→/* ───────────────────────── SHARED HOOK ───────────────────────── */
+   320→
+   321→function useOnScreen(threshold = 0.15) {
+   322→  const ref = useRef<HTMLDivElement>(null)
+   323→  const [visible, setVisible] = useState(false)
+   324→  useEffect(() => {
+   325→    const el = ref.current
+   326→    if (!el) return
+   327→    const obs = new IntersectionObserver(
+   328→      ([e]) => { if (e.isIntersecting) setVisible(true) },
+   329→      { threshold }
+   330→    )
+   331→    obs.observe(el)
+   332→    return () => obs.disconnect()
+   333→  }, [threshold])
+   334→  return { ref, visible }
+   335→}
+   336→
+   337→/* ───────────────────────── SECTION HEADING ───────────────────────── */
+   338→
+   339→function SectionHeading({ label, title, visible, delay = 0 }: { label: string; title: string; visible: boolean; delay?: number }) {
+   340→  return (
+   341→    <div className="text-center mb-16">
+   342→      <motion.div
+   343→        initial={{ opacity: 0, y: 20 }}
+   344→        animate={visible ? { opacity: 1, y: 0 } : {}}
+   345→        transition={{ duration: 0.6, delay }}
+   346→        className="flex items-center justify-center gap-4 mb-5"
+   347→      >
+   348→        <div className="w-10 h-px bg-gradient-to-r from-transparent to-[#C68E4E]" />
+   349→        <span className="text-[#C68E4E] text-xs sm:text-sm tracking-[0.35em] uppercase font-semibold">
+   350→          {label}
+   351→        </span>
+   352→        <div className="w-10 h-px bg-gradient-to-l from-transparent to-[#C68E4E]" />
+   353→      </motion.div>
+   354→      <motion.h2
+   355→        initial={{ opacity: 0, y: 20 }}
+   356→        animate={visible ? { opacity: 1, y: 0 } : {}}
+   357→        transition={{ duration: 0.6, delay: delay + 0.1 }}
+   358→        className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.04em] uppercase text-white"
+   359→      >
+   360→        {title}
+   361→      </motion.h2>
+   362→      <motion.div
+   363→        initial={{ scaleX: 0 }}
+   364→        animate={visible ? { scaleX: 1 } : {}}
+   365→        transition={{ duration: 0.8, delay: delay + 0.25 }}
+   366→        className="mt-5 mx-auto w-20 h-[2px] bg-[#C68E4E] origin-center"
+   367→      />
+   368→    </div>
+   369→  )
+   370→}
+   371→
+   372→/* ───────────────────────── COMPONENTS ───────────────────────── */
+   373→
+   374→function Header() {
+   375→  const [scrolled, setScrolled] = useState(false)
+   376→  const [mobileOpen, setMobileOpen] = useState(false)
+   377→
+   378→  useEffect(() => {
+   379→    const handler = () => setScrolled(window.scrollY > 50)
+   380→    window.addEventListener('scroll', handler, { passive: true })
+   381→    return () => window.removeEventListener('scroll', handler)
+   382→  }, [])
+   383→
+   384→  return (
+   385→    <header
+   386→      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+   387→        scrolled
+   388→          ? 'glass py-3 shadow-[0_2px_20px_rgba(0,0,0,0.6)]'
+   389→          : 'bg-transparent py-5'
+   390→      }`}
+   391→    >
+   392→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+   393→        {/* Logo */}
+   394→        <a href="#" className="flex items-center group">
+   395→          <img
+   396→            src="/logo.png"
+   397→            alt="ПАР ХАУС — Производство бань и саун"
+   398→            fetchPriority="high"
+   399→            className="h-11 sm:h-13 w-auto object-contain mix-blend-screen brightness-110"
+   400→          />
+   401→        </a>
+   402→
+   403→        {/* Desktop Nav */}
+   404→        <nav className="hidden lg:flex items-center gap-8">
+   405→          {NAV_LINKS.map((link) => (
+   406→            <a
+   407→              key={link.href}
+   408→              href={link.href}
+   409→              className="text-[#C0C8D0] hover:text-[#C68E4E] text-sm tracking-[0.15em] uppercase transition-colors duration-300 relative group"
+   410→            >
+   411→              {link.label}
+   412→              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#C68E4E] transition-all duration-300 group-hover:w-full" />
+   413→            </a>
+   414→          ))}
+   415→        </nav>
+   416→
+   417→        {/* Right icons */}
+   418→        <div className="flex items-center gap-4">
+   419→          <a
+   420→            href="tel:+79048220007"
+   421→            className="hidden sm:flex items-center gap-2 text-[#C0C8D0] hover:text-[#C68E4E] transition-colors duration-300"
+   422→          >
+   423→            <Phone className="w-4 h-4" />
+   424→            <span className="text-sm font-medium">+7 (904) 822-00-07</span>
+   425→          </a>
+   426→          <a
+   427→            href="#catalog"
+   428→            className="relative p-2 text-[#C0C8D0] hover:text-[#C68E4E] transition-colors duration-300"
+   429→          >
+   430→            <ShoppingBag className="w-5 h-5" />
+   431→          </a>
+   432→          <button
+   433→            onClick={() => setMobileOpen(!mobileOpen)}
+   434→            className="lg:hidden p-2 text-[#C0C8D0] hover:text-[#C68E4E] transition-colors"
+   435→            aria-label="Меню"
+   436→          >
+   437→            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+   438→          </button>
+   439→        </div>
+   440→      </div>
+   441→
+   442→      {/* Mobile menu */}
+   443→      <AnimatePresence>
+   444→        {mobileOpen && (
+   445→          <motion.div
+   446→            initial={{ opacity: 0, height: 0 }}
+   447→            animate={{ opacity: 1, height: 'auto' }}
+   448→            exit={{ opacity: 0, height: 0 }}
+   449→            className="lg:hidden glass overflow-hidden"
+   450→          >
+   451→            <nav className="flex flex-col px-4 py-4 gap-4">
+   452→              {NAV_LINKS.map((link) => (
+   453→                <a
+   454→                  key={link.href}
+   455→                  href={link.href}
+   456→                  onClick={() => setMobileOpen(false)}
+   457→                  className="text-[#C0C8D0] hover:text-[#C68E4E] text-sm tracking-[0.15em] uppercase transition-colors py-2"
+   458→                >
+   459→                  {link.label}
+   460→                </a>
+   461→              ))}
+   462→              <a
+   463→                href="tel:+79048220007"
+   464→                className="flex items-center gap-2 text-[#C68E4E] text-sm font-medium pt-2 border-t border-[#C68E4E]/20"
+   465→              >
+   466→                <Phone className="w-4 h-4" />
+   467→                +7 (904) 822-00-07
+   468→              </a>
+   469→            </nav>
+   470→          </motion.div>
+   471→        )}
+   472→      </AnimatePresence>
+   473→    </header>
+   474→  )
+   475→}
+   476→
+   477→/* ─── HERO ─── */
+   478→function HeroSection() {
+   479→  const ref = useRef<HTMLElement>(null)
+   480→  const { scrollYProgress } = useScroll({
+   481→    target: ref,
+   482→    offset: ['start start', 'end start'],
+   483→  })
+   484→  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
+   485→
+   486→  return (
+   487→    <section
+   488→      ref={ref}
+   489→      id="hero"
+   490→      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+   491→    >
+   492→      {/* Background video from VK */}
+   493→      <div className="absolute inset-0 z-0">
+   494→        <iframe
+   495→          src="https://vk.com/video_ext.php?oid=-232348817&id=456239044&hd=2&autoplay=1&loop=1&muted=1&background=1"
+   496→          allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+   497→          allowFullScreen
+   498→          referrerPolicy="no-referrer"
+   499→          sandbox="allow-scripts allow-same-origin allow-presentation allow-autoplay"
+   500→          className="absolute top-0 left-0 w-full h-full pointer-events-none lg:w-[200vw] lg:h-[200vh] lg:-left-[50vw] lg:-top-[50vh]"
+   501→          style={{ border: 0 }}
+   502→          title="ПАР ХАУС — бани и сауны"
+   503→        />
+   504→        {/* Dark overlay for text readability */}
+   505→        <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/50 via-[#1A1A1A]/30 to-[#1A1A1A]" />
+   506→        {/* Side vignettes for drama */}
+   507→        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#1A1A1A_100%)]" />
+   508→        {/* Light beams */}
+   509→        <div className="light-beam top-0 left-[15%] w-[3px] h-[70%]" />
+   510→        <div className="light-beam top-0 left-[45%] w-[2px] h-[50%] opacity-70" />
+   511→        <div className="light-beam top-0 right-[20%] w-[2px] h-[60%] opacity-50" />
+   512→      </div>
+   513→
+   514→      {/* Vapor particles */}
+   515→      <div className="absolute bottom-0 left-0 right-0 h-64 z-[1] pointer-events-none">
+   516→        <div
+   517→          className="vapor-particle absolute bottom-0 left-[10%] w-48 h-48 rounded-full bg-[#C68E4E]/8 blur-3xl"
+   518→          style={{ animationDelay: '0s' }}
+   519→        />
+   520→        <div
+   521→          className="vapor-particle absolute bottom-0 left-[40%] w-64 h-64 rounded-full bg-[#C68E4E]/5 blur-3xl"
+   522→          style={{ animationDelay: '2s' }}
+   523→        />
+   524→        <div
+   525→          className="vapor-particle absolute bottom-0 right-[15%] w-56 h-56 rounded-full bg-[#C68E4E]/6 blur-3xl"
+   526→          style={{ animationDelay: '4s' }}
+   527→        />
+   528→      </div>
+   529→
+   530→      {/* Content */}
+   531→      <motion.div
+   532→        style={{ opacity }}
+   533→        className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-24"
+   534→      >
+   535→        <div className="max-w-4xl">
+   536→          {/* Tagline */}
+   537→          <motion.div
+   538→            initial={{ opacity: 0, y: 20 }}
+   539→            animate={{ opacity: 1, y: 0 }}
+   540→            transition={{ duration: 0.8, delay: 0.5 }}
+   541→            className="flex items-center gap-3 mb-6"
+   542→          >
+   543→            <div className="w-14 h-[2px] bg-[#C68E4E]" />
+   544→            <span className="text-[#C68E4E] text-xs sm:text-sm tracking-[0.3em] uppercase font-semibold">
+   545→              Производство бань и саун
+   546→            </span>
+   547→          </motion.div>
+   548→
+   549→          {/* Subtitle */}
+   550→          <motion.p
+   551→            initial={{ opacity: 0, y: 20 }}
+   552→            animate={{ opacity: 1, y: 0 }}
+   553→            transition={{ duration: 0.8, delay: 0.7 }}
+   554→            className="text-lg sm:text-xl lg:text-2xl text-[#D0D6DC] max-w-2xl leading-relaxed font-light"
+   555→          >
+   556→            Строим бани, которые дышат.
+   557→            <br className="hidden sm:block" />
+   558→            <span className="text-white font-normal">
+   559→              {' '}Инженерные решения для русского пара.
+   560→            </span>
+   561→          </motion.p>
+   562→
+   563→          {/* CTA Buttons */}
+   564→          <motion.div
+   565→            initial={{ opacity: 0, y: 20 }}
+   566→            animate={{ opacity: 1, y: 0 }}
+   567→            transition={{ duration: 0.8, delay: 0.8 }}
+   568→            className="mt-10 flex flex-col sm:flex-row gap-4"
+   569→          >
+   570→            <Button
+   571→              size="lg"
+   572→              className="bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,142,78,0.4)]"
+   573→              onClick={() => document.getElementById('calc-dialog-trigger')?.click()}
+   574→            >
+   575→              Рассчитать проект
+   576→              <ArrowRight className="ml-2 w-4 h-4" />
+   577→            </Button>
+   578→            <Button
+   579→              variant="outline"
+   580→              size="lg"
+   581→              className="border-[#C68E4E]/50 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300"
+   582→              onClick={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })}
+   583→            >
+   584→              Смотреть каталог
+   585→            </Button>
+   586→          </motion.div>
+   587→        </div>
+   588→      </motion.div>
+   589→
+   590→      {/* Scroll indicator */}
+   591→      <motion.div
+   592→        initial={{ opacity: 0 }}
+   593→        animate={{ opacity: 1 }}
+   594→        transition={{ delay: 1.5, duration: 1 }}
+   595→        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+   596→      >
+   597→        <span className="text-[#C68E4E]/50 text-[10px] tracking-[0.3em] uppercase">
+   598→          Scroll
+   599→        </span>
+   600→        <div className="scroll-indicator">
+   601→          <ChevronDown className="w-5 h-5 text-[#C68E4E]/70" />
+   602→        </div>
+   603→      </motion.div>
+   604→    </section>
+   605→  )
+   606→}
+   607→
+   608→/* ─── ADVANTAGES ─── */
+   609→function AdvantagesSection() {
+   610→  const { ref, visible } = useOnScreen(0.2)
+   611→
+   612→  return (
+   613→    <section ref={ref} className="relative py-24 lg:py-32 bg-[#222222]">
+   614→      {/* Top gold divider line */}
+   615→      <div className="section-divider absolute top-0 left-0 right-0" />
+   616→
+   617→      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   618→        <SectionHeading label="Почему мы" title="Преимущества" visible={visible} />
+   619→
+   620→        {/* Glassmorphism cards with strong borders */}
+   621→        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+   622→          {ADVANTAGES.map((item, idx) => (
+   623→            <motion.div
+   624→              key={item.title}
+   625→              initial={{ opacity: 0, y: 30 }}
+   626→              animate={visible ? { opacity: 1, y: 0 } : {}}
+   627→              transition={{ duration: 0.6, delay: 0.15 * idx }}
+   628→              className="glass-card group rounded-lg p-6 lg:p-8 hover:border-[#C68E4E]/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_12px_48px_rgba(198,142,78,0.12)]"
+   629→            >
+   630→              <div className="w-14 h-14 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center mb-6 group-hover:bg-[#C68E4E]/25 group-hover:border-[#C68E4E]/50 transition-colors duration-300">
+   631→                <item.icon className="w-7 h-7 text-[#C68E4E]" />
+   632→              </div>
+   633→              <h3 className="text-white font-bold text-base tracking-[0.04em] uppercase mb-3">
+   634→                {item.title}
+   635→              </h3>
+   636→              <p className="text-[#B0B8C0] text-sm leading-relaxed">
+   637→                {item.description}
+   638→              </p>
+   639→            </motion.div>
+   640→          ))}
+   641→        </div>
+   642→      </div>
+   643→
+   644→      {/* Bottom gold divider line */}
+   645→      <div className="section-divider absolute bottom-0 left-0 right-0" />
+   646→    </section>
+   647→  )
+   648→}
+   649→
+   650→/* ─── CATALOG ─── */
+   651→function CatalogSection() {
+   652→  const { ref, visible } = useOnScreen(0.1)
+   653→
+   654→  return (
+   655→    <section ref={ref} id="catalog" className="relative py-24 lg:py-32 bg-[#1A1A1A]">
+   656→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   657→        <SectionHeading
+   658→          label="Продукция"
+   659→          title="Каталог бань"
+   660→          visible={visible}
+   661→        />
+   662→        <motion.p
+   663→          initial={{ opacity: 0, y: 15 }}
+   664→          animate={visible ? { opacity: 1, y: 0 } : {}}
+   665→          transition={{ duration: 0.6, delay: 0.2 }}
+   666→          className="text-center text-[#B0B8C0] max-w-xl mx-auto mb-12"
+   667→        >
+   668→          Каждая баня — уникальный проект, созданный с учётом ваших пожеланий и особенностей участка
+   669→        </motion.p>
+   670→
+   671→        {/* Product grid */}
+   672→        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+   673→          {CATALOG_ITEMS.map((item, idx) => (
+   674→            <motion.div
+   675→              key={item.id}
+   676→              initial={{ opacity: 0, y: 30 }}
+   677→              animate={visible ? { opacity: 1, y: 0 } : {}}
+   678→              transition={{ duration: 0.6, delay: 0.08 * idx }}
+   679→              className="group bg-[#242424] rounded-lg overflow-hidden border border-[#333333] hover:border-[#C68E4E]/40 transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]"
+   680→            >
+   681→              <div className="relative h-48 sm:h-56 overflow-hidden">
+   682→                <div
+   683→                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+   684→                  style={{ backgroundImage: `url('${item.image}')` }}
+   685→                />
+   686→                <div className="absolute inset-0 bg-gradient-to-t from-[#242424] via-transparent to-transparent" />
+   687→                <div className="absolute top-3 left-3">
+   688→                  <span className="inline-block px-2.5 py-1 text-[10px] tracking-[0.12em] uppercase font-bold bg-[#C68E4E] text-white">
+   689→                    {item.type}
+   690→                  </span>
+   691→                </div>
+   692→                <div className="absolute bottom-3 right-3">
+   693→                  <span className="text-xl font-bold text-[#C68E4E] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+   694→                    {item.price}
+   695→                  </span>
+   696→                </div>
+   697→              </div>
+   698→              <div className="p-5">
+   699→                <h3 className="text-white font-bold text-base tracking-[0.02em] uppercase mb-1.5 leading-tight">
+   700→                  {item.name}
+   701→                </h3>
+   702→                <p className="text-[#8090A0] text-xs mb-3">{item.size}</p>
+   703→                {item.description && (
+   704→                  <p className="text-[#909AA4] text-sm leading-relaxed mb-3 line-clamp-2">
+   705→                    {item.description}
+   706→                  </p>
+   707→                )}
+   708→                <div className="flex flex-wrap gap-1.5 mb-4">
+   709→                  {item.features.map((feature) => (
+   710→                    <span
+   711→                      key={feature}
+   712→                      className="text-[10px] tracking-[0.06em] uppercase text-[#B0B8C0] bg-[#1A1A1A] border border-[#3A3A3A] px-2 py-0.5 rounded-sm"
+   713→                    >
+   714→                      {feature}
+   715→                    </span>
+   716→                  ))}
+   717→                </div>
+   718→                <Button
+   719→                  variant="outline"
+   720→                  className="w-full border-[#C68E4E]/40 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] text-xs tracking-[0.12em] uppercase rounded-none h-9 transition-all duration-300"
+   721→                  onClick={() => document.getElementById('calc-dialog-trigger')?.click()}
+   722→                >
+   723→                  Заказать
+   724→                  <ArrowRight className="ml-2 w-3.5 h-3.5" />
+   725→                </Button>
+   726→              </div>
+   727→            </motion.div>
+   728→          ))}
+   729→        </div>
+   730→      </div>
+   731→    </section>
+   732→  )
+   733→}
+   734→
+   735→/* ─── PROJECT GALLERY MODAL ─── */
+   736→function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; onClose: () => void }) {
+   737→  const [currentIdx, setCurrentIdx] = useState(0)
+   738→  const gallery = project.gallery
+   739→  const scrollRef = useRef<HTMLDivElement>(null)
+   740→
+   741→  useEffect(() => {
+   742→    const handler = (e: KeyboardEvent) => {
+   743→      if (e.key === 'Escape') onClose()
+   744→      if (e.key === 'ArrowRight') setCurrentIdx((i) => Math.min(i + 1, gallery.length - 1))
+   745→      if (e.key === 'ArrowLeft') setCurrentIdx((i) => Math.max(i - 1, 0))
+   746→    }
+   747→    window.addEventListener('keydown', handler)
+   748→    document.body.style.overflow = 'hidden'
+   749→    scrollRef.current?.scrollTo(0, 0)
+   750→    return () => {
+   751→      window.removeEventListener('keydown', handler)
+   752→      document.body.style.overflow = ''
+   753→    }
+   754→  }, [gallery.length, onClose])
+   755→
+   756→  return (
+   757→    <motion.div
+   758→      initial={{ opacity: 0 }}
+   759→      animate={{ opacity: 1 }}
+   760→      exit={{ opacity: 0 }}
+   761→      transition={{ duration: 0.3 }}
+   762→      className="fixed inset-0 z-[100] bg-[#1A1A1A] overflow-y-auto"
+   763→      ref={scrollRef}
+   764→    >
+   765→      {/* Sticky header */}
+   766→      <div className="sticky top-0 z-10 bg-[#1A1A1A]/95 backdrop-blur-md border-b border-[#333]/50">
+   767→        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+   768→          <button
+   769→            onClick={onClose}
+   770→            className="flex items-center gap-2 text-[#8090A0] hover:text-[#C68E4E] transition-colors group"
+   771→          >
+   772→            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+   773→            <span className="text-sm tracking-[0.05em] uppercase">Назад к проектам</span>
+   774→          </button>
+   775→          <span className="text-[#C68E4E] font-bold text-lg">{project.price}</span>
+   776→        </div>
+   777→      </div>
+   778→
+   779→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+   780→        {/* Main image with gallery controls */}
+   781→        <div className="relative">
+   782→          <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-[#111] rounded-lg overflow-hidden border border-[#333]">
+   783→            <AnimatePresence mode="wait">
+   784→              <motion.img
+   785→                key={currentIdx}
+   786→                src={gallery[currentIdx]}
+   787→                alt={`${project.title} — фото ${currentIdx + 1}`}
+   788→                initial={{ opacity: 0, scale: 1.02 }}
+   789→                animate={{ opacity: 1, scale: 1 }}
+   790→                exit={{ opacity: 0, scale: 0.98 }}
+   791→                transition={{ duration: 0.25 }}
+   792→                className="absolute inset-0 w-full h-full object-contain"
+   793→              />
+   794→            </AnimatePresence>
+   795→
+   796→            {/* Nav arrows */}
+   797→            {gallery.length > 1 && (
+   798→              <>
+   799→                <button
+   800→                  onClick={() => setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1))}
+   801→                  className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/60 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/50 transition-all"
+   802→                  aria-label="Предыдущее фото"
+   803→                >
+   804→                  <ChevronLeft className="w-5 h-5" />
+   805→                </button>
+   806→                <button
+   807→                  onClick={() => setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1))}
+   808→                  className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/60 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/50 transition-all"
+   809→                  aria-label="Следующее фото"
+   810→                >
+   811→                  <ChevronRight className="w-5 h-5" />
+   812→                </button>
+   813→              </>
+   814→            )}
+   815→
+   816→            {/* Counter badge */}
+   817→            <div className="absolute bottom-3 right-3 bg-black/70 text-white/80 text-xs px-3 py-1.5 rounded-sm border border-white/10">
+   818→              {currentIdx + 1} / {gallery.length}
+   819→            </div>
+   820→          </div>
+   821→
+   822→          {/* Thumbnails strip */}
+   823→          {gallery.length > 1 && (
+   824→            <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+   825→              {gallery.map((img, idx) => (
+   826→                <button
+   827→                  key={idx}
+   828→                  onClick={() => setCurrentIdx(idx)}
+   829→                  className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded overflow-hidden border-2 transition-all ${
+   830→                    idx === currentIdx
+   831→                      ? 'border-[#C68E4E] opacity-100'
+   832→                      : 'border-[#333] opacity-50 hover:opacity-80'
+   833→                  }`}
+   834→                >
+   835→                  <img src={img} alt={`Миниатюра ${idx + 1}`} className="w-full h-full object-cover" />
+   836→                </button>
+   837→              ))}
+   838→            </div>
+   839→          )}
+   840→        </div>
+   841→
+   842→        {/* Project info */}
+   843→        <div className="mt-10 lg:mt-14 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+   844→          {/* Left: description */}
+   845→          <div className="lg:col-span-2">
+   846→            <div className="flex items-center gap-3 mb-4">
+   847→              <div className="w-8 h-[2px] bg-[#C68E4E]" />
+   848→              <span className="text-[#C68E4E] text-xs tracking-[0.3em] uppercase font-semibold">
+   849→                {project.year}
+   850→              </span>
+   851→            </div>
+   852→            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.03em] uppercase text-white mb-6">
+   853→              {project.title}
+   854→            </h1>
+   855→            <div className="w-16 h-[2px] bg-[#C68E4E] mb-6" />
+   856→            <p className="text-[#B0B8C0] leading-relaxed text-base lg:text-lg">
+   857→              {project.description}
+   858→            </p>
+   859→          </div>
+   860→
+   861→          {/* Right: price card + CTA */}
+   862→          <div className="space-y-6">
+   863→            <div className="glass-card rounded-lg p-6">
+   864→              <div className="text-[#8090A0] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+   865→                Стоимость
+   866→              </div>
+   867→              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{project.price}</div>
+   868→              <div className="space-y-3">
+   869→                <a
+   870→                  href="tel:+79048220007"
+   871→                  className="flex items-center justify-center gap-2 w-full py-3 bg-[#C68E4E] hover:bg-[#B37D42] text-white font-bold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
+   872→                >
+   873→                  <Phone className="w-4 h-4" />
+   874→                  Позвонить
+   875→                </a>
+   876→              </div>
+   877→            </div>
+   878→            <div className="glass-card rounded-lg p-6">
+   879→              <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-3">
+   880→                Почему ПАР ХАУС
+   881→              </h3>
+   882→              <ul className="space-y-2.5">
+   883→                {['Собственное производство в Омске', 'Кедровый мини брус', 'Комплектация под ключ', 'Доставка и монтаж'].map((item) => (
+   884→                  <li key={item} className="flex items-start gap-2.5 text-[#B0B8C0] text-sm">
+   885→                    <Star className="w-4 h-4 text-[#C68E4E] shrink-0 mt-0.5" />
+   886→                    {item}
+   887→                  </li>
+   888→                ))}
+   889→              </ul>
+   890→            </div>
+   891→          </div>
+   892→        </div>
+   893→
+   894→        {/* Bottom spacer */}
+   895→        <div className="h-16" />
+   896→      </div>
+   897→    </motion.div>
+   898→  )
+   899→}
+   900→
+   901→/* ─── PROJECTS ─── */
+   902→function ProjectsSection() {
+   903→  const { ref, visible } = useOnScreen(0.1)
+   904→  const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null)
+   905→
+   906→  return (
+   907→    <section ref={ref} id="projects" className="relative py-24 lg:py-32 bg-[#222222]">
+   908→      <div className="section-divider absolute top-0 left-0 right-0" />
+   909→
+   910→      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   911→        <SectionHeading label="Портфолио" title="Наши проекты" visible={visible} />
+   912→
+   913→        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+   914→          {PROJECTS.map((project, idx) => (
+   915→            <motion.div
+   916→              key={project.slug}
+   917→              initial={{ opacity: 0, y: 30 }}
+   918→              animate={visible ? { opacity: 1, y: 0 } : {}}
+   919→              transition={{ duration: 0.6, delay: 0.08 * idx }}
+   920→              onClick={() => setSelectedProject(project)}
+   921→              className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
+   922→            >
+   923→              <div
+   924→                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+   925→                style={{ backgroundImage: `url('${project.image}')` }}
+   926→              />
+   927→              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/50 to-transparent" />
+   928→              {/* Click hint */}
+   929→              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+   930→                <div className="w-14 h-14 rounded-full bg-[#C68E4E]/20 border border-[#C68E4E]/50 flex items-center justify-center">
+   931→                  <ArrowRight className="w-6 h-6 text-[#C68E4E]" />
+   932→                </div>
+   933→              </div>
+   934→              <div className="absolute bottom-0 left-0 right-0 p-6">
+   935→                <div className="flex items-center justify-between mb-2">
+   936→                  <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
+   937→                    {project.gallery.length} фото
+   938→                  </span>
+   939→                  <span className="text-[#C68E4E] font-bold text-sm">{project.price}</span>
+   940→                </div>
+   941→                <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase">
+   942→                  {project.title}
+   943→                </h3>
+   944→              </div>
+   945→            </motion.div>
+   946→          ))}
+   947→        </div>
+   948→      </div>
+   949→
+   950→      <div className="section-divider absolute bottom-0 left-0 right-0" />
+   951→
+   952→      {/* Project detail page overlay */}
+   953→      <AnimatePresence>
+   954→        {selectedProject && (
+   955→          <ProjectDetailPage
+   956→            project={selectedProject}
+   957→            onClose={() => setSelectedProject(null)}
+   958→          />
+   959→        )}
+   960→      </AnimatePresence>
+   961→    </section>
+   962→  )
+   963→}
+   964→
+   965→/* ─── ABOUT ─── */
+   966→function AboutSection() {
+   967→  const { ref, visible } = useOnScreen(0.2)
+   968→
+   969→  return (
+   970→    <section ref={ref} id="about" className="relative py-24 lg:py-32 bg-[#1A1A1A]">
+   971→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   972→        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+   973→          {/* Image */}
+   974→          <motion.div
+   975→            initial={{ opacity: 0, x: -30 }}
+   976→            animate={visible ? { opacity: 1, x: 0 } : {}}
+   977→            transition={{ duration: 0.8 }}
+   978→            className="relative rounded-lg overflow-hidden h-[400px] lg:h-[500px] border-2 border-[#C68E4E]/20"
+   979→          >
+   980→            <div
+   981→              className="absolute inset-0 bg-cover bg-center"
+   982→              style={{ backgroundImage: "url('/hero-bg-sauna.png')" }}
+   983→            />
+   984→            <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/60 to-transparent" />
+   985→            {/* Gold accent corner */}
+   986→            <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#C68E4E]/40" />
+   987→            <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-[#C68E4E]/40" />
+   988→          </motion.div>
+   989→
+   990→          {/* Text */}
+   991→          <motion.div
+   992→            initial={{ opacity: 0, x: 30 }}
+   993→            animate={visible ? { opacity: 1, x: 0 } : {}}
+   994→            transition={{ duration: 0.8, delay: 0.2 }}
+   995→          >
+   996→            <div className="flex items-center gap-3 mb-4">
+   997→              <div className="w-8 h-[2px] bg-[#C68E4E]" />
+   998→              <span className="text-[#C68E4E] text-xs tracking-[0.3em] uppercase font-semibold">
+   999→                О производстве
+  1000→              </span>
+  1001→            </div>
+  1002→            <h2 className="text-3xl sm:text-4xl font-bold tracking-[0.02em] uppercase text-white mb-6">
+  1003→              Традиции русского
+  1004→              <br />
+  1005→              <span className="text-[#C68E4E]">мастерства</span>
+  1006→            </h2>
+  1007→            <p className="text-[#B0B8C0] leading-relaxed mb-6">
+  1008→              «ПАР ХАУС» — это современное производство мобильных бань, саун и дачных домиков в Омске. Каркасные и брусовые строения изготавливаются по новой технологии — работаем на качество, а не на количество.
+  1009→            </p>
+  1010→            <p className="text-[#B0B8C0] leading-relaxed mb-8">
+  1011→              Используем только термически модифицированную древесину —
+  1012→              термоясень, лиственницу и карельскую берёзу. Каждая деталь
+  1013→              изготавливается на собственном производстве с контролем качества на
+  1014→              каждом этапе.
+  1015→            </p>
+  1016→            <div className="grid grid-cols-3 gap-6">
+  1017→              {[
+  1018→                { num: '8+', label: 'Лет опыта' },
+  1019→                { num: '200+', label: 'Проектов' },
+  1020→                { num: '100%', label: 'Натуральное' },
+  1021→              ].map((stat) => (
+  1022→                <div key={stat.label} className="border-t-2 border-[#C68E4E]/30 pt-4">
+  1023→                  <div className="text-3xl font-bold text-[#C68E4E] mb-1">{stat.num}</div>
+  1024→                  <div className="text-[#8090A0] text-sm">{stat.label}</div>
+  1025→                </div>
+  1026→              ))}
+  1027→            </div>
+  1028→          </motion.div>
+  1029→        </div>
+  1030→      </div>
+  1031→    </section>
+  1032→  )
+  1033→}
+  1034→
+  1035→/* ─── CONTACTS ─── */
+  1036→function ContactsSection() {
+  1037→  const { ref, visible } = useOnScreen(0.1)
+  1038→  const [mapLoaded, setMapLoaded] = useState(false)
+  1039→
+  1040→  useEffect(() => {
+  1041→    const el = ref.current
+  1042→    if (!el) return
+  1043→    const obs = new IntersectionObserver(
+  1044→      ([e]) => {
+  1045→        if (e.isIntersecting) {
+  1046→          setMapLoaded(true)
+  1047→        }
+  1048→      },
+  1049→      { threshold: 0.1 }
+  1050→    )
+  1051→    obs.observe(el)
+  1052→    return () => obs.disconnect()
+  1053→  }, [])
+  1054→
+  1055→  return (
+  1056→    <section ref={ref} id="contacts" className="relative py-24 lg:py-32 bg-[#222222]">
+  1057→      <div className="section-divider absolute top-0 left-0 right-0" />
+  1058→
+  1059→      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  1060→        <SectionHeading label="Связаться с нами" title="Контакты" visible={visible} />
+  1061→
+  1062→        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+  1063→          {/* Contact info */}
+  1064→          <motion.div
+  1065→            initial={{ opacity: 0, x: -30 }}
+  1066→            animate={visible ? { opacity: 1, x: 0 } : {}}
+  1067→            transition={{ duration: 0.8 }}
+  1068→            className="space-y-6"
+  1069→          >
+  1070→            {/* Phone */}
+  1071→            <div className="glass-card rounded-lg p-6">
+  1072→              <div className="flex items-start gap-4">
+  1073→                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+  1074→                  <Phone className="w-5 h-5 text-[#C68E4E]" />
+  1075→                </div>
+  1076→                <div>
+  1077→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
+  1078→                    Телефон
+  1079→                  </h3>
+  1080→                  <a
+  1081→                    href="tel:+79048220007"
+  1082→                    className="text-[#C68E4E] text-xl font-semibold hover:underline underline-offset-4 decoration-[#C68E4E]/30"
+  1083→                  >
+  1084→                    +7 (904) 822-00-07
+  1085→                  </a>
+  1086→                  <p className="text-[#8090A0] text-sm mt-1">
+  1087→                    Звоните бесплатно, консультация по проекту
+  1088→                  </p>
+  1089→                </div>
+  1090→              </div>
+  1091→            </div>
+  1092→
+  1093→            {/* Address */}
+  1094→            <div className="glass-card rounded-lg p-6">
+  1095→              <div className="flex items-start gap-4">
+  1096→                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+  1097→                  <MapPin className="w-5 h-5 text-[#C68E4E]" />
+  1098→                </div>
+  1099→                <div>
+  1100→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
+  1101→                    Адрес производства
+  1102→                  </h3>
+  1103→                  <p className="text-[#D0D6DC] text-base">
+  1104→                    г. Омск, пос. Дружино,
+  1105→                    <br />
+  1106→                    ул. Тополиная, 31
+  1107→                  </p>
+  1108→                </div>
+  1109→              </div>
+  1110→            </div>
+  1111→
+  1112→            {/* Hours */}
+  1113→            <div className="glass-card rounded-lg p-6">
+  1114→              <div className="flex items-start gap-4">
+  1115→                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+  1116→                  <Clock className="w-5 h-5 text-[#C68E4E]" />
+  1117→                </div>
+  1118→                <div>
+  1119→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
+  1120→                    Режим работы
+  1121→                  </h3>
+  1122→                  <p className="text-[#D0D6DC] text-base">
+  1123→                    Пн—Пт: 9:00 — 18:00
+  1124→                    <br />
+  1125→                    Сб: 10:00 — 16:00
+  1126→                    <br />
+  1127→                    <span className="text-[#C68E4E] font-medium">Вс: выходной</span>
+  1128→                  </p>
+  1129→                </div>
+  1130→              </div>
+  1131→            </div>
+  1132→
+  1133→            {/* Email */}
+  1134→            <div className="glass-card rounded-lg p-6">
+  1135→              <div className="flex items-start gap-4">
+  1136→                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+  1137→                  <Mail className="w-5 h-5 text-[#C68E4E]" />
+  1138→                </div>
+  1139→                <div>
+  1140→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">
+  1141→                    Email
+  1142→                  </h3>
+  1143→                  <a
+  1144→                    href="mailto:info@parhouse55.ru"
+  1145→                    className="text-[#C68E4E] text-base hover:underline underline-offset-4 decoration-[#C68E4E]/30"
+  1146→                  >
+  1147→                    info@parhouse55.ru
+  1148→                  </a>
+  1149→                </div>
+  1150→              </div>
+  1151→            </div>
+  1152→          </motion.div>
+  1153→
+  1154→          {/* Yandex Map */}
+  1155→          <motion.div
+  1156→            initial={{ opacity: 0, x: 30 }}
+  1157→            animate={visible ? { opacity: 1, x: 0 } : {}}
+  1158→            transition={{ duration: 0.8, delay: 0.2 }}
+  1159→            className="rounded-lg overflow-hidden h-full min-h-[400px] lg:min-h-0 border-2 border-[#333] hover:border-[#C68E4E]/30 transition-colors duration-500"
+  1160→          >
+  1161→            {mapLoaded && (
+  1162→              <iframe
+  1163→                src="https://yandex.ru/map-widget/v1/?ll=73.3705%2C55.0971&z=13&text=%D0%9E%D0%BC%D1%81%D0%BA%2C%20%D0%94%D1%80%D1%83%D0%B6%D0%B8%D0%BD%D0%BE%2C%20%D0%A2%D0%BE%D0%BF%D0%BE%D0%BB%D0%B8%D0%BD%D0%B0%D1%8F%2031"
+  1164→                width="100%"
+  1165→                height="100%"
+  1166→                style={{ minHeight: '400px' }}
+  1167→                frameBorder="0"
+  1168→                title="Яндекс Карта — ПАР ХАУС"
+  1169→                sandbox="allow-scripts allow-same-origin allow-popups"
+  1170→                referrerPolicy="no-referrer-when-downgrade"
+  1171→                className="grayscale hover:grayscale-0 transition-all duration-500"
+  1172→              />
+  1173→            )}
+  1174→          </motion.div>
+  1175→        </div>
+  1176→      </div>
+  1177→    </section>
+  1178→  )
+  1179→}
+  1180→
+  1181→/* ─── CALC DIALOG ─── */
+  1182→function CalcDialog() {
+  1183→  const [open, setOpen] = useState(false)
+  1184→  const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
+  1185→  const [submitted, setSubmitted] = useState(false)
+  1186→
+  1187→  const handleSubmit = (e: React.FormEvent) => {
+  1188→    e.preventDefault()
+  1189→    if (!formData.consent) return
+  1190→    setSubmitted(true)
+  1191→    setTimeout(() => {
+  1192→      setOpen(false)
+  1193→      setSubmitted(false)
+  1194→      setFormData({ name: '', phone: '', message: '', consent: false })
+  1195→    }, 2000)
+  1196→  }
+  1197→
+  1198→  return (
+  1199→    <>
+  1200→      <button
+  1201→        id="calc-dialog-trigger"
+  1202→        onClick={() => setOpen(true)}
+  1203→        className="sr-only"
+  1204→        aria-label="Открыть форму расчёта"
+  1205→      >
+  1206→        trigger
+  1207→      </button>
+  1208→
+  1209→      <Dialog open={open} onOpenChange={setOpen}>
+  1210→        <DialogContent className="bg-[#1E1E1E] border border-[#C68E4E]/20 text-white sm:max-w-lg rounded-lg shadow-[0_0_80px_rgba(198,142,78,0.1)]">
+  1211→          <DialogHeader>
+  1212→            <DialogTitle className="text-2xl font-bold tracking-[0.05em] uppercase text-white">
+  1213→              Рассчитать проект
+  1214→            </DialogTitle>
+  1215→            <DialogDescription className="text-[#8090A0]">
+  1216→              Оставьте заявку и мы перезвоним вам в течение 30 минут
+  1217→            </DialogDescription>
+  1218→          </DialogHeader>
+  1219→
+  1220→          {submitted ? (
+  1221→            <div className="py-12 text-center">
+  1222→              <div className="w-16 h-16 rounded-full bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center mx-auto mb-4">
+  1223→                <Star className="w-8 h-8 text-[#C68E4E]" />
+  1224→              </div>
+  1225→              <p className="text-[#C68E4E] font-semibold text-lg">Заявка отправлена!</p>
+  1226→              <p className="text-[#8090A0] text-sm mt-1">
+  1227→                Мы свяжемся с вами в ближайшее время
+  1228→              </p>
+  1229→            </div>
+  1230→          ) : (
+  1231→            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+  1232→              <div className="space-y-2">
+  1233→                <Label htmlFor="name" className="text-[#B0B8C0] text-sm">
+  1234→                  Ваше имя
+  1235→                </Label>
+  1236→                <Input
+  1237→                  id="name"
+  1238→                  required
+  1239→                  value={formData.name}
+  1240→                  onChange={(e) =>
+  1241→                    setFormData((p) => ({ ...p, name: e.target.value }))
+  1242→                  }
+  1243→                  placeholder="Иван Иванов"
+  1244→                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
+  1245→                />
+  1246→              </div>
+  1247→              <div className="space-y-2">
+  1248→                <Label htmlFor="phone" className="text-[#B0B8C0] text-sm">
+  1249→                  Телефон
+  1250→                </Label>
+  1251→                <Input
+  1252→                  id="phone"
+  1253→                  type="tel"
+  1254→                  required
+  1255→                  value={formData.phone}
+  1256→                  onChange={(e) =>
+  1257→                    setFormData((p) => ({ ...p, phone: e.target.value }))
+  1258→                  }
+  1259→                  placeholder="+7 (___) ___-__-__"
+  1260→                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
+  1261→                />
+  1262→              </div>
+  1263→              <div className="space-y-2">
+  1264→                <Label htmlFor="message" className="text-[#B0B8C0] text-sm">
+  1265→                  Комментарий
+  1266→                </Label>
+  1267→                <Textarea
+  1268→                  id="message"
+  1269→                  value={formData.message}
+  1270→                  onChange={(e) =>
+  1271→                    setFormData((p) => ({ ...p, message: e.target.value }))
+  1272→                  }
+  1273→                  placeholder="Опишите вашу идею бани..."
+  1274→                  rows={3}
+  1275→                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none resize-none"
+  1276→                />
+  1277→              </div>
+  1278→              {/* 152-ФЗ: согласие на обработку персональных данных */}
+  1279→              <label className="flex items-start gap-3 cursor-pointer group">
+  1280→                <input
+  1281→                  type="checkbox"
+  1282→                  required
+  1283→                  checked={formData.consent}
+  1284→                  onChange={(e) =>
+  1285→                    setFormData((p) => ({ ...p, consent: e.target.checked }))
+  1286→                  }
+  1287→                  className="mt-1 accent-[#C68E4E] w-4 h-4 shrink-0"
+  1288→                />
+  1289→                <span className="text-[#8090A0] text-xs leading-relaxed">
+  1290→                  Нажимая кнопку, вы соглашаетесь с{' '}
+  1291→                  <button
+  1292→                    type="button"
+  1293→                    onClick={(e) => {
+  1294→                      e.preventDefault()
+  1295→                      document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' })
+  1296→                      setOpen(false)
+  1297→                    }}
+  1298→                    className="text-[#C68E4E] underline underline-offset-2 hover:text-[#D4A762] transition-colors"
+  1299→                  >
+  1300→                    Политикой обработки персональных данных
+  1301→                  </button>
+  1302→                </span>
+  1303→              </label>
+  1304→              <Button
+  1305→                type="submit"
+  1306→                disabled={!formData.consent}
+  1307→                className="w-full bg-[#C68E4E] hover:bg-[#D4A762] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
+  1308→              >
+  1309→                Отправить заявку
+  1310→                <ArrowRight className="ml-2 w-4 h-4" />
+  1311→              </Button>
+  1312→            </form>
+  1313→          )}
+  1314→        </DialogContent>
+  1315→      </Dialog>
+  1316→    </>
+  1317→  )
+  1318→}
+  1319→
+  1320→/* ─── FOOTER ─── */
+  1321→function Footer() {
+  1322→  return (
+  1323→    <footer className="relative border-t-2 border-[#C68E4E]/15 bg-[#141414]">
+  1324→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+  1325→        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+  1326→          {/* Logo & Description */}
+  1327→          <div className="sm:col-span-2 lg:col-span-1">
+  1328→          <div className="mb-5">
+  1329→            <img
+  1330→              src="/logo.png"
+  1331→              alt="ПАР ХАУС"
+  1332→              loading="lazy"
+  1333→              className="h-14 w-auto object-contain mix-blend-screen brightness-110 opacity-80"
+  1334→            />
+  1335→          </div>
+  1336→            <p className="text-[#8090A0] text-sm leading-relaxed">
+  1337→              Производство и монтаж бань и саун под ключ в Омске и Омской области.
+  1338→            </p>
+  1339→          </div>
+  1340→
+  1341→          {/* Navigation */}
+  1342→          <div>
+  1343→            <h4 className="text-[#C68E4E] font-bold text-xs tracking-[0.2em] uppercase mb-4">
+  1344→              Навигация
+  1345→            </h4>
+  1346→            <ul className="space-y-2.5">
+  1347→              {NAV_LINKS.map((link) => (
+  1348→                <li key={link.href}>
+  1349→                  <a
+  1350→                    href={link.href}
+  1351→                    className="text-[#909AA4] hover:text-[#C68E4E] text-sm transition-colors duration-300"
+  1352→                  >
+  1353→                    {link.label}
+  1354→                  </a>
+  1355→                </li>
+  1356→              ))}
+  1357→            </ul>
+  1358→          </div>
+  1359→
+  1360→          {/* Services */}
+  1361→          <div>
+  1362→            <h4 className="text-[#C68E4E] font-bold text-xs tracking-[0.2em] uppercase mb-4">
+  1363→              Услуги
+  1364→            </h4>
+  1365→            <ul className="space-y-2.5">
+  1366→              {['Бани под ключ', 'Сауны', 'Проектирование', 'Ремонт бань'].map(
+  1367→                (item) => (
+  1368→                  <li key={item}>
+  1369→                    <span className="text-[#909AA4] text-sm">{item}</span>
+  1370→                  </li>
+  1371→                )
+  1372→              )}
+  1373→            </ul>
+  1374→          </div>
+  1375→
+  1376→          {/* Contacts */}
+  1377→          <div>
+  1378→            <h4 className="text-[#C68E4E] font-bold text-xs tracking-[0.2em] uppercase mb-4">
+  1379→              Контакты
+  1380→            </h4>
+  1381→            <div className="space-y-3">
+  1382→              <a
+  1383→                href="tel:+79048220007"
+  1384→                className="flex items-center gap-2 text-[#C68E4E] text-sm hover:underline underline-offset-4"
+  1385→              >
+  1386→                <Phone className="w-3.5 h-3.5" />
+  1387→                +7 (904) 822-00-07
+  1388→              </a>
+  1389→              <div className="flex items-start gap-2 text-[#909AA4] text-sm">
+  1390→                <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+  1391→                <span>г. Омск, пос. Дружино, ул. Тополиная, 31</span>
+  1392→              </div>
+  1393→            </div>
+  1394→          </div>
+  1395→        </div>
+  1396→
+  1397→        {/* Bottom bar */}
+  1398→        <div className="mt-12 pt-6 border-t border-[#C68E4E]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+  1399→          <p className="text-[#606870] text-xs tracking-wider">
+  1400→            © {new Date().getFullYear()} ПАР ХАУС. Все права защищены.
+  1401→          </p>
+  1402→          <div className="flex items-center gap-4">
+  1403→            <a
+  1404→              href="#privacy-policy"
+  1405→              onClick={(e) => {
+  1406→                e.preventDefault()
+  1407→                document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' })
+  1408→              }}
+  1409→              className="text-[#505860] hover:text-[#C68E4E] text-xs transition-colors"
+  1410→            >
+  1411→              Политика конфиденциальности
+  1412→            </a>
+  1413→            <span className="text-[#606870] text-xs">Производство бань и саун в Омске</span>
+  1414→          </div>
+  1415→        </div>
+  1416→      </div>
+  1417→    </footer>
+  1418→  )
+  1419→}
+  1420→
+  1421→/* ─── PRIVACY POLICY (152-ФЗ) ─── */
+  1422→function PrivacyPolicySection() {
+  1423→  return (
+  1424→    <section id="privacy-policy" className="bg-[#141414] py-16">
+  1425→      <div className="section-divider" />
+  1426→      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12">
+  1427→        <h2 className="text-2xl font-bold tracking-[0.05em] uppercase text-white mb-8">
+  1428→          Политика обработки персональных данных
+  1429→        </h2>
+  1430→        <div className="space-y-4 text-[#8090A0] text-sm leading-relaxed">
+  1431→          <p><strong className="text-[#B0B8C0]">1. Общие положения</strong></p>
+  1432→          <p>
+  1433→            Настоящая Политика обработки персональных данных составлена в соответствии
+  1434→            с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет
+  1435→            порядок обработки персональных данных и меры по обеспечению безопасности
+  1436→            персональных данных, предпринимаемые ИП (далее — Оператор).
+  1437→          </p>
+  1438→          <p><strong className="text-[#B0B8C0]">2. Основные понятия</strong></p>
+  1439→          <p>
+  1440→            <strong className="text-[#909AA4]">Персональные данные</strong> — любая информация, относящаяся к прямо или косвенно
+  1441→            определённому или определяемому физическому лицу (субъекту персональных данных).
+  1442→          </p>
+  1443→          <p><strong className="text-[#B0B8C0]">3. Какие данные собираем</strong></p>
+  1444→          <ul className="list-disc list-inside space-y-1 ml-2">
+  1445→            <li>ФИО — при заполнении формы заявки</li>
+  1446→            <li>Номер телефона — для обратной связи</li>
+  1447→            <li>Комментарий — по желанию пользователя</li>
+  1448→          </ul>
+  1449→          <p><strong className="text-[#B0B8C0]">4. Цели обработки</strong></p>
+  1450→          <ul className="list-disc list-inside space-y-1 ml-2">
+  1451→            <li>Обработка входящих заявок и обратная связь</li>
+  1452→            <li>Консультирование по вопросам продукции и услуг</li>
+  1453→            <li>Улучшение качества сервиса</li>
+  1454→          </ul>
+  1455→          <p><strong className="text-[#B0B8C0]">5. Правовые основания</strong></p>
+  1456→          <p>
+  1457→            Обработка персональных данных осуществляется на основании согласия субъекта
+  1458→            персональных данных, выраженного путём отметки в форме обратной связи на сайте.
+  1459→          </p>
+  1460→          <p><strong className="text-[#B0B8C0]">6. Защита данных</strong></p>
+  1461→          <p>
+  1462→            Оператор принимает необходимые организационные и технические меры для защиты
+  1463→            персональных данных от неправомерного или случайного доступа, уничтожения,
+  1464→            изменения, блокирования, копирования, предоставления, распространения
+  1465→            персональных данных, а также от иных неправомерных действий в отношении
+  1466→            персональных данных третьих лиц.
+  1467→          </p>
+  1468→          <p><strong className="text-[#B0B8C0]">7. Сроки хранения</strong></p>
+  1469→          <p>
+  1470→            Персональные данные хранятся не более 3 лет с момента последнего обращения
+  1471→            субъекта, после чего уничтожаются.
+  1472→          </p>
+  1473→          <p><strong className="text-[#B0B8C0]">8. Контакты</strong></p>
+  1474→          <p>
+  1475→            По всем вопросам, связанным с обработкой персональных данных, обращайтесь:{' '}
+  1476→            <a href="tel:+79048220007" className="text-[#C68E4E] hover:underline">+7 (904) 822-00-07</a>
+  1477→            {' '}или{' '}
+  1478→            <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] hover:underline">info@parhouse55.ru</a>
+  1479→          </p>
+  1480→          <p className="text-[#505860] text-xs mt-6">Дата последнего обновления: {new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+  1481→        </div>
+  1482→      </div>
+  1483→    </section>
+  1484→  )
+  1485→}
+  1486→
+  1487→/* ───────────────────────── MAIN PAGE ───────────────────────── */
+  1488→
+  1489→export default function Home() {
+  1490→  return (
+  1491→    <div className="min-h-screen flex flex-col bg-[#1A1A1A]">
+  1492→      <Header />
+  1493→      <main className="flex-1">
+  1494→        <HeroSection />
+  1495→        <AdvantagesSection />
+  1496→        <CatalogSection />
+  1497→        <ProjectsSection />
+  1498→        <AboutSection />
+  1499→        <ContactsSection />
+  1500→      </main>
+  1501→      <Footer />
+  1502→      <PrivacyPolicySection />
+  1503→      <CalcDialog />
+  1504→    </div>
+  1505→  )
+  1506→}

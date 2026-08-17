@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import {
   Phone,
@@ -255,6 +255,7 @@ function Header() {
           <img
             src="/logo.png"
             alt="ПАР ХАУС — Производство бань и саун"
+            fetchPriority="high"
             className="h-11 sm:h-13 w-auto object-contain mix-blend-screen brightness-110"
           />
         </a>
@@ -354,6 +355,8 @@ function HeroSection() {
           src="https://vk.com/video_ext.php?oid=-232348817&id=456239044&hd=2&autoplay=1&loop=1&muted=1&background=1"
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
           allowFullScreen
+          referrerPolicy="no-referrer"
+          sandbox="allow-scripts allow-same-origin allow-presentation allow-autoplay"
           className="absolute top-0 left-0 w-full h-full pointer-events-none lg:w-[200vw] lg:h-[200vh] lg:-left-[50vw] lg:-top-[50vh]"
           style={{ border: 0 }}
           title="ПАР ХАУС — бани и сауны"
@@ -839,6 +842,8 @@ function ContactsSection() {
                 style={{ minHeight: '400px' }}
                 frameBorder="0"
                 title="Яндекс Карта — ПАР ХАУС"
+                sandbox="allow-scripts allow-same-origin allow-popups"
+                referrerPolicy="no-referrer-when-downgrade"
                 className="grayscale hover:grayscale-0 transition-all duration-500"
               />
             )}
@@ -852,21 +857,19 @@ function ContactsSection() {
 /* ─── CALC DIALOG ─── */
 function CalcDialog() {
   const [open, setOpen] = useState(false)
-  const [formData, setFormData] = useState({ name: '', phone: '', message: '' })
+  const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
   const [submitted, setSubmitted] = useState(false)
 
-  const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault()
-      setSubmitted(true)
-      setTimeout(() => {
-        setOpen(false)
-        setSubmitted(false)
-        setFormData({ name: '', phone: '', message: '' })
-      }, 2000)
-    },
-    []
-  )
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!formData.consent) return
+    setSubmitted(true)
+    setTimeout(() => {
+      setOpen(false)
+      setSubmitted(false)
+      setFormData({ name: '', phone: '', message: '', consent: false })
+    }, 2000)
+  }
 
   return (
     <>
@@ -948,9 +951,36 @@ function CalcDialog() {
                   className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none resize-none"
                 />
               </div>
+              {/* 152-ФЗ: согласие на обработку персональных данных */}
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  required
+                  checked={formData.consent}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, consent: e.target.checked }))
+                  }
+                  className="mt-1 accent-[#C68E4E] w-4 h-4 shrink-0"
+                />
+                <span className="text-[#8090A0] text-xs leading-relaxed">
+                  Нажимая кнопку, вы соглашаетесь с{' '}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' })
+                      setOpen(false)
+                    }}
+                    className="text-[#C68E4E] underline underline-offset-2 hover:text-[#D4A762] transition-colors"
+                  >
+                    Политикой обработки персональных данных
+                  </button>
+                </span>
+              </label>
               <Button
                 type="submit"
-                className="w-full bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
+                disabled={!formData.consent}
+                className="w-full bg-[#C68E4E] hover:bg-[#D4A762] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
               >
                 Отправить заявку
                 <ArrowRight className="ml-2 w-4 h-4" />
@@ -975,6 +1005,7 @@ function Footer() {
             <img
               src="/logo.png"
               alt="ПАР ХАУС"
+              loading="lazy"
               className="h-14 w-auto object-contain mix-blend-screen brightness-110 opacity-80"
             />
           </div>
@@ -1044,12 +1075,88 @@ function Footer() {
           <p className="text-[#606870] text-xs tracking-wider">
             © {new Date().getFullYear()} ПАР ХАУС. Все права защищены.
           </p>
-          <p className="text-[#505860] text-xs">
-            Производство бань и саун в Омске
-          </p>
+          <div className="flex items-center gap-4">
+            <a
+              href="#privacy-policy"
+              onClick={(e) => {
+                e.preventDefault()
+                document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+              className="text-[#505860] hover:text-[#C68E4E] text-xs transition-colors"
+            >
+              Политика конфиденциальности
+            </a>
+            <span className="text-[#606870] text-xs">Производство бань и саун в Омске</span>
+          </div>
         </div>
       </div>
     </footer>
+  )
+}
+
+/* ─── PRIVACY POLICY (152-ФЗ) ─── */
+function PrivacyPolicySection() {
+  return (
+    <section id="privacy-policy" className="bg-[#141414] py-16">
+      <div className="section-divider" />
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12">
+        <h2 className="text-2xl font-bold tracking-[0.05em] uppercase text-white mb-8">
+          Политика обработки персональных данных
+        </h2>
+        <div className="space-y-4 text-[#8090A0] text-sm leading-relaxed">
+          <p><strong className="text-[#B0B8C0]">1. Общие положения</strong></p>
+          <p>
+            Настоящая Политика обработки персональных данных составлена в соответствии
+            с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет
+            порядок обработки персональных данных и меры по обеспечению безопасности
+            персональных данных, предпринимаемые ИП (далее — Оператор).
+          </p>
+          <p><strong className="text-[#B0B8C0]">2. Основные понятия</strong></p>
+          <p>
+            <strong className="text-[#909AA4]">Персональные данные</strong> — любая информация, относящаяся к прямо или косвенно
+            определённому или определяемому физическому лицу (субъекту персональных данных).
+          </p>
+          <p><strong className="text-[#B0B8C0]">3. Какие данные собираем</strong></p>
+          <ul className="list-disc list-inside space-y-1 ml-2">
+            <li>ФИО — при заполнении формы заявки</li>
+            <li>Номер телефона — для обратной связи</li>
+            <li>Комментарий — по желанию пользователя</li>
+          </ul>
+          <p><strong className="text-[#B0B8C0]">4. Цели обработки</strong></p>
+          <ul className="list-disc list-inside space-y-1 ml-2">
+            <li>Обработка входящих заявок и обратная связь</li>
+            <li>Консультирование по вопросам продукции и услуг</li>
+            <li>Улучшение качества сервиса</li>
+          </ul>
+          <p><strong className="text-[#B0B8C0]">5. Правовые основания</strong></p>
+          <p>
+            Обработка персональных данных осуществляется на основании согласия субъекта
+            персональных данных, выраженного путём отметки в форме обратной связи на сайте.
+          </p>
+          <p><strong className="text-[#B0B8C0]">6. Защита данных</strong></p>
+          <p>
+            Оператор принимает необходимые организационные и технические меры для защиты
+            персональных данных от неправомерного или случайного доступа, уничтожения,
+            изменения, блокирования, копирования, предоставления, распространения
+            персональных данных, а также от иных неправомерных действий в отношении
+            персональных данных третьих лиц.
+          </p>
+          <p><strong className="text-[#B0B8C0]">7. Сроки хранения</strong></p>
+          <p>
+            Персональные данные хранятся не более 3 лет с момента последнего обращения
+            субъекта, после чего уничтожаются.
+          </p>
+          <p><strong className="text-[#B0B8C0]">8. Контакты</strong></p>
+          <p>
+            По всем вопросам, связанным с обработкой персональных данных, обращайтесь:{' '}
+            <a href="tel:+79048220007" className="text-[#C68E4E] hover:underline">+7 (904) 822-00-07</a>
+            {' '}или{' '}
+            <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] hover:underline">info@parhouse55.ru</a>
+          </p>
+          <p className="text-[#505860] text-xs mt-6">Дата последнего обновления: {new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -1068,6 +1175,7 @@ export default function Home() {
         <ContactsSection />
       </main>
       <Footer />
+      <PrivacyPolicySection />
       <CalcDialog />
     </div>
   )

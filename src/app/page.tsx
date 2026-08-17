@@ -413,7 +413,7 @@ const pageVariants = {
   exit: { opacity: 0, y: -20 },
 }
 
-const pageTransition = { duration: 0.35, ease: 'easeInOut' }
+const pageTransition = { duration: 0.35, ease: 'easeInOut' as const }
 
 /* ───────────────────────── SECTION HEADING ───────────────────────── */
 

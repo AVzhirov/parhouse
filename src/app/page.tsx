@@ -43,7 +43,7 @@ const CURRENT_YEAR = new Date().getFullYear()
 
 /* ───────────────────────── TYPES ───────────────────────── */
 
-type PageId = 'home' | 'catalog' | 'projects' | 'about' | 'contacts'
+type PageId = 'home' | 'catalog' | 'projects' | 'about' | 'contacts' | 'privacy'
 
 /* ───────────────────────── DATA ───────────────────────── */
 
@@ -1828,7 +1828,7 @@ function AboutValues() {
 
 /* ───────────────────────── CONTACTS PAGE ───────────────────────── */
 
-function ContactsPage() {
+function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const { ref, visible } = useOnScreen(0.1)
   const [mapLoaded, setMapLoaded] = useState(false)
 
@@ -2057,7 +2057,7 @@ function ContactForm() {
             Нажимая кнопку, вы соглашаетесь с{' '}
             <button
               type="button"
-              onClick={() => document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => onNavigate('privacy')}
               className="text-[#C68E4E] underline underline-offset-2 hover:text-[#D4A762] transition-colors"
             >
               Политикой обработки персональных данных
@@ -2079,7 +2079,7 @@ function ContactForm() {
 
 /* ───────────────────────── CALC DIALOG ───────────────────────── */
 
-function CalcDialog() {
+function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
   const [submitted, setSubmitted] = useState(false)
@@ -2182,8 +2182,8 @@ function CalcDialog() {
                     type="button"
                     onClick={(e) => {
                       e.preventDefault()
-                      document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' })
                       setOpen(false)
+                      onNavigate('privacy')
                     }}
                     className="text-[#C68E4E] underline underline-offset-2 hover:text-[#D4A762] transition-colors"
                   >
@@ -2285,10 +2285,7 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
           <div className="flex items-center gap-4">
             <button
               type="button"
-              onClick={() => {
-                onNavigate('home')
-                setTimeout(() => document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' }), 400)
-              }}
+              onClick={() => onNavigate('privacy')}
               className="text-[#505860] hover:text-[#C68E4E] text-xs transition-colors"
             >
               Политика конфиденциальности
@@ -2303,11 +2300,18 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
 /* ───────────────────────── PRIVACY POLICY (152-ФЗ) ───────────────────────── */
 
-function PrivacyPolicySection() {
+function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   return (
-    <section id="privacy-policy" className="bg-[#141414] py-16">
+    <div className="min-h-screen bg-[#141414] py-16">
       <div className="section-divider" />
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12">
+        <button
+          onClick={() => onNavigate('contacts')}
+          className="flex items-center gap-2 text-[#C68E4E] hover:text-[#D4A762] transition-colors mb-8 text-sm"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Назад
+        </button>
         <h2 className="text-2xl font-bold tracking-[0.05em] uppercase text-white mb-8">
           Политика обработки персональных данных
         </h2>
@@ -2364,7 +2368,7 @@ function PrivacyPolicySection() {
           <p className="text-[#505860] text-xs mt-6">Дата последнего обновления: {new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
 
@@ -2449,15 +2453,27 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
-              <ContactsPage />
+              <ContactsPage onNavigate={handleNavigate} />
+            </motion.div>
+          )}
+
+          {currentPage === 'privacy' && (
+            <motion.div
+              key="privacy"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <PrivacyPage onNavigate={handleNavigate} />
             </motion.div>
           )}
         </AnimatePresence>
       </main>
 
       <Footer onNavigate={handleNavigate} />
-      <PrivacyPolicySection />
-      <CalcDialog />
+      <CalcDialog onNavigate={handleNavigate} />
 
       {/* Global floating elements */}
       <BackToTop />

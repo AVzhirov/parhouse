@@ -158,3 +158,31 @@ Stage Summary:
 - VK video iframe hero with scaling trick preserved
 - mix-blend-screen on logos on dark BG preserved
 - Security features (iframe sandbox, referrerPolicy) preserved
+
+---
+Task ID: 3
+Agent: main
+Task: Security and optimization audit
+
+Work Log:
+- Added Content-Security-Policy header to next.config.ts
+- Added X-Permitted-Cross-Domain-Policies header
+- Verified all 8 security headers are served correctly
+- Fixed JSON-LD opening hours (Saturday 10:00-16:00 separated from weekday hours)
+- Added robots metadata (index: true, follow: true)
+- Added <noscript> fallback with phone number
+- Added pattern validation on phone inputs (both forms)
+- Added autoComplete="name" and autoComplete="tel" on all form inputs
+- Added maxLength={50} on name inputs
+- Fixed privacy policy footer link to use SPA navigation (navigate to home then scroll)
+- Fixed useCountUp hook — eliminated ref-during-render lint error, proper RAF cleanup
+- Removed motion.div layout prop and popLayout mode from catalog grid (expensive Framer Motion)
+- Added loading="lazy" and decoding="async" to gallery images and thumbnails
+- Cached new Date().getFullYear() in CURRENT_YEAR constant
+- Removed unnecessary eslint-disable directives
+- Removed screen-wake-lock from VK iframe allow attribute
+
+Stage Summary:
+- 8 security headers verified (CSP, X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Referrer-Policy, Permissions-Policy, HSTS, X-Permitted-Cross-Domain-Policies)
+- 0 ESLint errors, 0 warnings
+- All fixes verified in browser with agent-browser

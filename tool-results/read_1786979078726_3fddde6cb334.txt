@@ -1,0 +1,906 @@
+  1549→                  <img src={img} alt={`Миниатюра ${idx + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+  1550→                </button>
+  1551→              ))}
+  1552→            </div>
+  1553→          )}
+  1554→        </div>
+  1555→
+  1556→        {/* Project info */}
+  1557→        <div className="mt-10 lg:mt-14 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+  1558→          {/* Left: description */}
+  1559→          <div className="lg:col-span-2">
+  1560→            <div className="flex items-center gap-3 mb-4">
+  1561→              <div className="w-8 h-[2px] bg-[#C68E4E]" />
+  1562→              <span className="text-[#C68E4E] text-xs tracking-[0.3em] uppercase font-semibold">
+  1563→                {project.year}
+  1564→              </span>
+  1565→            </div>
+  1566→            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.03em] uppercase text-white mb-6">
+  1567→              {project.title}
+  1568→            </h1>
+  1569→            <div className="w-16 h-[2px] bg-[#C68E4E] mb-6" />
+  1570→            <p className="text-[#B0B8C0] leading-relaxed text-base lg:text-lg">
+  1571→              {project.description}
+  1572→            </p>
+  1573→          </div>
+  1574→
+  1575→          {/* Right: price card + CTA */}
+  1576→          <div className="space-y-6">
+  1577→            <div className="glass-card rounded-lg p-6">
+  1578→              <div className="text-[#8090A0] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+  1579→                Стоимость
+  1580→              </div>
+  1581→              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{project.price}</div>
+  1582→              <div className="space-y-3">
+  1583→                <a
+  1584→                  href="tel:+79048220007"
+  1585→                  className="flex items-center justify-center gap-2 w-full py-3 bg-[#C68E4E] hover:bg-[#B37D42] text-white font-bold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
+  1586→                >
+  1587→                  <Phone className="w-4 h-4" />
+  1588→                  Позвонить
+  1589→                </a>
+  1590→              </div>
+  1591→            </div>
+  1592→            <div className="glass-card rounded-lg p-6">
+  1593→              <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-3">
+  1594→                Почему ПАР ХАУС
+  1595→              </h3>
+  1596→              <ul className="space-y-2.5">
+  1597→                {['Собственное производство в Омске', 'Кедровый мини брус', 'Комплектация под ключ', 'Доставка и монтаж'].map((txt) => (
+  1598→                  <li key={txt} className="flex items-start gap-2.5 text-[#B0B8C0] text-sm">
+  1599→                    <Star className="w-4 h-4 text-[#C68E4E] shrink-0 mt-0.5" />
+  1600→                    {txt}
+  1601→                  </li>
+  1602→                ))}
+  1603→              </ul>
+  1604→            </div>
+  1605→          </div>
+  1606→        </div>
+  1607→
+  1608→        {/* Bottom spacer */}
+  1609→        <div className="h-16" />
+  1610→      </div>
+  1611→    </motion.div>
+  1612→  )
+  1613→}
+  1614→
+  1615→/* ───────────────────────── ABOUT PAGE ───────────────────────── */
+  1616→
+  1617→function AboutPage() {
+  1618→  return (
+  1619→    <div className="pt-28 pb-16">
+  1620→      {/* About Hero */}
+  1621→      <AboutHero />
+  1622→
+  1623→      {/* Stats */}
+  1624→      <AboutStats />
+  1625→
+  1626→      {/* Materials */}
+  1627→      <AboutMaterials />
+  1628→
+  1629→      {/* Process Timeline */}
+  1630→      <ProcessTimeline />
+  1631→
+  1632→      {/* Values */}
+  1633→      <AboutValues />
+  1634→    </div>
+  1635→  )
+  1636→}
+  1637→
+  1638→/* ─── About Hero ─── */
+  1639→function AboutHero() {
+  1640→  const { ref, visible } = useOnScreen(0.2)
+  1641→
+  1642→  return (
+  1643→    <section ref={ref} className="relative py-16 lg:py-24 bg-[#1A1A1A]">
+  1644→      <div className="section-divider absolute top-0 left-0 right-0" />
+  1645→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  1646→        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+  1647→          {/* Image */}
+  1648→          <motion.div
+  1649→            initial={{ opacity: 0, x: -30 }}
+  1650→            animate={visible ? { opacity: 1, x: 0 } : {}}
+  1651→            transition={{ duration: 0.8 }}
+  1652→            className="relative rounded-lg overflow-hidden h-[400px] lg:h-[500px] border-2 border-[#C68E4E]/20"
+  1653→          >
+  1654→            <div
+  1655→              className="absolute inset-0 bg-cover bg-center"
+  1656→              style={{ backgroundImage: "url('/hero-bg-sauna.png')" }}
+  1657→            />
+  1658→            <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/60 to-transparent" />
+  1659→            <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#C68E4E]/40" />
+  1660→            <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-[#C68E4E]/40" />
+  1661→          </motion.div>
+  1662→
+  1663→          {/* Text */}
+  1664→          <motion.div
+  1665→            initial={{ opacity: 0, x: 30 }}
+  1666→            animate={visible ? { opacity: 1, x: 0 } : {}}
+  1667→            transition={{ duration: 0.8, delay: 0.2 }}
+  1668→          >
+  1669→            <div className="flex items-center gap-3 mb-4">
+  1670→              <div className="w-8 h-[2px] bg-[#C68E4E]" />
+  1671→              <span className="text-[#C68E4E] text-xs tracking-[0.3em] uppercase font-semibold">
+  1672→                О производстве
+  1673→              </span>
+  1674→            </div>
+  1675→            <h2 className="text-3xl sm:text-4xl font-bold tracking-[0.02em] uppercase text-white mb-6">
+  1676→              Традиции русского
+  1677→              <br />
+  1678→              <span className="text-[#C68E4E]">мастерства</span>
+  1679→            </h2>
+  1680→            <p className="text-[#B0B8C0] leading-relaxed mb-6">
+  1681→              «ПАР ХАУС» — это современное производство мобильных бань, саун и дачных домиков в Омске. Каркасные и брусовые строения изготавливаются по новой технологии — работаем на качество, а не на количество.
+  1682→            </p>
+  1683→            <p className="text-[#B0B8C0] leading-relaxed">
+  1684→              Используем только термически модифицированную древесину —
+  1685→              термоясень, лиственницу и карельскую берёзу. Каждая деталь
+  1686→              изготавливается на собственном производстве с контролем качества на
+  1687→              каждом этапе.
+  1688→            </p>
+  1689→          </motion.div>
+  1690→        </div>
+  1691→      </div>
+  1692→    </section>
+  1693→  )
+  1694→}
+  1695→
+  1696→/* ─── About Stats ─── */
+  1697→function AboutStats() {
+  1698→  const { ref, visible } = useOnScreen(0.2)
+  1699→  const stat8 = useCountUp(8, 2000)
+  1700→  const stat200 = useCountUp(200, 2000)
+  1701→  const stat100 = useCountUp(100, 2000)
+  1702→  const stat5 = useCountUp(5, 1500)
+  1703→
+  1704→  // eslint-disable-next-line react-hooks/rules-of-hooks -- stable refs
+  1705→  const starts = [stat8.start, stat200.start, stat100.start, stat5.start] as const
+  1706→  useEffect(() => {
+  1707→    if (visible) starts.forEach((s) => s())
+  1708→  // eslint-disable-next-line react-hooks/exhaustive-deps
+  1709→  }, [visible])
+  1710→
+  1711→  const stats = [
+  1712→    { count: stat8.count, suffix: '+', label: 'Лет опыта' },
+  1713→    { count: stat200.count, suffix: '+', label: 'Проектов' },
+  1714→    { count: stat100.count, suffix: '%', label: 'Натуральное' },
+  1715→    { count: stat5.count, suffix: '', label: 'Лет гарантия' },
+  1716→  ]
+  1717→
+  1718→  return (
+  1719→    <section ref={ref} className="relative py-16 lg:py-20 bg-[#222222]">
+  1720→      <div className="section-divider absolute top-0 left-0 right-0" />
+  1721→      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+  1722→        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+  1723→          {stats.map((stat, idx) => (
+  1724→            <motion.div
+  1725→              key={stat.label}
+  1726→              initial={{ opacity: 0, y: 20 }}
+  1727→              animate={visible ? { opacity: 1, y: 0 } : {}}
+  1728→              transition={{ duration: 0.6, delay: 0.12 * idx }}
+  1729→              className="text-center border-t-2 border-[#C68E4E]/30 pt-6"
+  1730→            >
+  1731→              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#C68E4E] mb-2">
+  1732→                {stat.count}{stat.suffix}
+  1733→              </div>
+  1734→              <div className="text-[#8090A0] text-sm">{stat.label}</div>
+  1735→            </motion.div>
+  1736→          ))}
+  1737→        </div>
+  1738→      </div>
+  1739→    </section>
+  1740→  )
+  1741→}
+  1742→
+  1743→/* ─── About Materials ─── */
+  1744→function AboutMaterials() {
+  1745→  const { ref, visible } = useOnScreen(0.15)
+  1746→
+  1747→  return (
+  1748→    <section ref={ref} className="relative py-20 lg:py-28 bg-[#1A1A1A]">
+  1749→      <div className="section-divider absolute top-0 left-0 right-0" />
+  1750→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  1751→        <SectionHeading label="Материалы" title="Мы работаем с" visible={visible} />
+  1752→
+  1753→        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  1754→          {MATERIALS.map((material, idx) => (
+  1755→            <motion.div
+  1756→              key={material.name}
+  1757→              initial={{ opacity: 0, y: 30 }}
+  1758→              animate={visible ? { opacity: 1, y: 0 } : {}}
+  1759→              transition={{ duration: 0.6, delay: 0.15 * idx }}
+  1760→              className="glass-card group rounded-lg p-6 lg:p-8 hover:border-[#C68E4E]/50 transition-all duration-500 hover:-translate-y-1"
+  1761→            >
+  1762→              <div className="w-12 h-12 rounded-full bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center mb-5">
+  1763→                <TreePine className="w-6 h-6 text-[#C68E4E]" />
+  1764→              </div>
+  1765→              <h3 className="text-white font-bold text-base tracking-[0.04em] uppercase mb-3">
+  1766→                {material.name}
+  1767→              </h3>
+  1768→              <p className="text-[#B0B8C0] text-sm leading-relaxed">
+  1769→                {material.desc}
+  1770→              </p>
+  1771→            </motion.div>
+  1772→          ))}
+  1773→        </div>
+  1774→      </div>
+  1775→    </section>
+  1776→  )
+  1777→}
+  1778→
+  1779→/* ─── About Values ─── */
+  1780→function AboutValues() {
+  1781→  const { ref, visible } = useOnScreen(0.15)
+  1782→
+  1783→  return (
+  1784→    <section ref={ref} className="relative py-20 lg:py-28 bg-[#1A1A1A]">
+  1785→      <div className="section-divider absolute top-0 left-0 right-0" />
+  1786→      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+  1787→        <SectionHeading label="Ценности" title="Наши принципы" visible={visible} />
+  1788→
+  1789→        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+  1790→          {VALUES.map((value, idx) => (
+  1791→            <motion.div
+  1792→              key={value.title}
+  1793→              initial={{ opacity: 0, y: 30 }}
+  1794→              animate={visible ? { opacity: 1, y: 0 } : {}}
+  1795→              transition={{ duration: 0.6, delay: 0.15 * idx }}
+  1796→              className="glass-card rounded-lg p-6 lg:p-8 text-center"
+  1797→            >
+  1798→              <div className="w-14 h-14 rounded-full bg-[#C68E4E]/15 border-2 border-[#C68E4E]/40 flex items-center justify-center mx-auto mb-5">
+  1799→                <span className="text-[#C68E4E] text-xl font-bold">{idx + 1}</span>
+  1800→              </div>
+  1801→              <h3 className="text-white font-bold text-base tracking-[0.04em] uppercase mb-3">
+  1802→                {value.title}
+  1803→              </h3>
+  1804→              <p className="text-[#B0B8C0] text-sm leading-relaxed">
+  1805→                {value.desc}
+  1806→              </p>
+  1807→            </motion.div>
+  1808→          ))}
+  1809→        </div>
+  1810→      </div>
+  1811→    </section>
+  1812→  )
+  1813→}
+  1814→
+  1815→/* ───────────────────────── CONTACTS PAGE ───────────────────────── */
+  1816→
+  1817→function ContactsPage() {
+  1818→  const { ref, visible } = useOnScreen(0.1)
+  1819→  const [mapLoaded, setMapLoaded] = useState(false)
+  1820→
+  1821→  useEffect(() => {
+  1822→    const el = ref.current
+  1823→    if (!el) return
+  1824→    const obs = new IntersectionObserver(
+  1825→      ([e]) => {
+  1826→        if (e.isIntersecting) {
+  1827→          setMapLoaded(true)
+  1828→        }
+  1829→      },
+  1830→      { threshold: 0.1 }
+  1831→    )
+  1832→    obs.observe(el)
+  1833→    return () => obs.disconnect()
+  1834→  }, [])
+  1835→
+  1836→  return (
+  1837→    <div className="pt-28 pb-16">
+  1838→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  1839→        <SectionHeading label="Связаться с нами" title="Контакты" visible={visible} />
+  1840→
+  1841→        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+  1842→          {/* Contact info */}
+  1843→          <motion.div
+  1844→            initial={{ opacity: 0, x: -30 }}
+  1845→            animate={visible ? { opacity: 1, x: 0 } : {}}
+  1846→            transition={{ duration: 0.8 }}
+  1847→            className="space-y-6"
+  1848→          >
+  1849→            {/* Phone */}
+  1850→            <div className="glass-card rounded-lg p-6">
+  1851→              <div className="flex items-start gap-4">
+  1852→                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+  1853→                  <Phone className="w-5 h-5 text-[#C68E4E]" />
+  1854→                </div>
+  1855→                <div>
+  1856→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">Телефон</h3>
+  1857→                  <a href="tel:+79048220007" className="text-[#C68E4E] text-xl font-semibold hover:underline underline-offset-4 decoration-[#C68E4E]/30">
+  1858→                    +7 (904) 822-00-07
+  1859→                  </a>
+  1860→                  <p className="text-[#8090A0] text-sm mt-1">Звоните бесплатно, консультация по проекту</p>
+  1861→                </div>
+  1862→              </div>
+  1863→            </div>
+  1864→
+  1865→            {/* Address */}
+  1866→            <div className="glass-card rounded-lg p-6">
+  1867→              <div className="flex items-start gap-4">
+  1868→                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+  1869→                  <MapPin className="w-5 h-5 text-[#C68E4E]" />
+  1870→                </div>
+  1871→                <div>
+  1872→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">Адрес производства</h3>
+  1873→                  <p className="text-[#D0D6DC] text-base">г. Омск, пос. Дружино,<br />ул. Тополиная, 31</p>
+  1874→                </div>
+  1875→              </div>
+  1876→            </div>
+  1877→
+  1878→            {/* Hours */}
+  1879→            <div className="glass-card rounded-lg p-6">
+  1880→              <div className="flex items-start gap-4">
+  1881→                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+  1882→                  <Clock className="w-5 h-5 text-[#C68E4E]" />
+  1883→                </div>
+  1884→                <div>
+  1885→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">Режим работы</h3>
+  1886→                  <p className="text-[#D0D6DC] text-base">Пн—Пт: 9:00 — 18:00<br />Сб: 10:00 — 16:00<br /><span className="text-[#C68E4E] font-medium">Вс: выходной</span></p>
+  1887→                </div>
+  1888→              </div>
+  1889→            </div>
+  1890→
+  1891→            {/* Email */}
+  1892→            <div className="glass-card rounded-lg p-6">
+  1893→              <div className="flex items-start gap-4">
+  1894→                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+  1895→                  <Mail className="w-5 h-5 text-[#C68E4E]" />
+  1896→                </div>
+  1897→                <div>
+  1898→                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">Email</h3>
+  1899→                  <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] text-base hover:underline underline-offset-4 decoration-[#C68E4E]/30">
+  1900→                    info@parhouse55.ru
+  1901→                  </a>
+  1902→                </div>
+  1903→              </div>
+  1904→            </div>
+  1905→
+  1906→            {/* Social Links */}
+  1907→            <div className="flex gap-4">
+  1908→              <a
+  1909→                href="https://vk.com/parhouse55"
+  1910→                target="_blank"
+  1911→                rel="noopener noreferrer"
+  1912→                className="glass-card rounded-lg w-12 h-12 flex items-center justify-center hover:border-[#C68E4E]/50 transition-colors group"
+  1913→                aria-label="VK"
+  1914→              >
+  1915→                <MessageCircle className="w-5 h-5 text-[#8090A0] group-hover:text-[#C68E4E] transition-colors" />
+  1916→              </a>
+  1917→              <a
+  1918→                href="https://wa.me/79048220007"
+  1919→                target="_blank"
+  1920→                rel="noopener noreferrer"
+  1921→                className="glass-card rounded-lg w-12 h-12 flex items-center justify-center hover:border-[#25D366]/50 transition-colors group"
+  1922→                aria-label="WhatsApp"
+  1923→              >
+  1924→                <MessageCircle className="w-5 h-5 text-[#8090A0] group-hover:text-[#25D366] transition-colors" />
+  1925→              </a>
+  1926→            </div>
+  1927→          </motion.div>
+  1928→
+  1929→          {/* Right: Contact Form + Map */}
+  1930→          <motion.div
+  1931→            initial={{ opacity: 0, x: 30 }}
+  1932→            animate={visible ? { opacity: 1, x: 0 } : {}}
+  1933→            transition={{ duration: 0.8, delay: 0.2 }}
+  1934→            className="space-y-8"
+  1935→          >
+  1936→            {/* Contact Form */}
+  1937→            <ContactForm />
+  1938→
+  1939→            {/* Yandex Map */}
+  1940→            <div
+  1941→              ref={ref}
+  1942→              className="rounded-lg overflow-hidden h-full min-h-[400px] lg:min-h-0 border-2 border-[#333] hover:border-[#C68E4E]/30 transition-colors duration-500"
+  1943→            >
+  1944→              {mapLoaded && (
+  1945→                <iframe
+  1946→                  src="https://yandex.ru/map-widget/v1/?ll=73.3705%2C55.0971&z=13&text=%D0%9E%D0%BC%D1%81%D0%BA%2C%20%D0%94%D1%80%D1%83%D0%B6%D0%B8%D0%BD%D0%BE%2C%20%D0%A2%D0%BE%D0%BF%D0%BE%D0%BB%D0%B8%D0%BD%D0%B0%D1%8F%2031"
+  1947→                  width="100%"
+  1948→                  height="100%"
+  1949→                  style={{ minHeight: '400px' }}
+  1950→                  frameBorder="0"
+  1951→                  title="Яндекс Карта — ПАР ХАУС"
+  1952→                  sandbox="allow-scripts allow-same-origin allow-popups"
+  1953→                  referrerPolicy="no-referrer-when-downgrade"
+  1954→                  className="grayscale hover:grayscale-0 transition-all duration-500"
+  1955→                />
+  1956→              )}
+  1957→            </div>
+  1958→          </motion.div>
+  1959→        </div>
+  1960→      </div>
+  1961→    </div>
+  1962→  )
+  1963→}
+  1964→
+  1965→/* ─── Contact Form (Inline) ─── */
+  1966→function ContactForm() {
+  1967→  const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
+  1968→  const [submitted, setSubmitted] = useState(false)
+  1969→
+  1970→  const handleSubmit = (e: React.FormEvent) => {
+  1971→    e.preventDefault()
+  1972→    if (!formData.consent) return
+  1973→    setSubmitted(true)
+  1974→    setTimeout(() => {
+  1975→      setSubmitted(false)
+  1976→      setFormData({ name: '', phone: '', message: '', consent: false })
+  1977→    }, 3000)
+  1978→  }
+  1979→
+  1980→  if (submitted) {
+  1981→    return (
+  1982→      <div className="glass-card rounded-lg p-10 text-center">
+  1983→        <div className="w-16 h-16 rounded-full bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center mx-auto mb-4">
+  1984→          <Star className="w-8 h-8 text-[#C68E4E]" />
+  1985→        </div>
+  1986→        <p className="text-[#C68E4E] font-semibold text-lg mb-1">Сообщение отправлено!</p>
+  1987→        <p className="text-[#8090A0] text-sm">Мы свяжемся с вами в ближайшее время</p>
+  1988→      </div>
+  1989→    )
+  1990→  }
+  1991→
+  1992→  return (
+  1993→    <div className="glass-card rounded-lg p-6 lg:p-8">
+  1994→      <h3 className="text-white font-bold text-lg tracking-[0.05em] uppercase mb-6">Напишите нам</h3>
+  1995→      <form onSubmit={handleSubmit} className="space-y-4">
+  1996→        <div className="space-y-2">
+  1997→          <Label htmlFor="contact-name" className="text-[#B0B8C0] text-sm">Ваше имя</Label>
+  1998→          <Input
+  1999→            id="contact-name"
+  2000→            required
+  2001→            autoComplete="name"
+  2002→            maxLength={50}
+  2003→            value={formData.name}
+  2004→            onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
+  2005→            placeholder="Иван Иванов"
+  2006→            className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
+  2007→          />
+  2008→        </div>
+  2009→        <div className="space-y-2">
+  2010→          <Label htmlFor="contact-phone" className="text-[#B0B8C0] text-sm">Телефон</Label>
+  2011→          <Input
+  2012→            id="contact-phone"
+  2013→            type="tel"
+  2014→            required
+  2015→            autoComplete="tel"
+  2016→            pattern="[+]?[0-9\s\-()]{7,18}"
+  2017→            value={formData.phone}
+  2018→            onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+  2019→            placeholder="+7 (___) ___-__-__"
+  2020→            className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
+  2021→          />
+  2022→        </div>
+  2023→        <div className="space-y-2">
+  2024→          <Label htmlFor="contact-message" className="text-[#B0B8C0] text-sm">Сообщение</Label>
+  2025→          <Textarea
+  2026→            id="contact-message"
+  2027→            value={formData.message}
+  2028→            onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
+  2029→            placeholder="Опишите ваш вопрос..."
+  2030→            rows={4}
+  2031→            className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none resize-none"
+  2032→          />
+  2033→        </div>
+  2034→        <label className="flex items-start gap-3 cursor-pointer group">
+  2035→          <input
+  2036→            type="checkbox"
+  2037→            required
+  2038→            checked={formData.consent}
+  2039→            onChange={(e) => setFormData((p) => ({ ...p, consent: e.target.checked }))}
+  2040→            className="mt-1 accent-[#C68E4E] w-4 h-4 shrink-0"
+  2041→          />
+  2042→          <span className="text-[#8090A0] text-xs leading-relaxed">
+  2043→            Нажимая кнопку, вы соглашаетесь с{' '}
+  2044→            <button
+  2045→              type="button"
+  2046→              onClick={() => document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' })}
+  2047→              className="text-[#C68E4E] underline underline-offset-2 hover:text-[#D4A762] transition-colors"
+  2048→            >
+  2049→              Политикой обработки персональных данных
+  2050→            </button>
+  2051→          </span>
+  2052→        </label>
+  2053→        <Button
+  2054→          type="submit"
+  2055→          disabled={!formData.consent}
+  2056→          className="w-full bg-[#C68E4E] hover:bg-[#D4A762] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
+  2057→        >
+  2058→          Отправить сообщение
+  2059→          <Send className="ml-2 w-4 h-4" />
+  2060→        </Button>
+  2061→      </form>
+  2062→    </div>
+  2063→  )
+  2064→}
+  2065→
+  2066→/* ───────────────────────── CALC DIALOG ───────────────────────── */
+  2067→
+  2068→function CalcDialog() {
+  2069→  const [open, setOpen] = useState(false)
+  2070→  const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
+  2071→  const [submitted, setSubmitted] = useState(false)
+  2072→
+  2073→  const handleSubmit = (e: React.FormEvent) => {
+  2074→    e.preventDefault()
+  2075→    if (!formData.consent) return
+  2076→    setSubmitted(true)
+  2077→    setTimeout(() => {
+  2078→      setOpen(false)
+  2079→      setSubmitted(false)
+  2080→      setFormData({ name: '', phone: '', message: '', consent: false })
+  2081→    }, 2000)
+  2082→  }
+  2083→
+  2084→  return (
+  2085→    <>
+  2086→      <button
+  2087→        id="calc-dialog-trigger"
+  2088→        onClick={() => setOpen(true)}
+  2089→        className="sr-only"
+  2090→        aria-label="Открыть форму расчёта"
+  2091→      >
+  2092→        trigger
+  2093→      </button>
+  2094→
+  2095→      <Dialog open={open} onOpenChange={setOpen}>
+  2096→        <DialogContent className="bg-[#1E1E1E] border border-[#C68E4E]/20 text-white sm:max-w-lg rounded-lg shadow-[0_0_80px_rgba(198,142,78,0.1)]">
+  2097→          <DialogHeader>
+  2098→            <DialogTitle className="text-2xl font-bold tracking-[0.05em] uppercase text-white">
+  2099→              Рассчитать проект
+  2100→            </DialogTitle>
+  2101→            <DialogDescription className="text-[#8090A0]">
+  2102→              Оставьте заявку и мы перезвоним вам в течение 30 минут
+  2103→            </DialogDescription>
+  2104→          </DialogHeader>
+  2105→
+  2106→          {submitted ? (
+  2107→            <div className="py-12 text-center">
+  2108→              <div className="w-16 h-16 rounded-full bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center mx-auto mb-4">
+  2109→                <Star className="w-8 h-8 text-[#C68E4E]" />
+  2110→              </div>
+  2111→              <p className="text-[#C68E4E] font-semibold text-lg">Заявка отправлена!</p>
+  2112→              <p className="text-[#8090A0] text-sm mt-1">
+  2113→                Мы свяжемся с вами в ближайшее время
+  2114→              </p>
+  2115→            </div>
+  2116→          ) : (
+  2117→            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+  2118→              <div className="space-y-2">
+  2119→                <Label htmlFor="name" className="text-[#B0B8C0] text-sm">Ваше имя</Label>
+  2120→                <Input
+  2121→                  id="name"
+  2122→                  required
+  2123→                  autoComplete="name"
+  2124→                  maxLength={50}
+  2125→                  value={formData.name}
+  2126→                  onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
+  2127→                  placeholder="Иван Иванов"
+  2128→                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
+  2129→                />
+  2130→              </div>
+  2131→              <div className="space-y-2">
+  2132→                <Label htmlFor="phone" className="text-[#B0B8C0] text-sm">Телефон</Label>
+  2133→                <Input
+  2134→                  id="phone"
+  2135→                  type="tel"
+  2136→                  required
+  2137→                  autoComplete="tel"
+  2138→                  pattern="[+]?[0-9\s\-()]{7,18}"
+  2139→                  value={formData.phone}
+  2140→                  onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+  2141→                  placeholder="+7 (___) ___-__-__"
+  2142→                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
+  2143→                />
+  2144→              </div>
+  2145→              <div className="space-y-2">
+  2146→                <Label htmlFor="message" className="text-[#B0B8C0] text-sm">Комментарий</Label>
+  2147→                <Textarea
+  2148→                  id="message"
+  2149→                  value={formData.message}
+  2150→                  onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
+  2151→                  placeholder="Опишите вашу идею бани..."
+  2152→                  rows={3}
+  2153→                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none resize-none"
+  2154→                />
+  2155→              </div>
+  2156→              {/* 152-ФЗ: согласие на обработку персональных данных */}
+  2157→              <label className="flex items-start gap-3 cursor-pointer group">
+  2158→                <input
+  2159→                  type="checkbox"
+  2160→                  required
+  2161→                  checked={formData.consent}
+  2162→                  onChange={(e) => setFormData((p) => ({ ...p, consent: e.target.checked }))}
+  2163→                  className="mt-1 accent-[#C68E4E] w-4 h-4 shrink-0"
+  2164→                />
+  2165→                <span className="text-[#8090A0] text-xs leading-relaxed">
+  2166→                  Нажимая кнопку, вы соглашаетесь с{' '}
+  2167→                  <button
+  2168→                    type="button"
+  2169→                    onClick={(e) => {
+  2170→                      e.preventDefault()
+  2171→                      document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' })
+  2172→                      setOpen(false)
+  2173→                    }}
+  2174→                    className="text-[#C68E4E] underline underline-offset-2 hover:text-[#D4A762] transition-colors"
+  2175→                  >
+  2176→                    Политикой обработки персональных данных
+  2177→                  </button>
+  2178→                </span>
+  2179→              </label>
+  2180→              <Button
+  2181→                type="submit"
+  2182→                disabled={!formData.consent}
+  2183→                className="w-full bg-[#C68E4E] hover:bg-[#D4A762] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
+  2184→              >
+  2185→                Отправить заявку
+  2186→                <ArrowRight className="ml-2 w-4 h-4" />
+  2187→              </Button>
+  2188→            </form>
+  2189→          )}
+  2190→        </DialogContent>
+  2191→      </Dialog>
+  2192→    </>
+  2193→  )
+  2194→}
+  2195→
+  2196→/* ───────────────────────── FOOTER ───────────────────────── */
+  2197→
+  2198→function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
+  2199→  return (
+  2200→    <footer className="relative border-t-2 border-[#C68E4E]/15 bg-[#141414] mt-auto">
+  2201→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+  2202→        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+  2203→          {/* Logo & Description */}
+  2204→          <div className="sm:col-span-2 lg:col-span-1">
+  2205→            <div className="mb-5">
+  2206→              <img
+  2207→                src="/logo.png"
+  2208→                alt="ПАР ХАУС"
+  2209→                loading="lazy"
+  2210→                className="h-14 w-auto object-contain mix-blend-screen brightness-110 opacity-80"
+  2211→              />
+  2212→            </div>
+  2213→            <p className="text-[#8090A0] text-sm leading-relaxed">
+  2214→              Производство и монтаж бань и саун под ключ в Омске и Омской области.
+  2215→            </p>
+  2216→          </div>
+  2217→
+  2218→          {/* Navigation */}
+  2219→          <div>
+  2220→            <h4 className="text-[#C68E4E] font-bold text-xs tracking-[0.2em] uppercase mb-4">Навигация</h4>
+  2221→            <ul className="space-y-2.5">
+  2222→              {NAV_LINKS.map((link) => (
+  2223→                <li key={link.pageId}>
+  2224→                  <button
+  2225→                    onClick={() => onNavigate(link.pageId)}
+  2226→                    className="text-[#909AA4] hover:text-[#C68E4E] text-sm transition-colors duration-300"
+  2227→                  >
+  2228→                    {link.label}
+  2229→                  </button>
+  2230→                </li>
+  2231→              ))}
+  2232→            </ul>
+  2233→          </div>
+  2234→
+  2235→          {/* Services */}
+  2236→          <div>
+  2237→            <h4 className="text-[#C68E4E] font-bold text-xs tracking-[0.2em] uppercase mb-4">Услуги</h4>
+  2238→            <ul className="space-y-2.5">
+  2239→              {['Бани под ключ', 'Сауны', 'Проектирование', 'Ремонт бань'].map((item) => (
+  2240→                <li key={item}>
+  2241→                  <span className="text-[#909AA4] text-sm">{item}</span>
+  2242→                </li>
+  2243→              ))}
+  2244→            </ul>
+  2245→          </div>
+  2246→
+  2247→          {/* Contacts */}
+  2248→          <div>
+  2249→            <h4 className="text-[#C68E4E] font-bold text-xs tracking-[0.2em] uppercase mb-4">Контакты</h4>
+  2250→            <div className="space-y-3">
+  2251→              <a
+  2252→                href="tel:+79048220007"
+  2253→                className="flex items-center gap-2 text-[#C68E4E] text-sm hover:underline underline-offset-4"
+  2254→              >
+  2255→                <Phone className="w-3.5 h-3.5" />
+  2256→                +7 (904) 822-00-07
+  2257→              </a>
+  2258→              <div className="flex items-start gap-2 text-[#909AA4] text-sm">
+  2259→                <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+  2260→                <span>г. Омск, пос. Дружино, ул. Тополиная, 31</span>
+  2261→              </div>
+  2262→            </div>
+  2263→          </div>
+  2264→        </div>
+  2265→
+  2266→        {/* Bottom bar */}
+  2267→        <div className="mt-12 pt-6 border-t border-[#C68E4E]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+  2268→          <p className="text-[#606870] text-xs tracking-wider">
+  2269→            © {new Date().getFullYear()} ПАР ХАУС. Все права защищены.
+  2270→          </p>
+  2271→          <div className="flex items-center gap-4">
+  2272→            <button
+  2273→              type="button"
+  2274→              onClick={() => {
+  2275→                onNavigate('home')
+  2276→                setTimeout(() => document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' }), 400)
+  2277→              }}
+  2278→              className="text-[#505860] hover:text-[#C68E4E] text-xs transition-colors"
+  2279→            >
+  2280→              Политика конфиденциальности
+  2281→            </button>
+  2282→            <span className="text-[#606870] text-xs">Производство бань и саун в Омске</span>
+  2283→          </div>
+  2284→        </div>
+  2285→      </div>
+  2286→    </footer>
+  2287→  )
+  2288→}
+  2289→
+  2290→/* ───────────────────────── PRIVACY POLICY (152-ФЗ) ───────────────────────── */
+  2291→
+  2292→function PrivacyPolicySection() {
+  2293→  return (
+  2294→    <section id="privacy-policy" className="bg-[#141414] py-16">
+  2295→      <div className="section-divider" />
+  2296→      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12">
+  2297→        <h2 className="text-2xl font-bold tracking-[0.05em] uppercase text-white mb-8">
+  2298→          Политика обработки персональных данных
+  2299→        </h2>
+  2300→        <div className="space-y-4 text-[#8090A0] text-sm leading-relaxed">
+  2301→          <p><strong className="text-[#B0B8C0]">1. Общие положения</strong></p>
+  2302→          <p>
+  2303→            Настоящая Политика обработки персональных данных составлена в соответствии
+  2304→            с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет
+  2305→            порядок обработки персональных данных и меры по обеспечению безопасности
+  2306→            персональных данных, предпринимаемые ИП (далее — Оператор).
+  2307→          </p>
+  2308→          <p><strong className="text-[#B0B8C0]">2. Основные понятия</strong></p>
+  2309→          <p>
+  2310→            <strong className="text-[#909AA4]">Персональные данные</strong> — любая информация, относящаяся к прямо или косвенно
+  2311→            определённому или определяемому физическому лицу (субъекту персональных данных).
+  2312→          </p>
+  2313→          <p><strong className="text-[#B0B8C0]">3. Какие данные собираем</strong></p>
+  2314→          <ul className="list-disc list-inside space-y-1 ml-2">
+  2315→            <li>ФИО — при заполнении формы заявки</li>
+  2316→            <li>Номер телефона — для обратной связи</li>
+  2317→            <li>Комментарий — по желанию пользователя</li>
+  2318→          </ul>
+  2319→          <p><strong className="text-[#B0B8C0]">4. Цели обработки</strong></p>
+  2320→          <ul className="list-disc list-inside space-y-1 ml-2">
+  2321→            <li>Обработка входящих заявок и обратная связь</li>
+  2322→            <li>Консультирование по вопросам продукции и услуг</li>
+  2323→            <li>Улучшение качества сервиса</li>
+  2324→          </ul>
+  2325→          <p><strong className="text-[#B0B8C0]">5. Правовые основания</strong></p>
+  2326→          <p>
+  2327→            Обработка персональных данных осуществляется на основании согласия субъекта
+  2328→            персональных данных, выраженного путём отметки в форме обратной связи на сайте.
+  2329→          </p>
+  2330→          <p><strong className="text-[#B0B8C0]">6. Защита данных</strong></p>
+  2331→          <p>
+  2332→            Оператор принимает необходимые организационные и технические меры для защиты
+  2333→            персональных данных от неправомерного или случайного доступа, уничтожения,
+  2334→            изменения, блокирования, копирования, предоставления, распространения
+  2335→            персональных данных, а также от иных неправомерных действий в отношении
+  2336→            персональных данных третьих лиц.
+  2337→          </p>
+  2338→          <p><strong className="text-[#B0B8C0]">7. Сроки хранения</strong></p>
+  2339→          <p>
+  2340→            Персональные данные хранятся не более 3 лет с момента последнего обращения
+  2341→            субъекта, после чего уничтожаются.
+  2342→          </p>
+  2343→          <p><strong className="text-[#B0B8C0]">8. Контакты</strong></p>
+  2344→          <p>
+  2345→            По всем вопросам, связанным с обработкой персональных данных, обращайтесь:{' '}
+  2346→            <a href="tel:+79048220007" className="text-[#C68E4E] hover:underline">+7 (904) 822-00-07</a>
+  2347→            {' '}или{' '}
+  2348→            <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] hover:underline">info@parhouse55.ru</a>
+  2349→          </p>
+  2350→          <p className="text-[#505860] text-xs mt-6">Дата последнего обновления: {new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+  2351→        </div>
+  2352→      </div>
+  2353→    </section>
+  2354→  )
+  2355→}
+  2356→
+  2357→/* ───────────────────────── MAIN PAGE ───────────────────────── */
+  2358→
+  2359→export default function Home() {
+  2360→  const [currentPage, setCurrentPage] = useState<PageId>('home')
+  2361→  const mainRef = useRef<HTMLDivElement>(null)
+  2362→
+  2363→  const handleNavigate = useCallback((page: PageId) => {
+  2364→    setCurrentPage(page)
+  2365→    window.scrollTo({ top: 0, behavior: 'smooth' })
+  2366→  }, [])
+  2367→
+  2368→  return (
+  2369→    <div className="min-h-screen flex flex-col bg-[#1A1A1A]">
+  2370→      <Header currentPage={currentPage} onNavigate={handleNavigate} />
+  2371→
+  2372→      {/* Scroll progress bar (visible on home page) */}
+  2373→      {currentPage === 'home' && <ScrollProgressBar mainRef={mainRef} />}
+  2374→
+  2375→      <main className="flex-1" ref={mainRef}>
+  2376→        <AnimatePresence mode="wait">
+  2377→          {currentPage === 'home' && (
+  2378→            <motion.div
+  2379→              key="home"
+  2380→              variants={pageVariants}
+  2381→              initial="initial"
+  2382→              animate="animate"
+  2383→              exit="exit"
+  2384→              transition={pageTransition}
+  2385→            >
+  2386→              <HomePage onNavigate={handleNavigate} />
+  2387→            </motion.div>
+  2388→          )}
+  2389→
+  2390→          {currentPage === 'catalog' && (
+  2391→            <motion.div
+  2392→              key="catalog"
+  2393→              variants={pageVariants}
+  2394→              initial="initial"
+  2395→              animate="animate"
+  2396→              exit="exit"
+  2397→              transition={pageTransition}
+  2398→            >
+  2399→              <CatalogPage />
+  2400→            </motion.div>
+  2401→          )}
+  2402→
+  2403→          {currentPage === 'projects' && (
+  2404→            <motion.div
+  2405→              key="projects"
+  2406→              variants={pageVariants}
+  2407→              initial="initial"
+  2408→              animate="animate"
+  2409→              exit="exit"
+  2410→              transition={pageTransition}
+  2411→            >
+  2412→              <ProjectsPage />
+  2413→            </motion.div>
+  2414→          )}
+  2415→
+  2416→          {currentPage === 'about' && (
+  2417→            <motion.div
+  2418→              key="about"
+  2419→              variants={pageVariants}
+  2420→              initial="initial"
+  2421→              animate="animate"
+  2422→              exit="exit"
+  2423→              transition={pageTransition}
+  2424→            >
+  2425→              <AboutPage />
+  2426→            </motion.div>
+  2427→          )}
+  2428→
+  2429→          {currentPage === 'contacts' && (
+  2430→            <motion.div
+  2431→              key="contacts"
+  2432→              variants={pageVariants}
+  2433→              initial="initial"
+  2434→              animate="animate"
+  2435→              exit="exit"
+  2436→              transition={pageTransition}
+  2437→            >
+  2438→              <ContactsPage />
+  2439→            </motion.div>
+  2440→          )}
+  2441→        </AnimatePresence>
+  2442→      </main>
+  2443→
+  2444→      <Footer onNavigate={handleNavigate} />
+  2445→      <PrivacyPolicySection />
+  2446→      <CalcDialog />
+  2447→
+  2448→      {/* Global floating elements */}
+  2449→      <BackToTop />
+  2450→      <WhatsAppButton />
+  2451→    </div>
+  2452→  )
+  2453→}
+  2454→

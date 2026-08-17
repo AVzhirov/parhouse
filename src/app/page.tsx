@@ -39,6 +39,8 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 
+const CURRENT_YEAR = new Date().getFullYear()
+
 /* ───────────────────────── TYPES ───────────────────────── */
 
 type PageId = 'home' | 'catalog' | 'projects' | 'about' | 'contacts'
@@ -382,23 +384,25 @@ function useOnScreen(threshold = 0.15) {
   return { ref, visible }
 }
 
-function useCountUp(end: number, duration = 2000, start = 0) {
-  const [count, setCount] = useState(start)
-  const [running, setRunning] = useState(false)
+function useCountUp(end: number, duration = 2000, startVal = 0) {
+  const [count, setCount] = useState(startVal)
+  const [triggered, setTriggered] = useState(false)
+  const rafRef = useRef(0)
+
   useEffect(() => {
-    if (!running) return
+    if (!triggered) return
     let startTs: number | null = null
-    let raf: number
     const step = (ts: number) => {
       if (!startTs) startTs = ts
       const progress = Math.min((ts - startTs) / duration, 1)
-      setCount(Math.floor(start + (end - start) * progress))
-      if (progress < 1) raf = requestAnimationFrame(step)
+      setCount(Math.floor(startVal + (end - startVal) * progress))
+      if (progress < 1) rafRef.current = requestAnimationFrame(step)
     }
-    raf = requestAnimationFrame(step)
-    return () => cancelAnimationFrame(raf)
-  }, [running, end, duration, start])
-  return { count, start: () => setRunning(true) }
+    rafRef.current = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [triggered, end, duration, startVal])
+
+  return { count, start: () => setTriggered(true) }
 }
 
 /* ───────────────────────── PAGE TRANSITION VARIANTS ───────────────────────── */
@@ -655,7 +659,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
       <div className="absolute inset-0 z-0">
         <iframe
           src="https://vk.com/video_ext.php?oid=-232348817&id=456239044&hd=2&autoplay=1&loop=1&muted=1&background=1"
-          allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture;"
           allowFullScreen
           referrerPolicy="no-referrer"
           sandbox="allow-scripts allow-same-origin allow-presentation allow-autoplay"
@@ -1178,12 +1182,11 @@ function CatalogPage() {
         </div>
 
         {/* Product grid */}
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence mode="popLayout">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <AnimatePresence mode="wait">
             {filtered.map((item, idx) => (
               <motion.div
                 key={item.id}
-                layout
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -1236,7 +1239,7 @@ function CatalogPage() {
               </motion.div>
             ))}
           </AnimatePresence>
-        </motion.div>
+        </div>
       </div>
 
       {/* Catalog Detail Modal */}
@@ -1499,6 +1502,8 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.25 }}
                 className="absolute inset-0 w-full h-full object-contain"
+                loading="lazy"
+                decoding="async"
               />
             </AnimatePresence>
 
@@ -1541,7 +1546,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
                       : 'border-[#333] opacity-50 hover:opacity-80'
                   }`}
                 >
-                  <img src={img} alt={`Миниатюра ${idx + 1}`} className="w-full h-full object-cover" />
+                  <img src={img} alt={`Миниатюра ${idx + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -1696,14 +1701,10 @@ function AboutStats() {
   const stat100 = useCountUp(100, 2000)
   const stat5 = useCountUp(5, 1500)
 
+  const starts = [stat8.start, stat200.start, stat100.start, stat5.start] as const
   useEffect(() => {
-    if (visible) {
-      stat8.start()
-      stat200.start()
-      stat100.start()
-      stat5.start()
-    }
-  }, [visible, stat8, stat200, stat100, stat5])
+    if (visible) starts.forEach((s) => s())
+  }, [visible])
 
   const stats = [
     { count: stat8.count, suffix: '+', label: 'Лет опыта' },
@@ -1995,6 +1996,8 @@ function ContactForm() {
           <Input
             id="contact-name"
             required
+            autoComplete="name"
+            maxLength={50}
             value={formData.name}
             onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
             placeholder="Иван Иванов"
@@ -2007,6 +2010,8 @@ function ContactForm() {
             id="contact-phone"
             type="tel"
             required
+            autoComplete="tel"
+            pattern="[+]?[0-9\s\-()]{7,18}"
             value={formData.phone}
             onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
             placeholder="+7 (___) ___-__-__"
@@ -2113,6 +2118,8 @@ function CalcDialog() {
                 <Input
                   id="name"
                   required
+                  autoComplete="name"
+                  maxLength={50}
                   value={formData.name}
                   onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
                   placeholder="Иван Иванов"
@@ -2125,6 +2132,8 @@ function CalcDialog() {
                   id="phone"
                   type="tel"
                   required
+                  autoComplete="tel"
+                  pattern="[+]?[0-9\s\-()]{7,18}"
                   value={formData.phone}
                   onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
                   placeholder="+7 (___) ___-__-__"
@@ -2255,19 +2264,19 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-[#C68E4E]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[#606870] text-xs tracking-wider">
-            © {new Date().getFullYear()} ПАР ХАУС. Все права защищены.
+            © {CURRENT_YEAR} ПАР ХАУС. Все права защищены.
           </p>
           <div className="flex items-center gap-4">
-            <a
-              href="#privacy-policy"
-              onClick={(e) => {
-                e.preventDefault()
-                document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' })
+            <button
+              type="button"
+              onClick={() => {
+                onNavigate('home')
+                setTimeout(() => document.getElementById('privacy-policy')?.scrollIntoView({ behavior: 'smooth' }), 400)
               }}
               className="text-[#505860] hover:text-[#C68E4E] text-xs transition-colors"
             >
               Политика конфиденциальности
-            </a>
+            </button>
             <span className="text-[#606870] text-xs">Производство бань и саун в Омске</span>
           </div>
         </div>

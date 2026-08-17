@@ -30,6 +30,10 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.png",
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     title: "ПАР ХАУС — Производство бань и саун под ключ",
     description:
@@ -75,9 +79,15 @@ export default function RootLayout({
               openingHoursSpecification: [
                 {
                   '@type': 'OpeningHoursSpecification',
-                  dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                  dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
                   opens: '09:00',
                   closes: '18:00',
+                },
+                {
+                  '@type': 'OpeningHoursSpecification',
+                  dayOfWeek: ['Saturday'],
+                  opens: '10:00',
+                  closes: '16:00',
                 },
               ],
               priceRange: '₽₽',
@@ -89,6 +99,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <noscript>
+          <div style={{ padding: '2rem', textAlign: 'center', color: '#C68E4E', fontSize: '1.2rem' }}>
+            Для работы сайта необходим включённый JavaScript. Позвоните нам: <a href="tel:+79048220007" style={{ color: '#C68E4E' }}>+7 (904) 822-00-07</a>
+          </div>
+        </noscript>
         {children}
         <Toaster />
       </body>

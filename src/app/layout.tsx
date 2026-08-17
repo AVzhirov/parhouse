@@ -98,6 +98,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         <noscript>
           <div style={{ padding: '2rem', textAlign: 'center', color: '#C68E4E', fontSize: '1.2rem' }}>

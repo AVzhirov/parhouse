@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import {
   Phone,
@@ -373,27 +373,25 @@ function useOnScreen(threshold = 0.15) {
   const [visible, setVisible] = useState(true) // true for SSR
   const hasChecked = useRef(false)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const el = ref.current
-    if (!el) return
-    if (!hasChecked.current) {
-      hasChecked.current = true
+    if (!el || hasChecked.current) return
+    hasChecked.current = true
+
+    // Delay check to avoid flash — runs after first paint
+    const timer = setTimeout(() => {
       const rect = el.getBoundingClientRect()
       if (rect.top > window.innerHeight) {
         setVisible(false)
       }
-    }
-  }, [])
+    }, 50)
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
     const obs = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) setVisible(true) },
       { threshold }
     )
     obs.observe(el)
-    return () => obs.disconnect()
+    return () => { clearTimeout(timer); obs.disconnect() }
   }, [threshold])
 
   return { ref, visible }

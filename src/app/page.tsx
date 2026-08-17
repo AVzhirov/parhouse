@@ -65,60 +65,114 @@ const ADVANTAGES = [
 const CATALOG_ITEMS = [
   {
     id: 1,
-    name: 'Баня «Карельская»',
-    type: 'Барельефная',
-    price: 'от 650 000 ₽',
-    size: '4×6 м',
-    image: '/hero-bg-sauna.png',
-    features: ['Термоясень', 'Печь-каменка', 'Терраса', 'Комната отдыха'],
+    name: 'Дачный домик 4×6 плюс террасой',
+    type: 'Дачный домик',
+    price: '650 000 ₽',
+    size: '4×6 м + терраса',
+    image: '/product-1.jpg',
+    description: 'Дачный домик 4х6 с террасой — это классика, которая дает хороший простор для планировки. С террасой полезная площадь визуально и функционально расширяется, а само строение выглядит законченным.',
+    features: ['Терраса', 'Просторная планировка', 'Каркасная технология'],
   },
   {
     id: 2,
-    name: 'Баня «Сибирская»',
-    type: 'Брусчатая',
-    price: 'от 520 000 ₽',
-    size: '3×5 м',
-    image: '/sauna-barrel.png',
-    features: ['Профилированный брус', 'Парная + помывочная', 'Веранда'],
+    name: 'Каркасная баня 5,5×2,5',
+    type: 'Каркасная баня',
+    price: '780 000 ₽',
+    size: '5,5×2,5 м',
+    image: '/product-2.jpg',
+    description: 'Просторная каркасная баня с продуманной планировкой. Оптимальные размеры для комфортной парной и зоны отдыха.',
+    features: ['Парная', 'Помывочная', 'Комната отдыха'],
   },
   {
     id: 3,
-    name: 'Баня «Имперская»',
-    type: 'Рубленая',
-    price: 'от 1 200 000 ₽',
-    size: '6×8 м',
-    image: '/hero-bg-wood.png',
-    features: ['Цельный лес', 'Бассейн', 'Бильярдная', 'Терраса 2 этаж'],
+    name: 'Мини парная с электрокаменкой 4×2,4',
+    type: 'Мини парная',
+    price: '445 000 ₽',
+    size: '4×2,4 м',
+    image: '/product-3.jpg',
+    description: 'Компактная мини-парная с электрокаменкой — идеальное решение для небольшого участка. Быстрый прогрев, экономичный расход электроэнергии.',
+    features: ['Электрокаменка', 'Компактная', 'Быстрый прогрев'],
   },
   {
     id: 4,
-    name: 'Баня «Мини»',
-    type: 'Компактная',
-    price: 'от 380 000 ₽',
-    size: '2.5×3.5 м',
-    image: '/hero-bg-wood.png',
-    features: ['Термодерево', 'Печь Harvia', 'Минималистичный дизайн'],
+    name: 'Баня 3,9×2,15 с тёплым полом',
+    type: 'Баня с тёплым полом',
+    price: '380 000 ₽',
+    size: '3,9×2,15 м',
+    image: '/product-4.jpg',
+    description: 'Баня с системой тёплого пола для дополнительного комфорта. Оптимальные габариты, продуманная внутренняя планировка.',
+    features: ['Тёплый пол', 'Компактная', 'Утеплённая'],
+  },
+  {
+    id: 5,
+    name: 'Мобильный офис',
+    type: 'Мобильное здание',
+    price: '290 000 ₽',
+    size: 'Мобильный',
+    image: '/product-5.jpg',
+    description: 'Мобильный офис на базе каркасной технологии. Быстрое развёртывание, транспортируется на любой участок.',
+    features: ['Мобильный', 'Каркасный', 'Транспортируемый'],
+  },
+  {
+    id: 6,
+    name: 'Баня 4×2',
+    type: 'Каркасная баня',
+    price: '320 000 ₽',
+    size: '4×2 м',
+    image: '/product-6.jpg',
+    description: 'Компактная баня 4 на 2 метра — бюджетное решение для тех, кому нужна качественная парная на небольшом участке.',
+    features: ['Компактная', 'Бюджетная', 'Каркасная'],
+  },
+  {
+    id: 7,
+    name: 'Дачный домик',
+    type: 'Дачный домик',
+    price: '550 000 ₽',
+    size: 'Стандартный',
+    image: '/product-7.jpg',
+    description: 'Удобный дачный домик для сезонного проживания. Каркасная технология обеспечивает быстрое строительство и отличную теплоизоляцию.',
+    features: ['Сезонный', 'Каркасный', 'Теплоизоляция'],
+  },
+  {
+    id: 8,
+    name: 'Каркасная баня 2,5×4',
+    type: 'Каркасная баня',
+    price: '450 000 ₽',
+    size: '2,5×4 м',
+    image: '/product-8.jpg',
+    description: 'Каркасная баня с размерами 2,5 на 4 метра. Продуманная внутренняя планировка с парной и зоной отдыха.',
+    features: ['Парная', 'Зона отдыха', 'Каркасная'],
+  },
+  {
+    id: 9,
+    name: 'Баня 3,9×2,15',
+    type: 'Каркасная баня',
+    price: '350 000 ₽',
+    size: '3,9×2,15 м',
+    image: '/product-9.jpg',
+    description: 'Баня 3,9 на 2,15 м — одно из самых популярных решений. Оптимальное сочетание цены, размеров и функциональности.',
+    features: ['Парная', 'Компактная', 'Популярная'],
   },
 ]
 
 const PROJECTS = [
   {
-    title: 'Баня в пос. Дружино',
-    description: 'Проект бани «Карельская» с панорамным остеклением и террасой',
-    image: '/hero-bg-sauna.png',
+    title: 'Каркасная баня 5,5×2,5',
+    description: 'Просторная баня с продуманной планировкой для комфортной парной и зоны отдыха',
+    image: '/product-2.jpg',
     year: '2024',
   },
   {
-    title: 'Сауна в д. Новоомская',
-    description: 'Компактная сауна с внутренним оформлением из термодерева',
-    image: '/hero-bg-wood.png',
+    title: 'Мини парная 4×2,4',
+    description: 'Компактная парная с электрокаменкой — быстрый прогрев и экономичный расход',
+    image: '/product-3.jpg',
     year: '2024',
   },
   {
-    title: 'Баня-барельеф в Омске',
-    description: 'Флагманский проект с комнатой отдыха второго уровня',
-    image: '/sauna-barrel.png',
-    year: '2023',
+    title: 'Баня с тёплым полом',
+    description: 'Баня 3,9×2,15 м с системой тёплого пола для дополнительного комфорта',
+    image: '/product-4.jpg',
+    year: '2024',
   },
 ]
 
@@ -483,42 +537,47 @@ function CatalogSection() {
         </motion.p>
 
         {/* Product grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {CATALOG_ITEMS.map((item, idx) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 30 }}
               animate={visible ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 * idx }}
+              transition={{ duration: 0.6, delay: 0.08 * idx }}
               className="group bg-[#242424] rounded-lg overflow-hidden border border-[#333333] hover:border-[#C68E4E]/40 transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]"
             >
-              <div className="relative h-56 sm:h-64 overflow-hidden">
+              <div className="relative h-48 sm:h-56 overflow-hidden">
                 <div
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                   style={{ backgroundImage: `url('${item.image}')` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#242424] via-transparent to-transparent" />
-                <div className="absolute top-4 left-4">
-                  <span className="inline-block px-3 py-1.5 text-[11px] tracking-[0.15em] uppercase font-bold bg-[#C68E4E] text-white">
+                <div className="absolute top-3 left-3">
+                  <span className="inline-block px-2.5 py-1 text-[10px] tracking-[0.12em] uppercase font-bold bg-[#C68E4E] text-white">
                     {item.type}
                   </span>
                 </div>
-                <div className="absolute bottom-4 right-4">
-                  <span className="text-2xl font-bold text-[#C68E4E] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                <div className="absolute bottom-3 right-3">
+                  <span className="text-xl font-bold text-[#C68E4E] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                     {item.price}
                   </span>
                 </div>
               </div>
-              <div className="p-6">
-                <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase mb-2">
+              <div className="p-5">
+                <h3 className="text-white font-bold text-base tracking-[0.02em] uppercase mb-1.5 leading-tight">
                   {item.name}
                 </h3>
-                <p className="text-[#8090A0] text-sm mb-4">Размер: {item.size}</p>
-                <div className="flex flex-wrap gap-2 mb-5">
+                <p className="text-[#8090A0] text-xs mb-3">{item.size}</p>
+                {item.description && (
+                  <p className="text-[#909AA4] text-sm leading-relaxed mb-3 line-clamp-2">
+                    {item.description}
+                  </p>
+                )}
+                <div className="flex flex-wrap gap-1.5 mb-4">
                   {item.features.map((feature) => (
                     <span
                       key={feature}
-                      className="text-[11px] tracking-[0.08em] uppercase text-[#B0B8C0] bg-[#1A1A1A] border border-[#3A3A3A] px-2.5 py-1 rounded-sm"
+                      className="text-[10px] tracking-[0.06em] uppercase text-[#B0B8C0] bg-[#1A1A1A] border border-[#3A3A3A] px-2 py-0.5 rounded-sm"
                     >
                       {feature}
                     </span>
@@ -526,7 +585,7 @@ function CatalogSection() {
                 </div>
                 <Button
                   variant="outline"
-                  className="w-full border-[#C68E4E]/40 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] text-xs tracking-[0.15em] uppercase rounded-none h-10 transition-all duration-300"
+                  className="w-full border-[#C68E4E]/40 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] text-xs tracking-[0.12em] uppercase rounded-none h-9 transition-all duration-300"
                   onClick={() => document.getElementById('calc-dialog-trigger')?.click()}
                 >
                   Заказать
@@ -630,9 +689,7 @@ function AboutSection() {
               <span className="text-[#C68E4E]">мастерства</span>
             </h2>
             <p className="text-[#B0B8C0] leading-relaxed mb-6">
-              «ПАР ХАУС» — это современное производство бань и саун в Омске. Мы
-              объединяем вековые традиции русского банного дела с передовыми
-              инженерными решениями и технологиями обработки дерева.
+              «ПАР ХАУС» — это современное производство мобильных бань, саун и дачных домиков в Омске. Каркасные и брусовые строения изготавливаются по новой технологии — работаем на качество, а не на количество.
             </p>
             <p className="text-[#B0B8C0] leading-relaxed mb-8">
               Используем только термически модифицированную древесину —

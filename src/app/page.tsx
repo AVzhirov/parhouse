@@ -1207,7 +1207,7 @@ function CatalogPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.4, delay: 0.05 * idx }}
-                className="group bg-[#242424] rounded-lg overflow-hidden border border-[#333333] hover:border-[#C68E4E]/40 transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)] cursor-pointer"
+                className="group bg-[#242424] rounded-lg overflow-hidden border border-[#333333] hover:border-[#C68E4E]/40 transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)] cursor-pointer flex flex-col"
                 onClick={() => setSelectedItem(item)}
               >
                 <div className="relative h-48 sm:h-56 overflow-hidden">
@@ -1227,7 +1227,7 @@ function CatalogPage() {
                     </span>
                   </div>
                 </div>
-                <div className="p-5">
+                <div className="p-5 flex flex-col flex-1">
                   <h3 className="text-white font-bold text-base tracking-[0.02em] uppercase mb-1.5 leading-tight">
                     {item.name}
                   </h3>
@@ -1247,7 +1247,7 @@ function CatalogPage() {
                       </span>
                     ))}
                   </div>
-                  <div className="flex items-center justify-center gap-2 text-[#C68E4E] text-xs tracking-[0.1em] uppercase font-semibold group-hover:gap-3 transition-all duration-300">
+                  <div className="mt-auto flex items-center justify-center gap-2 text-[#C68E4E] text-xs tracking-[0.1em] uppercase font-semibold group-hover:gap-3 transition-all duration-300">
                     Подробнее
                     <ArrowRight className="w-3.5 h-3.5" />
                   </div>

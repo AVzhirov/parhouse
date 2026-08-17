@@ -34,8 +34,18 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Skip _next/static assets explicitly (fixes Beget shared hosting)
+  RewriteRule ^_next/static - [L]
+
+  # Skip static files by extension
+  RewriteRule \.(css|js|woff2?|ttf|eot|otf|png|jpe?g|gif|svg|ico|webp|json|xml|txt|pdf|zip)$ - [L]
+
+  # Skip existing files and directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # SPA fallback: everything else -> index.html
   RewriteRule . /index.html [L]
 </IfModule>

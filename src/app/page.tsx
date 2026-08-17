@@ -159,44 +159,159 @@ const CATALOG_ITEMS = [
 
 const PROJECTS = [
   {
+    slug: 'dachny-domik-46-terasa',
+    title: 'Дачный домик 4×6 с террасой',
+    description: 'Дачный домик 4х6 с террасой — это классика, которая дает хороший простор для планировки. Главное преимущество — с террасой полезная площадь визуально и функционально расширяется, а само строение выглядит законченным.',
+    image: '/projects/dachny-domik-46-terasa/main.jpg',
+    year: '2024',
+    price: '650 000 ₽',
+    gallery: [
+      '/projects/dachny-domik-46-terasa/main.jpg',
+      '/projects/dachny-domik-46-terasa/gallery-1.jpg',
+      '/projects/dachny-domik-46-terasa/gallery-2.jpg',
+      '/projects/dachny-domik-46-terasa/gallery-3.jpg',
+      '/projects/dachny-domik-46-terasa/gallery-4.jpg',
+      '/projects/dachny-domik-46-terasa/gallery-5.jpg',
+    ],
+  },
+  {
+    slug: 'karkasnaya-banya-55-25',
     title: 'Каркасная баня 5,5×2,5',
-    description: 'Просторная баня с продуманной планировкой. 8 фото из VK.',
-    image: '/projects/p1-1.jpg',
+    description: 'Каркасная баня 5×2,5 с панорамными окнами, с тёплым полом.',
+    image: '/projects/karkasnaya-banya-55-25/main.jpg',
     year: '2024',
     price: '780 000 ₽',
     gallery: [
-      '/projects/p1-1.jpg',
-      '/projects/p1-2.jpg',
-      '/projects/p1-3.jpg',
-      '/projects/p1-4.jpg',
-      '/projects/p1-5.jpg',
-      '/projects/p1-6.jpg',
-      '/projects/p1-7.jpg',
-      '/projects/p1-8.jpg',
+      '/projects/karkasnaya-banya-55-25/main.jpg',
+      '/projects/karkasnaya-banya-55-25/gallery-1.jpg',
+      '/projects/karkasnaya-banya-55-25/gallery-2.jpg',
+      '/projects/karkasnaya-banya-55-25/gallery-3.jpg',
+      '/projects/karkasnaya-banya-55-25/gallery-4.jpg',
+      '/projects/karkasnaya-banya-55-25/gallery-5.jpg',
     ],
   },
   {
-    title: 'Мини парная 4×2,4',
-    description: 'Компактная парная с электрокаменкой — быстрый прогрев и экономичный расход',
-    image: '/projects/p1-3.jpg',
+    slug: 'mini-parnaya-elektrokamenka',
+    title: 'Мини парная с электрокаменкой 4×2,4',
+    description: 'Мини парная с электрокаменкой и небольшим предбанником, специальное панорамное остекление прямо в парной. Уютная МИНИ баня — отличный вариант для мини отелей или компактного места.',
+    image: '/projects/mini-parnaya-elektrokamenka/main.jpg',
     year: '2024',
     price: '445 000 ₽',
     gallery: [
-      '/projects/p1-3.jpg',
-      '/projects/p1-7.jpg',
-      '/projects/p1-4.jpg',
+      '/projects/mini-parnaya-elektrokamenka/main.jpg',
+      '/projects/mini-parnaya-elektrokamenka/gallery-1.jpg',
+      '/projects/mini-parnaya-elektrokamenka/gallery-2.jpg',
+      '/projects/mini-parnaya-elektrokamenka/gallery-3.jpg',
+      '/projects/mini-parnaya-elektrokamenka/gallery-4.jpg',
+      '/projects/mini-parnaya-elektrokamenka/gallery-5.jpg',
     ],
   },
   {
+    slug: 'banya-39-teplym-polom',
     title: 'Баня 3,9×2,15 с тёплым полом',
-    description: 'Баня с системой тёплого пола для дополнительного комфорта',
-    image: '/projects/p1-2.jpg',
+    description: 'Горячая новинка осени — баня 3,9×2,15 с тёплым полом в комнате отдыха. Продуманное до мелочей пространство для здоровья и удовольствия. Качество исполнения и smart-решения.',
+    image: '/projects/banya-39-teplym-polom/main.jpg',
     year: '2024',
     price: '380 000 ₽',
     gallery: [
-      '/projects/p1-2.jpg',
-      '/projects/p1-5.jpg',
-      '/projects/p1-8.jpg',
+      '/projects/banya-39-teplym-polom/main.jpg',
+      '/projects/banya-39-teplym-polom/gallery-1.jpg',
+      '/projects/banya-39-teplym-polom/gallery-2.jpg',
+      '/projects/banya-39-teplym-polom/gallery-3.jpg',
+      '/projects/banya-39-teplym-polom/gallery-4.jpg',
+      '/projects/banya-39-teplym-polom/gallery-5.jpg',
+    ],
+  },
+  {
+    slug: 'mobilny-ofis',
+    title: 'Мобильный офис',
+    description: 'Мобильный офис продаж размер 3,5×2,5 для круглогодичного использования.',
+    image: '/projects/mobilny-ofis/main.jpg',
+    year: '2024',
+    price: '290 000 ₽',
+    gallery: [
+      '/projects/mobilny-ofis/main.jpg',
+      '/projects/mobilny-ofis/gallery-1.jpg',
+      '/projects/mobilny-ofis/gallery-2.jpg',
+      '/projects/mobilny-ofis/gallery-3.jpg',
+      '/projects/mobilny-ofis/gallery-4.jpg',
+      '/projects/mobilny-ofis/gallery-5.jpg',
+    ],
+  },
+  {
+    slug: 'banya-42',
+    title: 'Баня 4×2',
+    description: 'Баня 4×2 из профилированного мини бруса.',
+    image: '/projects/banya-42/main.jpg',
+    year: '2024',
+    price: '320 000 ₽',
+    gallery: [
+      '/projects/banya-42/main.jpg',
+      '/projects/banya-42/gallery-1.jpg',
+      '/projects/banya-42/gallery-2.jpg',
+      '/projects/banya-42/gallery-3.jpg',
+      '/projects/banya-42/gallery-4.jpg',
+    ],
+  },
+  {
+    slug: 'dachny-domik-64',
+    title: 'Дачный домик 6×4',
+    description: 'Дачный домик 6×4, собран из профилированного кедрового мини бруса.',
+    image: '/projects/dachny-domik-64/main.jpg',
+    year: '2024',
+    price: '550 000 ₽',
+    gallery: [
+      '/projects/dachny-domik-64/main.jpg',
+      '/projects/dachny-domik-64/gallery-1.jpg',
+      '/projects/dachny-domik-64/gallery-2.jpg',
+      '/projects/dachny-domik-64/gallery-3.jpg',
+    ],
+  },
+  {
+    slug: 'karkasnaya-banya-25-4',
+    title: 'Каркасная баня 2,5×4',
+    description: 'Каркасная баня 2,5×4 под ключ.',
+    image: '/projects/karkasnaya-banya-25-4/main.jpg',
+    year: '2024',
+    price: '450 000 ₽',
+    gallery: [
+      '/projects/karkasnaya-banya-25-4/main.jpg',
+      '/projects/karkasnaya-banya-25-4/gallery-1.jpg',
+      '/projects/karkasnaya-banya-25-4/gallery-2.jpg',
+      '/projects/karkasnaya-banya-25-4/gallery-3.jpg',
+      '/projects/karkasnaya-banya-25-4/gallery-4.jpg',
+      '/projects/karkasnaya-banya-25-4/gallery-5.jpg',
+    ],
+  },
+  {
+    slug: 'banya-39-215',
+    title: 'Баня 3,9×2,15',
+    description: 'Баня 3,9×2,15 из сухого профилированного кедрового мини бруса, парилка обшита осиновой вагонкой. Печь «Русь», бак 50л из нержавейки, дымоход «Термофор» 0,8мм. Установка по противопожарным нормам. Электрика медным проводом в кабель канале. Обработка пропиткой, водоотведение. Мебель и камни в подарок.',
+    image: '/projects/banya-39-215/main.jpg',
+    year: '2024',
+    price: '350 000 ₽',
+    gallery: [
+      '/projects/banya-39-215/main.jpg',
+      '/projects/banya-39-215/gallery-1.jpg',
+      '/projects/banya-39-215/gallery-2.jpg',
+      '/projects/banya-39-215/gallery-3.jpg',
+      '/projects/banya-39-215/gallery-4.jpg',
+    ],
+  },
+  {
+    slug: 'banya-brus-52-24',
+    title: 'Баня из профилированного бруса 5×2,4',
+    description: 'Баня 5×2,4 на 3 отделения, высота потолка 2,10м, ширина парилки 2,25м. Выдвижной нижний полок, мойка из лиственницы. Печь «Русь», бак 50л из нержавейки, дымоход «Термофор» 0,8мм. Электрика медным проводом в кабель канале, двойная пропитка. Мебель и камни в подарок.',
+    image: '/projects/banya-brus-52-24/main.jpg',
+    year: '2024',
+    price: '480 000 ₽',
+    gallery: [
+      '/projects/banya-brus-52-24/main.jpg',
+      '/projects/banya-brus-52-24/gallery-1.jpg',
+      '/projects/banya-brus-52-24/gallery-2.jpg',
+      '/projects/banya-brus-52-24/gallery-3.jpg',
+      '/projects/banya-brus-52-24/gallery-4.jpg',
+      '/projects/banya-brus-52-24/gallery-5.jpg',
     ],
   },
 ]
@@ -618,9 +733,10 @@ function CatalogSection() {
 }
 
 /* ─── PROJECT GALLERY MODAL ─── */
-function ProjectGallery({ project, onClose }: { project: typeof PROJECTS[0]; onClose: () => void }) {
+function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; onClose: () => void }) {
   const [currentIdx, setCurrentIdx] = useState(0)
   const gallery = project.gallery
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -630,6 +746,7 @@ function ProjectGallery({ project, onClose }: { project: typeof PROJECTS[0]; onC
     }
     window.addEventListener('keydown', handler)
     document.body.style.overflow = 'hidden'
+    scrollRef.current?.scrollTo(0, 0)
     return () => {
       window.removeEventListener('keydown', handler)
       document.body.style.overflow = ''
@@ -641,85 +758,141 @@ function ProjectGallery({ project, onClose }: { project: typeof PROJECTS[0]; onC
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
-      onClick={onClose}
+      transition={{ duration: 0.3 }}
+      className="fixed inset-0 z-[100] bg-[#1A1A1A] overflow-y-auto"
+      ref={scrollRef}
     >
-      <div className="relative w-full max-w-5xl mx-4" onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-white font-bold text-xl sm:text-2xl tracking-[0.03em] uppercase">
-              {project.title}
-            </h2>
-            <div className="flex items-center gap-3 mt-1">
-              <span className="text-[#C68E4E] text-sm font-semibold">{project.price}</span>
-              <span className="text-[#505860]">·</span>
-              <span className="text-[#8090A0] text-sm">{currentIdx + 1} / {gallery.length}</span>
-            </div>
-          </div>
+      {/* Sticky header */}
+      <div className="sticky top-0 z-10 bg-[#1A1A1A]/95 backdrop-blur-md border-b border-[#333]/50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <button
             onClick={onClose}
-            className="w-10 h-10 flex items-center justify-center text-[#8090A0] hover:text-white transition-colors rounded-sm border border-[#333] hover:border-[#C68E4E]/40"
-            aria-label="Закрыть"
+            className="flex items-center gap-2 text-[#8090A0] hover:text-[#C68E4E] transition-colors group"
           >
-            <X className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm tracking-[0.05em] uppercase">Назад к проектам</span>
           </button>
+          <span className="text-[#C68E4E] font-bold text-lg">{project.price}</span>
         </div>
+      </div>
 
-        {/* Main image */}
-        <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-[#111] rounded-lg overflow-hidden border border-[#333]">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={currentIdx}
-              src={gallery[currentIdx]}
-              alt={`${project.title} — фото ${currentIdx + 1}`}
-              initial={{ opacity: 0, scale: 1.02 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.25 }}
-              className="absolute inset-0 w-full h-full object-contain"
-            />
-          </AnimatePresence>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        {/* Main image with gallery controls */}
+        <div className="relative">
+          <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-[#111] rounded-lg overflow-hidden border border-[#333]">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentIdx}
+                src={gallery[currentIdx]}
+                alt={`${project.title} — фото ${currentIdx + 1}`}
+                initial={{ opacity: 0, scale: 1.02 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.25 }}
+                className="absolute inset-0 w-full h-full object-contain"
+              />
+            </AnimatePresence>
 
-          {/* Nav arrows */}
+            {/* Nav arrows */}
+            {gallery.length > 1 && (
+              <>
+                <button
+                  onClick={() => setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1))}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/60 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/50 transition-all"
+                  aria-label="Предыдущее фото"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1))}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/60 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/50 transition-all"
+                  aria-label="Следующее фото"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </>
+            )}
+
+            {/* Counter badge */}
+            <div className="absolute bottom-3 right-3 bg-black/70 text-white/80 text-xs px-3 py-1.5 rounded-sm border border-white/10">
+              {currentIdx + 1} / {gallery.length}
+            </div>
+          </div>
+
+          {/* Thumbnails strip */}
           {gallery.length > 1 && (
-            <>
-              <button
-                onClick={() => setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1))}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-black/50 hover:bg-[#C68E4E]/30 text-white/70 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/40 transition-all"
-                aria-label="Предыдущее фото"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1))}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-black/50 hover:bg-[#C68E4E]/30 text-white/70 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/40 transition-all"
-                aria-label="Следующее фото"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </>
+            <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+              {gallery.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentIdx(idx)}
+                  className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded overflow-hidden border-2 transition-all ${
+                    idx === currentIdx
+                      ? 'border-[#C68E4E] opacity-100'
+                      : 'border-[#333] opacity-50 hover:opacity-80'
+                  }`}
+                >
+                  <img src={img} alt={`Миниатюра ${idx + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
           )}
         </div>
 
-        {/* Thumbnails strip */}
-        {gallery.length > 1 && (
-          <div className="flex gap-2 mt-4 overflow-x-auto pb-2 max-h-20">
-            {gallery.map((img, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentIdx(idx)}
-                className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded overflow-hidden border-2 transition-all ${
-                  idx === currentIdx
-                    ? 'border-[#C68E4E] opacity-100'
-                    : 'border-[#333] opacity-50 hover:opacity-80'
-                }`}
-              >
-                <img src={img} alt={`Миниатюра ${idx + 1}`} className="w-full h-full object-cover" />
-              </button>
-            ))}
+        {/* Project info */}
+        <div className="mt-10 lg:mt-14 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          {/* Left: description */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-[2px] bg-[#C68E4E]" />
+              <span className="text-[#C68E4E] text-xs tracking-[0.3em] uppercase font-semibold">
+                {project.year}
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.03em] uppercase text-white mb-6">
+              {project.title}
+            </h1>
+            <div className="w-16 h-[2px] bg-[#C68E4E] mb-6" />
+            <p className="text-[#B0B8C0] leading-relaxed text-base lg:text-lg">
+              {project.description}
+            </p>
           </div>
-        )}
+
+          {/* Right: price card + CTA */}
+          <div className="space-y-6">
+            <div className="glass-card rounded-lg p-6">
+              <div className="text-[#8090A0] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+                Стоимость
+              </div>
+              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{project.price}</div>
+              <div className="space-y-3">
+                <a
+                  href="tel:+79048220007"
+                  className="flex items-center justify-center gap-2 w-full py-3 bg-[#C68E4E] hover:bg-[#B37D42] text-white font-bold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
+                >
+                  <Phone className="w-4 h-4" />
+                  Позвонить
+                </a>
+              </div>
+            </div>
+            <div className="glass-card rounded-lg p-6">
+              <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-3">
+                Почему ПАР ХАУС
+              </h3>
+              <ul className="space-y-2.5">
+                {['Собственное производство в Омске', 'Кедровый мини брус', 'Комплектация под ключ', 'Доставка и монтаж'].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-[#B0B8C0] text-sm">
+                    <Star className="w-4 h-4 text-[#C68E4E] shrink-0 mt-0.5" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom spacer */}
+        <div className="h-16" />
       </div>
     </motion.div>
   )
@@ -737,15 +910,15 @@ function ProjectsSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="Портфолио" title="Наши проекты" visible={visible} />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {PROJECTS.map((project, idx) => (
             <motion.div
-              key={project.title}
+              key={project.slug}
               initial={{ opacity: 0, y: 30 }}
               animate={visible ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.15 * idx }}
+              transition={{ duration: 0.6, delay: 0.08 * idx }}
               onClick={() => setSelectedProject(project)}
-              className="group relative rounded-lg overflow-hidden h-80 sm:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
+              className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
             >
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
@@ -759,15 +932,15 @@ function ProjectsSection() {
                 </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-6">
-                <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold mb-2 px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
-                  {project.year}
-                </span>
-                <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase mb-2">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
+                    {project.gallery.length} фото
+                  </span>
+                  <span className="text-[#C68E4E] font-bold text-sm">{project.price}</span>
+                </div>
+                <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase">
                   {project.title}
                 </h3>
-                <p className="text-[#C0C8D0] text-sm">
-                  {project.description}
-                </p>
               </div>
             </motion.div>
           ))}
@@ -776,10 +949,10 @@ function ProjectsSection() {
 
       <div className="section-divider absolute bottom-0 left-0 right-0" />
 
-      {/* Project gallery modal */}
+      {/* Project detail page overlay */}
       <AnimatePresence>
         {selectedProject && (
-          <ProjectGallery
+          <ProjectDetailPage
             project={selectedProject}
             onClose={() => setSelectedProject(null)}
           />

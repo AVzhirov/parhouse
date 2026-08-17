@@ -186,3 +186,22 @@ Stage Summary:
 - 8 security headers verified (CSP, X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Referrer-Policy, Permissions-Policy, HSTS, X-Permitted-Cross-Domain-Policies)
 - 0 ESLint errors, 0 warnings
 - All fixes verified in browser with agent-browser
+---
+Task ID: 1
+Agent: Main
+Task: Fix .htaccess SPA rewrite breaking _next/ static assets on Beget hosting
+
+Work Log:
+- Diagnosed root cause: RewriteRule in .htaccess was serving index.html (text/html) for _next/static/ CSS/JS requests
+- On Beget shared hosting, %{REQUEST_FILENAME} !-f condition may not resolve correctly
+- Added explicit RewriteRule ^_next/static - [L] to skip _next assets
+- Added RewriteRule for common static file extensions (css, js, woff2, png, jpg, etc.)
+- Removed ad-related Permissions-Policy features that caused warnings
+- Rebuilt project with bun run build - success
+- Verified curl returns correct Content-type: text/css for static assets
+- Committed and pushed to GitHub
+
+Stage Summary:
+- Fixed .htaccess with explicit skip rules for static assets
+- Push: 4569d59 -> main
+- User needs to re-download out/ folder and re-upload to Beget

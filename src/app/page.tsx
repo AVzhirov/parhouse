@@ -632,7 +632,7 @@ function WhatsAppButton() {
       href="https://wa.me/79048220007?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%B1%D0%B0%D0%BD%D1%8F%20%D0%BF%D0%BE%D0%B4%20%D0%BA%D0%BB%D1%8E%D1%87."
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-5 z-50 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20BD5A] text-white flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-colors duration-300 whatsapp-pulse"
+      className="fixed bottom-6 right-5 z-50 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20BD5A] text-white flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-all duration-300 hover:scale-110"
       aria-label="WhatsApp"
     >
       <MessageCircle className="w-6 h-6" />
@@ -1953,14 +1953,13 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             {/* Yandex Map */}
             <div
               ref={ref}
-              className="rounded-lg overflow-hidden h-full min-h-[400px] lg:min-h-0 border-2 border-[#333] hover:border-[#C68E4E]/30 transition-colors duration-500"
+              className="rounded-lg overflow-hidden border-2 border-[#333] hover:border-[#C68E4E]/30 transition-colors duration-500 h-[300px] sm:h-[350px] lg:h-[400px]"
             >
               {mapLoaded && (
                 <iframe
                   src="https://yandex.ru/map-widget/v1/?ll=73.3705%2C55.0971&z=13&text=%D0%9E%D0%BC%D1%81%D0%BA%2C%20%D0%94%D1%80%D1%83%D0%B6%D0%B8%D0%BD%D0%BE%2C%20%D0%A2%D0%BE%D0%BF%D0%BE%D0%BB%D0%B8%D0%BD%D0%B0%D1%8F%2031"
                   width="100%"
                   height="100%"
-                  style={{ minHeight: '400px' }}
                   frameBorder="0"
                   title="Яндекс Карта — ПАР ХАУС"
                   sandbox="allow-scripts allow-same-origin allow-popups"

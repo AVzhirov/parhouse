@@ -77,3 +77,24 @@ Stage Summary:
 - All sections render correctly on desktop and mobile
 - All interactions verified (nav, dialog, form, mobile menu, scroll)
 - No lint or runtime errors
+---
+Task ID: 1
+Agent: main
+Task: Replace hero section static background with VK video from clip-232348817_456239044
+
+Work Log:
+- Read HeroSection component in page.tsx (lines 336-450)
+- Extracted video params from VK clip URL: oid=-232348817, id=456239044
+- Replaced static parallax image background with VK video iframe embed
+- Used video_ext.php with autoplay=1, loop=1, muted=1, background=1 params
+- Set iframe to 180% size with negative offset for cover-like behavior
+- Removed unused bgY parallax transform variable
+- Verified via agent-browser: iframe present in DOM (2304x1166px)
+- Verified via network tab: video segments loading from okcdn.ru, video_view_started fired
+- VLM screenshot analysis confirmed video frame visible (wooden sauna building)
+
+Stage Summary:
+- Hero background successfully changed from static image to VK video embed
+- Video autoplays, loops, and is muted as required for background use
+- All overlays (gradient, vignette, light beams, vapor) preserved on top
+- No console errors, server compiles cleanly

@@ -340,7 +340,6 @@ function HeroSection() {
     target: ref,
     offset: ['start start', 'end start'],
   })
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
   return (
@@ -349,13 +348,17 @@ function HeroSection() {
       id="hero"
       className="relative min-h-screen flex flex-col justify-center overflow-hidden"
     >
-      {/* Background image with parallax */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
-          style={{ backgroundImage: "url('/hero-bg-wood.png')" }}
+      {/* Background video from VK */}
+      <div className="absolute inset-0 z-0">
+        <iframe
+          src="https://vk.com/video_ext.php?oid=-232348817&id=456239044&hd=2&autoplay=1&loop=1&muted=1&background=1"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+          allowFullScreen
+          className="absolute inset-0 w-[180%] h-[180%] -top-[40%] -left-[40%] pointer-events-none"
+          style={{ border: 0 }}
+          title="ПАР ХАУС — бани и сауны"
         />
-        {/* Lighter overlay so the wood texture is visible */}
+        {/* Dark overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/50 via-[#1A1A1A]/30 to-[#1A1A1A]" />
         {/* Side vignettes for drama */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#1A1A1A_100%)]" />
@@ -363,7 +366,7 @@ function HeroSection() {
         <div className="light-beam top-0 left-[15%] w-[3px] h-[70%]" />
         <div className="light-beam top-0 left-[45%] w-[2px] h-[50%] opacity-70" />
         <div className="light-beam top-0 right-[20%] w-[2px] h-[60%] opacity-50" />
-      </motion.div>
+      </div>
 
       {/* Vapor particles */}
       <div className="absolute bottom-0 left-0 right-0 h-64 z-[1] pointer-events-none">

@@ -48,7 +48,19 @@ dev.log
 dev.out.log
 test
 prompt
-
 server.log
+
 # Skills directory
 /skills/
+
+# Infrastructure (not part of app)
+.zscripts/
+Caddyfile
+db/*.db
+/download/
+/examples/
+/mini-services/
+tool-results/
+upload/
+screenshot-*.png
+screenshot-*.jpg

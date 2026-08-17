@@ -10,6 +10,8 @@ import {
   Wrench,
   Box,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   MapPin,
   Clock,
   Mail,
@@ -158,21 +160,44 @@ const CATALOG_ITEMS = [
 const PROJECTS = [
   {
     title: 'Каркасная баня 5,5×2,5',
-    description: 'Просторная баня с продуманной планировкой для комфортной парной и зоны отдыха',
-    image: '/product-2.jpg',
+    description: 'Просторная баня с продуманной планировкой. 8 фото из VK.',
+    image: '/projects/p1-1.jpg',
     year: '2024',
+    price: '780 000 ₽',
+    gallery: [
+      '/projects/p1-1.jpg',
+      '/projects/p1-2.jpg',
+      '/projects/p1-3.jpg',
+      '/projects/p1-4.jpg',
+      '/projects/p1-5.jpg',
+      '/projects/p1-6.jpg',
+      '/projects/p1-7.jpg',
+      '/projects/p1-8.jpg',
+    ],
   },
   {
     title: 'Мини парная 4×2,4',
     description: 'Компактная парная с электрокаменкой — быстрый прогрев и экономичный расход',
-    image: '/product-3.jpg',
+    image: '/projects/p1-3.jpg',
     year: '2024',
+    price: '445 000 ₽',
+    gallery: [
+      '/projects/p1-3.jpg',
+      '/projects/p1-7.jpg',
+      '/projects/p1-4.jpg',
+    ],
   },
   {
-    title: 'Баня с тёплым полом',
-    description: 'Баня 3,9×2,15 м с системой тёплого пола для дополнительного комфорта',
-    image: '/product-4.jpg',
+    title: 'Баня 3,9×2,15 с тёплым полом',
+    description: 'Баня с системой тёплого пола для дополнительного комфорта',
+    image: '/projects/p1-2.jpg',
     year: '2024',
+    price: '380 000 ₽',
+    gallery: [
+      '/projects/p1-2.jpg',
+      '/projects/p1-5.jpg',
+      '/projects/p1-8.jpg',
+    ],
   },
 ]
 
@@ -592,9 +617,118 @@ function CatalogSection() {
   )
 }
 
+/* ─── PROJECT GALLERY MODAL ─── */
+function ProjectGallery({ project, onClose }: { project: typeof PROJECTS[0]; onClose: () => void }) {
+  const [currentIdx, setCurrentIdx] = useState(0)
+  const gallery = project.gallery
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowRight') setCurrentIdx((i) => Math.min(i + 1, gallery.length - 1))
+      if (e.key === 'ArrowLeft') setCurrentIdx((i) => Math.max(i - 1, 0))
+    }
+    window.addEventListener('keydown', handler)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', handler)
+      document.body.style.overflow = ''
+    }
+  }, [gallery.length, onClose])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div className="relative w-full max-w-5xl mx-4" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-white font-bold text-xl sm:text-2xl tracking-[0.03em] uppercase">
+              {project.title}
+            </h2>
+            <div className="flex items-center gap-3 mt-1">
+              <span className="text-[#C68E4E] text-sm font-semibold">{project.price}</span>
+              <span className="text-[#505860]">·</span>
+              <span className="text-[#8090A0] text-sm">{currentIdx + 1} / {gallery.length}</span>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-10 h-10 flex items-center justify-center text-[#8090A0] hover:text-white transition-colors rounded-sm border border-[#333] hover:border-[#C68E4E]/40"
+            aria-label="Закрыть"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Main image */}
+        <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-[#111] rounded-lg overflow-hidden border border-[#333]">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={currentIdx}
+              src={gallery[currentIdx]}
+              alt={`${project.title} — фото ${currentIdx + 1}`}
+              initial={{ opacity: 0, scale: 1.02 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.25 }}
+              className="absolute inset-0 w-full h-full object-contain"
+            />
+          </AnimatePresence>
+
+          {/* Nav arrows */}
+          {gallery.length > 1 && (
+            <>
+              <button
+                onClick={() => setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1))}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-black/50 hover:bg-[#C68E4E]/30 text-white/70 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/40 transition-all"
+                aria-label="Предыдущее фото"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1))}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-black/50 hover:bg-[#C68E4E]/30 text-white/70 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/40 transition-all"
+                aria-label="Следующее фото"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Thumbnails strip */}
+        {gallery.length > 1 && (
+          <div className="flex gap-2 mt-4 overflow-x-auto pb-2 max-h-20">
+            {gallery.map((img, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIdx(idx)}
+                className={`shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded overflow-hidden border-2 transition-all ${
+                  idx === currentIdx
+                    ? 'border-[#C68E4E] opacity-100'
+                    : 'border-[#333] opacity-50 hover:opacity-80'
+                }`}
+              >
+                <img src={img} alt={`Миниатюра ${idx + 1}`} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+
 /* ─── PROJECTS ─── */
 function ProjectsSection() {
   const { ref, visible } = useOnScreen(0.1)
+  const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null)
 
   return (
     <section ref={ref} id="projects" className="relative py-24 lg:py-32 bg-[#222222]">
@@ -610,13 +744,20 @@ function ProjectsSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={visible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.15 * idx }}
-              className="group relative rounded-lg overflow-hidden h-80 sm:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500"
+              onClick={() => setSelectedProject(project)}
+              className="group relative rounded-lg overflow-hidden h-80 sm:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
             >
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                 style={{ backgroundImage: `url('${project.image}')` }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/50 to-transparent" />
+              {/* Click hint */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="w-14 h-14 rounded-full bg-[#C68E4E]/20 border border-[#C68E4E]/50 flex items-center justify-center">
+                  <ArrowRight className="w-6 h-6 text-[#C68E4E]" />
+                </div>
+              </div>
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold mb-2 px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
                   {project.year}
@@ -634,6 +775,16 @@ function ProjectsSection() {
       </div>
 
       <div className="section-divider absolute bottom-0 left-0 right-0" />
+
+      {/* Project gallery modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectGallery
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   )
 }

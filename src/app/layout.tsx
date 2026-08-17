@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "производство бань",
   ],
   icons: {
-    icon: "/hero-bg-wood.png",
+    icon: "/logo.png",
   },
   openGraph: {
     title: "ПАР ХАУС — Производство бань и саун под ключ",

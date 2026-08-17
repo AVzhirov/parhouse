@@ -197,18 +197,12 @@ function Header() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-3 group">
-          <div className="relative w-10 h-10 rounded-sm bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center group-hover:border-[#C68E4E] group-hover:bg-[#C68E4E]/30 transition-colors">
-            <span className="text-[#C68E4E] font-bold text-lg leading-none">П</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-white font-bold text-base tracking-[0.2em] uppercase leading-none">
-              Пар Хаус
-            </span>
-            <span className="text-[#A0AAB2] text-[10px] tracking-[0.15em] uppercase mt-0.5">
-              Production
-            </span>
-          </div>
+        <a href="#" className="flex items-center group">
+          <img
+            src="/logo.png"
+            alt="ПАР ХАУС — Производство бань и саун"
+            className="h-11 sm:h-13 w-auto object-contain mix-blend-screen brightness-110"
+          />
         </a>
 
         {/* Desktop Nav */}
@@ -339,12 +333,26 @@ function HeroSection() {
         className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-24"
       >
         <div className="max-w-4xl">
+          {/* Logo in hero */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="mb-8"
+          >
+            <img
+              src="/logo.png"
+              alt="ПАР ХАУС"
+              className="h-24 sm:h-32 lg:h-40 w-auto object-contain mix-blend-screen brightness-110 drop-shadow-[0_0_60px_rgba(198,142,78,0.3)]"
+            />
+          </motion.div>
+
           {/* Tagline */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex items-center gap-3 mb-8"
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="flex items-center gap-3 mb-6"
           >
             <div className="w-14 h-[2px] bg-[#C68E4E]" />
             <span className="text-[#C68E4E] text-xs sm:text-sm tracking-[0.3em] uppercase font-semibold">
@@ -352,27 +360,12 @@ function HeroSection() {
             </span>
           </motion.div>
 
-          {/* Main heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-gold-glow"
-          >
-            <span className="block text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-[0.08em] uppercase text-white leading-[0.9]">
-              ПАР
-            </span>
-            <span className="block text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-[0.08em] uppercase text-[#C68E4E] leading-[0.9] mt-1">
-              ХАУС
-            </span>
-          </motion.h1>
-
           {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-8 text-lg sm:text-xl lg:text-2xl text-[#D0D6DC] max-w-2xl leading-relaxed font-light"
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="text-lg sm:text-xl lg:text-2xl text-[#D0D6DC] max-w-2xl leading-relaxed font-light"
           >
             Строим бани, которые дышат.
             <br className="hidden sm:block" />
@@ -932,14 +925,13 @@ function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-sm bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center">
-                <span className="text-[#C68E4E] font-bold text-sm leading-none">П</span>
-              </div>
-              <span className="text-white font-bold text-sm tracking-[#C68E4E] uppercase">
-                Пар Хаус
-              </span>
-            </div>
+          <div className="mb-5">
+            <img
+              src="/logo.png"
+              alt="ПАР ХАУС"
+              className="h-14 w-auto object-contain mix-blend-screen brightness-110 opacity-80"
+            />
+          </div>
             <p className="text-[#8090A0] text-sm leading-relaxed">
               Производство и монтаж бань и саун под ключ в Омске и Омской области.
             </p>

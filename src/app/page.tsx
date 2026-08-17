@@ -655,22 +655,18 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
       ref={ref}
       className="relative min-h-screen flex flex-col justify-center overflow-hidden"
     >
-      {/* Background video from VK */}
+      {/* Background image */}
       <div className="absolute inset-0 z-0">
-        <iframe
-          src="https://vk.com/video_ext.php?oid=-232348817&id=456239044&hd=2&autoplay=1&loop=1&muted=1&background=1"
-          allow="autoplay; encrypted-media; fullscreen; picture-in-picture;"
-          allowFullScreen
-          referrerPolicy="no-referrer"
-          sandbox="allow-scripts allow-same-origin allow-presentation allow-autoplay"
-          className="absolute top-0 left-0 w-full h-full pointer-events-none lg:w-[200vw] lg:h-[200vh] lg:-left-[50vw] lg:-top-[50vh]"
-          style={{ border: 0 }}
-          title="ПАР ХАУС — бани и сауны"
+        <img
+          src="/hero-bg.jpg"
+          alt="ПАР ХАУС — интерьер бани из кедра"
+          className="absolute inset-0 w-full h-full object-cover scale-105"
+          fetchPriority="high"
         />
         {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/50 via-[#1A1A1A]/30 to-[#1A1A1A]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/60 via-[#1A1A1A]/40 to-[#1A1A1A]" />
         {/* Side vignettes for drama */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#1A1A1A_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#1A1A1A_100%)]" />
         {/* Light beams */}
         <div className="light-beam top-0 left-[15%] w-[3px] h-[70%]" />
         <div className="light-beam top-0 left-[45%] w-[2px] h-[50%] opacity-70" />

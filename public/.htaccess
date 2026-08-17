@@ -7,7 +7,6 @@
   Header set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
   Header set X-Permitted-Cross-Domain-Policies "none"
   Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
-  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vk.com https://yandex.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://vk.com https://yandex.ru; connect-src 'self'; media-src 'self' https://vk.com; worker-src 'self' blob:"
 </IfModule>
 
 # === Caching ===
@@ -16,6 +15,7 @@
   ExpiresByType text/html "access plus 1 hour"
   ExpiresByType text/css "access plus 1 year"
   ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/x-javascript "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/svg+xml "access plus 1 year"
@@ -27,7 +27,7 @@
 
 # === Gzip Compression ===
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/x-javascript application/json image/svg+xml
 </IfModule>
 
 # === SPA Routing ===

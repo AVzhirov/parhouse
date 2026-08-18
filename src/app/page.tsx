@@ -1721,7 +1721,9 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
                 className="glass-card rounded-lg w-12 h-12 flex items-center justify-center hover:border-[#C68E4E]/50 transition-colors group"
                 aria-label="VK"
               >
-                <MessageCircle className="w-5 h-5 text-[#8090A0] group-hover:text-[#C68E4E] transition-colors" />
+                <svg className="w-5 h-5 text-[#8090A0] group-hover:text-[#C68E4E] transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.785 16.241s.288-.032.436-.194c.136-.148.132-.427.132-.427s-.02-1.304.587-1.496c.598-.188 1.368 1.259 2.183 1.815.616.42 1.084.328 1.084.328l2.175-.03s1.14-.07.599-.964c-.044-.073-.314-.661-1.618-1.869-1.366-1.265-1.183-1.06.462-3.246.999-1.328 1.398-2.14 1.273-2.487-.119-.332-.854-.244-.854-.244l-2.444.015s-.182-.025-.316.056c-.131.079-.216.263-.216.263s-.388 1.036-.906 1.917c-1.092 1.856-1.528 1.954-1.706 1.84-.414-.268-.31-1.077-.31-1.651 0-1.795.272-2.543-.53-2.738-.266-.064-.462-.107-1.142-.114-.872-.009-1.61.003-2.027.208-.278.136-.493.44-.362.457.162.022.529.099.723.363.251.342.242 1.109.242 1.109s.144 2.112-.337 2.374c-.331.18-.783-.187-1.756-1.869-.498-.86-.874-1.812-.874-1.812s-.073-.178-.202-.274c-.157-.116-.377-.153-.377-.153l-2.323.015s-.35.01-.478.162c-.114.135-.009.413-.009.413s1.82 4.262 3.88 6.405c1.889 1.966 4.032 1.837 4.032 1.837h.972z"/>
+                </svg>
               </a>
               <a
                 href="https://wa.me/79048220007"
@@ -2064,6 +2066,93 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   )
 }
 
+/* ───────────────────────── COOKIE CONSENT BANNER (ФЗ-420) ───────────────────────── */
+
+const COOKIE_CONSENT_KEY = 'parhouse_cookie_consent'
+
+/** Expose consent state globally for conditional tracker loading */
+declare global {
+  interface Window {
+    __cookieConsent?: 'accepted' | 'rejected'
+    __loadTrackers?: () => void
+  }
+}
+
+function CookieBanner({ onNavigate }: { onNavigate: (page: PageId) => void }) {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const stored = localStorage.getItem(COOKIE_CONSENT_KEY)
+    if (stored === 'accepted' || stored === 'rejected') {
+      window.__cookieConsent = stored
+      if (stored === 'accepted' && typeof window.__loadTrackers === 'function') {
+        window.__loadTrackers()
+      }
+    } else {
+      const id = requestAnimationFrame(() => setVisible(true))
+      return () => cancelAnimationFrame(id)
+    }
+  }, [])
+
+  const handleAccept = useCallback(() => {
+    localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted')
+    window.__cookieConsent = 'accepted'
+    setVisible(false)
+    if (typeof window.__loadTrackers === 'function') {
+      window.__loadTrackers()
+    }
+  }, [])
+
+  const handleReject = useCallback(() => {
+    localStorage.setItem(COOKIE_CONSENT_KEY, 'rejected')
+    window.__cookieConsent = 'rejected'
+    setVisible(false)
+  }, [])
+
+  if (!visible) return null
+
+  return (
+    <motion.div
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 100, opacity: 0 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+      className="fixed bottom-0 left-0 right-0 z-[100] p-4 sm:p-6"
+    >
+      <div className="max-w-4xl mx-auto bg-[#1E1E1E] border border-[#C68E4E]/20 rounded-lg p-5 sm:p-6 shadow-[0_-4px_40px_rgba(0,0,0,0.5)]">
+        <p className="text-[#B0B8C0] text-sm leading-relaxed mb-5">
+          Мы используем файлы cookie для улучшения работы сайта и анализа посещаемости.
+          Нажимая «Принять», вы даёте согласие на использование аналитических cookie.
+          {' '}
+          <button
+            type="button"
+            onClick={() => { setVisible(false); onNavigate('privacy') }}
+            className="text-[#C68E4E] underline underline-offset-2 hover:text-[#D4A762] transition-colors whitespace-nowrap"
+          >
+            Политика конфиденциальности
+          </button>
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <button
+            type="button"
+            onClick={handleReject}
+            className="flex-1 px-6 py-3 text-sm font-semibold tracking-[0.08em] uppercase border border-[#555] text-[#B0B8C0] hover:bg-[#2A2A2A] hover:border-[#8090A0] transition-all duration-300 rounded-none"
+          >
+            Отказаться
+          </button>
+          <button
+            type="button"
+            onClick={handleAccept}
+            className="flex-1 px-6 py-3 text-sm font-semibold tracking-[0.08em] uppercase border border-[#C68E4E] bg-[#C68E4E] text-white hover:bg-[#D4A762] hover:border-[#D4A762] transition-all duration-300 rounded-none"
+          >
+            Принять
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 /* ───────────────────────── FOOTER ───────────────────────── */
 
 function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
@@ -2215,7 +2304,26 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             Персональные данные хранятся не более 3 лет с момента последнего обращения
             субъекта, после чего уничтожаются.
           </p>
-          <p><strong className="text-[#B0B8C0]">8. Контакты</strong></p>
+          <p><strong className="text-[#B0B8C0]">8. Использование файлов cookie</strong></p>
+          <p>
+            Сайт использует файлы cookie — небольшие текстовые файлы, размещаемые
+            на устройстве пользователя. Cookie делятся на две категории:
+          </p>
+          <ul className="list-disc list-inside space-y-1 ml-2">
+            <li><strong className="text-[#909AA4]">Технические (необходимые) cookie</strong> — обеспечивают корректную работу сайта,
+              запоминание выбранной страницы и настроек отображения. Эти cookie устанавливаются
+              автоматически и не требуют согласия пользователя.</li>
+            <li><strong className="text-[#909AA4]">Аналитические cookie</strong> — используются для сбора обезличенной статистики
+              посещаемости и поведения пользователей на сайте (например, Яндекс.Метрика).
+              Установка таких cookie производится только после получения согласия пользователя
+              посредством баннера на сайте.</li>
+          </ul>
+          <p>
+            Вы можете в любой момент отказаться от аналитических cookie, очистив
+            соответствующую запись в localStorage браузера (ключ: <code className="text-[#C68E4E] text-xs">parhouse_cookie_consent</code>)
+            или воспользовавшись настройками браузера.
+          </p>
+          <p><strong className="text-[#B0B8C0]">9. Контакты</strong></p>
           <p>
             По всем вопросам, связанным с обработкой персональных данных, обращайтесь:{' '}
             <a href="tel:+79048220007" className="text-[#C68E4E] hover:underline">+7 (904) 822-00-07</a>
@@ -2251,13 +2359,13 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#1A1A1A]">
+    <div className="min-h-screen flex flex-col bg-[#1A1A1A] relative">
       <Header currentPage={currentPage} onNavigate={handleNavigate} />
 
       {/* Scroll progress bar (visible on home page) */}
       {currentPage === 'home' && <ScrollProgressBar mainRef={mainRef} />}
 
-      <main className="flex-1" ref={mainRef}>
+      <main className="flex-1 relative" ref={mainRef}>
         <AnimatePresence mode="wait">
           {currentPage === 'home' && (
             <motion.div
@@ -2341,6 +2449,7 @@ export default function Home() {
 
       <Footer onNavigate={handleNavigate} />
       <CalcDialog onNavigate={handleNavigate} />
+      <CookieBanner onNavigate={handleNavigate} />
 
       {/* Global floating elements */}
       <BackToTop />

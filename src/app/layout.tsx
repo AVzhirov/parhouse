@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://parhouse55.ru'),
   title: "ПАР ХАУС — Производство бань и саун под ключ",
   description:
     "Строим бани, которые дышат. Инженерные решения для русского пара. Собственное производство, гарантия 5 лет, монтаж под ключ в Омске и Омской области.",

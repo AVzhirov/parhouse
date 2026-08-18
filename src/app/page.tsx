@@ -920,7 +920,7 @@ function CTABanner() {
 
 /* ───────────────────────── CATALOG PAGE ───────────────────────── */
 
-function CatalogPage() {
+function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId) => void; onOpenProject: (slug: string) => void }) {
   const { ref, visible } = useOnScreen(0.1)
   const [activeFilter, setActiveFilter] = useState('Все')
   const [selectedItem, setSelectedItem] = useState<typeof CATALOG_ITEMS[0] | null>(null)
@@ -1026,6 +1026,7 @@ function CatalogPage() {
           <CatalogDetailModal
             item={selectedItem}
             onClose={() => setSelectedItem(null)}
+            onOpenProject={onOpenProject}
           />
         )}
       </AnimatePresence>
@@ -1035,8 +1036,15 @@ function CatalogPage() {
 
 /* ───────────────────────── CATALOG DETAIL MODAL ───────────────────────── */
 
-function CatalogDetailModal({ item, onClose }: { item: typeof CATALOG_ITEMS[0]; onClose: () => void }) {
+function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CATALOG_ITEMS[0]; onClose: () => void; onOpenProject: (slug: string) => void }) {
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  const normalize = (s: string) => s.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '')
+  const matchedProject = PROJECTS.find((p) => {
+    const ni = normalize(item.name)
+    const np = normalize(p.title)
+    return ni.includes(np) || np.includes(ni) || (ni.split('x').length > 1 && np.split('x').length > 1 && ni.split('x')[0] === np.split('x')[0] && ni.split('x')[1] === np.split('x')[1])
+  })
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -1137,6 +1145,15 @@ function CatalogDetailModal({ item, onClose }: { item: typeof CATALOG_ITEMS[0]; 
                   <Phone className="w-4 h-4" />
                   Позвонить
                 </a>
+                {matchedProject && (
+                  <button
+                    onClick={() => { onClose(); onOpenProject(matchedProject.slug) }}
+                    className="flex items-center justify-center gap-2 w-full py-3 border border-[#8090A0]/30 hover:border-[#8090A0] hover:bg-[#8090A0]/10 text-[#8090A0] hover:text-white font-semibold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    Смотреть проект ({matchedProject.gallery.length} фото)
+                  </button>
+                )}
               </div>
             </div>
             <div className="glass-card rounded-lg p-6">
@@ -1163,9 +1180,19 @@ function CatalogDetailModal({ item, onClose }: { item: typeof CATALOG_ITEMS[0]; 
 
 /* ───────────────────────── PROJECTS PAGE ───────────────────────── */
 
-function ProjectsPage() {
+function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectSlug: string | null; onProjectOpened: () => void }) {
   const { ref, visible } = useOnScreen(0.1)
   const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null)
+
+  useEffect(() => {
+    if (initialProjectSlug && !selectedProject) {
+      const p = PROJECTS.find((pr) => pr.slug === initialProjectSlug)
+      if (p) {
+        setSelectedProject(p)
+        onProjectOpened()
+      }
+    }
+  }, [initialProjectSlug])
 
   return (
     <div className="pt-28 pb-16">
@@ -2137,6 +2164,7 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState<PageId>('home')
+  const [openProjectSlug, setOpenProjectSlug] = useState<string | null>(null)
   const mainRef = useRef<HTMLDivElement>(null)
 
   // Dismiss inline preloader once React hydrates
@@ -2184,7 +2212,7 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
-              <CatalogPage />
+              <CatalogPage onNavigate={handleNavigate} onOpenProject={(slug) => { setOpenProjectSlug(slug); handleNavigate('projects') }} />
             </motion.div>
           )}
 
@@ -2197,7 +2225,7 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
-              <ProjectsPage />
+              <ProjectsPage initialProjectSlug={openProjectSlug} onProjectOpened={() => setOpenProjectSlug(null)} />
             </motion.div>
           )}
 

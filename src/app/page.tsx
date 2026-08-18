@@ -1774,12 +1774,12 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 const FORM_ENDPOINT = 'https://api.web3forms.com/submit'
 const WEB3FORMS_KEY = '14a1eaa5-9689-46ac-ba9e-7756a18a6eb4'
 
-async function submitForm(data: { name: string; phone: string; message: string }, subject: string): Promise<boolean> {
+async function submitForm(fields: Record<string, string>): Promise<boolean> {
   try {
     const res = await fetch(FORM_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ access_key: WEB3FORMS_KEY, ...data, subject }),
+      body: JSON.stringify({ access_key: WEB3FORMS_KEY, ...fields }),
     })
     return res.ok
   } catch {
@@ -1796,7 +1796,7 @@ function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
     e.preventDefault()
     if (!formData.consent) return
     setStatus('sending')
-    const ok = await submitForm(formData, `Заявка с сайта ПАР ХАУС от ${formData.name}`)
+    const ok = await submitForm({ name: formData.name, phone: formData.phone, message: formData.message || '—', subject: `Заявка с сайта ПАР ХАУС от ${formData.name}` })
     setStatus(ok ? 'ok' : 'err')
     if (ok) {
       setTimeout(() => {
@@ -1946,10 +1946,16 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
     const subject = projectName
       ? `Заявка на проект «${projectName}» от ${formData.name}`
       : `Расчёт проекта — заявка от ${formData.name}`
-    const message = projectName
-      ? `Проект: ${projectName}\n${formData.message}`
-      : formData.message
-    const ok = await submitForm({ ...formData, message }, subject)
+    const payload: Record<string, string> = {
+      name: formData.name,
+      phone: formData.phone,
+      message: formData.message || '—',
+      subject,
+    }
+    if (projectName) {
+      payload['Проект'] = projectName
+    }
+    const ok = await submitForm(payload)
     setStatus(ok ? 'ok' : 'err')
     if (ok) {
       setTimeout(() => {

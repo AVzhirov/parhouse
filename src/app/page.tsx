@@ -1280,7 +1280,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      exit={{ opacity: 0, pointerEvents: 'none' }}
       transition={{ duration: 0.3 }}
       className="fixed inset-0 z-[100] bg-[#1A1A1A] overflow-y-auto"
       ref={scrollRef}

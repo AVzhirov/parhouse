@@ -387,21 +387,6 @@ function BackToTop() {
   )
 }
 
-/* ───────────────────────── WHATSAPP BUTTON ───────────────────────── */
-
-function WhatsAppButton() {
-  return (
-    <a
-      href="https://wa.me/79048220007?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%B1%D0%B0%D0%BD%D1%8F%20%D0%BF%D0%BE%D0%B4%20%D0%BA%D0%BB%D1%8E%D1%87."
-      target="_blank"
-      rel="noopener noreferrer"
-      className="fixed bottom-6 right-5 z-50 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20BD5A] text-white flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-all duration-300 hover:scale-110"
-      aria-label="WhatsApp"
-    >
-      <MessageCircle className="w-6 h-6" />
-    </a>
-  )
-}
 
 /* ───────────────────────── HERO SECTION ───────────────────────── */
 
@@ -2356,7 +2341,6 @@ export default function Home() {
 
       {/* Global floating elements */}
       <BackToTop />
-      <WhatsAppButton />
     </div>
   )
 }

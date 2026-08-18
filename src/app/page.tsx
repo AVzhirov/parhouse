@@ -500,7 +500,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             <Button
               size="lg"
               className="bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,142,78,0.4)]"
-              onClick={() => document.getElementById('calc-dialog-trigger')?.click()}
+              onClick={() => openCalcDialog()}
             >
               Рассчитать проект
               <ArrowRight className="ml-2 w-4 h-4" />
@@ -885,7 +885,7 @@ function CTABanner() {
             <Button
               size="lg"
               className="bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,142,78,0.4)]"
-              onClick={() => document.getElementById('calc-dialog-trigger')?.click()}
+              onClick={() => openCalcDialog()}
             >
               Рассчитать проект
               <ArrowRight className="ml-2 w-4 h-4" />
@@ -1124,7 +1124,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
                   className="w-full bg-[#C68E4E] hover:bg-[#B37D42] text-white font-bold tracking-[0.05em] uppercase text-sm rounded-sm h-11 transition-colors"
                   onClick={() => {
                     onClose()
-                    setTimeout(() => document.getElementById('calc-dialog-trigger')?.click(), 100)
+                    setTimeout(() => openCalcDialog(item.name), 100)
                   }}
                 >
                   Заказать
@@ -1392,7 +1392,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
                   Позвонить
                 </a>
                 <button
-                  onClick={() => { onClose(); setTimeout(() => document.getElementById('calc-dialog-trigger')?.click(), 350) }}
+                  onClick={() => { onClose(); setTimeout(() => openCalcDialog(project.title), 350) }}
                   className="flex items-center justify-center gap-2 w-full py-3 border border-[#C68E4E]/40 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-bold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
                 >
                   <MessageCircle className="w-4 h-4" />
@@ -1913,21 +1913,48 @@ function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
 /* ───────────────────────── CALC DIALOG ───────────────────────── */
 
+/** Module-level: stores project name for the next CalcDialog open */
+let _calcProjectName = ''
+
+/** Open CalcDialog, optionally pre-filling project context */
+function openCalcDialog(projectName?: string) {
+  _calcProjectName = projectName || ''
+  document.getElementById('calc-dialog-trigger')?.click()
+}
+
 function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const [open, setOpen] = useState(false)
+  const [projectName, setProjectName] = useState('')
   const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
+
+  // Sync module-level project name when dialog opens
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen)
+    if (nextOpen) {
+      setProjectName(_calcProjectName)
+      _calcProjectName = '' // consume it
+    } else {
+      setStatus('idle')
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.consent) return
     setStatus('sending')
-    const ok = await submitForm(formData, `Расчёт проекта — заявка от ${formData.name}`)
+    const subject = projectName
+      ? `Заявка на проект «${projectName}» от ${formData.name}`
+      : `Расчёт проекта — заявка от ${formData.name}`
+    const message = projectName
+      ? `Проект: ${projectName}\n${formData.message}`
+      : formData.message
+    const ok = await submitForm({ ...formData, message }, subject)
     setStatus(ok ? 'ok' : 'err')
     if (ok) {
       setTimeout(() => {
         setOpen(false)
-        setStatus('idle')
+        setProjectName('')
         setFormData({ name: '', phone: '', message: '', consent: false })
       }, 2000)
     } else {
@@ -1946,11 +1973,11 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         trigger
       </button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="bg-[#1E1E1E] border border-[#C68E4E]/20 text-white sm:max-w-lg rounded-lg shadow-[0_0_80px_rgba(198,142,78,0.1)]">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold tracking-[0.05em] uppercase text-white">
-              Рассчитать проект
+              {projectName ? `Заявка на «${projectName}»` : 'Рассчитать проект'}
             </DialogTitle>
             <DialogDescription className="text-[#8090A0]">
               Оставьте заявку и мы перезвоним вам в течение 30 минут

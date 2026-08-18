@@ -28,7 +28,7 @@ import {
   Hammer,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { CATALOG_ITEMS, PROJECTS } from '@/data/products'
+import { CATALOG_ITEMS, PROJECTS, CATALOG_FILTER_LABELS, getTypeLabel } from '@/data/products'
 import {
   Dialog,
   DialogContent,
@@ -113,7 +113,7 @@ const VALUES = [
   { title: 'Ответственность', desc: 'Берём ответственность за весь цикл — от проекта до финального монтажа и гарантийного обслуживания.' },
 ]
 
-const CATALOG_TYPES = ['Все', ...Array.from(new Set(CATALOG_ITEMS.map((item) => item.type)))]
+/* CATALOG_TYPES removed — now uses CATALOG_FILTER_LABELS from @/data/products */
 
 /* ───────────────────────── SHARED HOOKS ───────────────────────── */
 
@@ -927,7 +927,7 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
 
   const filtered = activeFilter === 'Все'
     ? CATALOG_ITEMS
-    : CATALOG_ITEMS.filter((item) => item.type === activeFilter)
+    : CATALOG_ITEMS.filter((item) => getTypeLabel(item.type) === activeFilter)
 
   return (
     <div className="pt-28 pb-16">
@@ -944,7 +944,7 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
 
         {/* Filter buttons */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {CATALOG_TYPES.map((type) => (
+          {CATALOG_FILTER_LABELS.map((type) => (
             <button
               key={type}
               onClick={() => setActiveFilter(type)}
@@ -986,7 +986,7 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
                   <div className="absolute inset-0 bg-gradient-to-t from-[#242424] via-transparent to-transparent" />
                   <div className="absolute top-3 left-3">
                     <span className="inline-block px-2.5 py-1 text-[10px] tracking-[0.12em] uppercase font-bold bg-[#C68E4E] text-white">
-                      {item.type}
+                      {getTypeLabel(item.type)}
                     </span>
                   </div>
                   <div className="absolute bottom-3 right-3">
@@ -1103,7 +1103,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-[2px] bg-[#C68E4E]" />
               <span className="inline-block px-2.5 py-1 text-[10px] tracking-[0.12em] uppercase font-bold bg-[#C68E4E] text-white">
-                {item.type}
+                {getTypeLabel(item.type)}
               </span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold tracking-[0.03em] uppercase text-white mb-4">

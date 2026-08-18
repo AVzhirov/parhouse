@@ -1,17 +1,45 @@
 /* ─────────────────────────════════════════════════════════════════
    ДАННЫЕ ТОВАРОВ И ПРОЕКТОВ — ПАР ХАУС
 
-   👆 ВСЕ ЦЕНЫ ЗДЕСЬ. Чтобы поменять цену —
-      измени число в поле price и пересобери проект:
+   👆 ВСЕ ЦЕНЫ И МЕТКИ ЗДЕСЬ.
+
+   • Чтобы поменять ЦЕНУ — измени число в поле price.
+   • Чтобы переименовать МЕТКУ (тип) в каталоге —
+     поменяй текст справа от двоеточия в CATALOG_TYPE_LABELS.
+     Например: 'karkas-banya': 'Каркасная баня' → 'karkas-banya': 'Баня каркасная'
+     Изменится везде: на карточках, в фильтрах, в деталях.
+
+   После изменений пересобери проект:
       bun run build  (или npm run build)
    ══════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────── МЕТКИ КАТАЛОГА ───────────────────
+   Ключ — внутренний ID (не менять!)
+   Значение — текст, который видит пользователь (можно менять)  */
+
+export const CATALOG_TYPE_LABELS: Record<string, string> = {
+  'dacha':         'Дачный домик',
+  'karkas-banya':  'Каркасная баня',
+  'mini-parnaya':  'Мини парная',
+  'banya-teplym':  'Баня с тёплым полом',
+  'mobile':        'Мобильное здание',
+  'detskiy':       'Детский домик',
+}
+
+/** Получить отображаемое имя типа по ключу */
+export function getTypeLabel(key: string): string {
+  return CATALOG_TYPE_LABELS[key] ?? key
+}
+
+/** Все метки для фильтров: ['Все', 'Дачный домик', ...] */
+export const CATALOG_FILTER_LABELS = ['Все', ...Object.values(CATALOG_TYPE_LABELS)]
 
 /* ─────────────────── ТИПЫ ─────────────────── */
 
 export interface CatalogItem {
   id: number
   name: string
-  type: string
+  type: string          // ключ из CATALOG_TYPE_LABELS (например 'karkas-banya')
   price: string
   size: string
   image: string
@@ -36,7 +64,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 1,
     name: 'Дачный домик 4×6 плюс террасой',
-    type: 'Дачный домик',
+    type: 'dacha',
     price: '650 000 ₽',
     size: '4×6 м + терраса',
     image: '/product-1.jpg',
@@ -47,7 +75,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 2,
     name: 'Каркасная баня 5,5×2,5',
-    type: 'Каркасная баня',
+    type: 'karkas-banya',
     price: '780 000 ₽',
     size: '5,5×2,5 м',
     image: '/product-2.jpg',
@@ -58,7 +86,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 3,
     name: 'Мини парная с электрокаменкой 4×2,4',
-    type: 'Мини парная',
+    type: 'mini-parnaya',
     price: '445 000 ₽',
     size: '4×2,4 м',
     image: '/product-3.jpg',
@@ -69,7 +97,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 4,
     name: 'Баня 3,9×2,15 с тёплым полом',
-    type: 'Баня с тёплым полом',
+    type: 'banya-teplym',
     price: '380 000 ₽',
     size: '3,9×2,15 м',
     image: '/product-4.jpg',
@@ -80,7 +108,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 5,
     name: 'Мобильный офис',
-    type: 'Мобильное здание',
+    type: 'mobile',
     price: '290 000 ₽',
     size: 'Мобильный',
     image: '/product-5.jpg',
@@ -91,7 +119,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 6,
     name: 'Баня 4×2',
-    type: 'Каркасная баня',
+    type: 'karkas-banya',
     price: '320 000 ₽',
     size: '4×2 м',
     image: '/product-6.jpg',
@@ -102,7 +130,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 7,
     name: 'Дачный домик',
-    type: 'Дачный домик',
+    type: 'dacha',
     price: '550 000 ₽',
     size: 'Стандартный',
     image: '/product-7.jpg',
@@ -113,7 +141,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 8,
     name: 'Каркасная баня 2,5×4',
-    type: 'Каркасная баня',
+    type: 'karkas-banya',
     price: '450 000 ₽',
     size: '2,5×4 м',
     image: '/product-8.jpg',
@@ -124,7 +152,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 9,
     name: 'Баня 3,9×2,15',
-    type: 'Каркасная баня',
+    type: 'karkas-banya',
     price: '350 000 ₽',
     size: '3,9×2,15 м',
     image: '/product-9.jpg',
@@ -135,7 +163,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 10,
     name: 'Каркасный домик 2,5х2 м для детей',
-    type: 'Детский домик',
+    type: 'detskiy',
     price: '125 000 ₽',
     size: '2,5×2 м',
     image: '/product-10.jpg',

@@ -1406,6 +1406,13 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
                   <Phone className="w-4 h-4" />
                   Позвонить
                 </a>
+                <button
+                  onClick={() => { onClose(); setTimeout(() => document.getElementById('calc-dialog-trigger')?.click(), 350) }}
+                  className="flex items-center justify-center gap-2 w-full py-3 border border-[#C68E4E]/40 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-bold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Оставить заявку
+                </button>
               </div>
             </div>
             <div className="glass-card rounded-lg p-6">

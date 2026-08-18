@@ -1597,7 +1597,7 @@ function AboutHero() {
           >
             <div
               className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: "url('/hero-bg-sauna.png')" }}
+              style={{ backgroundImage: "url('/hero-bg-sauna.webp')" }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/60 to-transparent" />
             <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#C68E4E]/40" />

@@ -49,6 +49,7 @@ type PageId = 'home' | 'catalog' | 'projects' | 'about' | 'contacts' | 'privacy'
 /* ───────────────────────── DATA ───────────────────────── */
 
 const NAV_LINKS: { label: string; pageId: PageId }[] = [
+  { label: 'Главная', pageId: 'home' },
   { label: 'Каталог', pageId: 'catalog' },
   { label: 'Проекты', pageId: 'projects' },
   { label: 'О производстве', pageId: 'about' },

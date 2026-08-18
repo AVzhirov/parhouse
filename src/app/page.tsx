@@ -1705,8 +1705,8 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">Email</h3>
-                  <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] text-base hover:underline underline-offset-4 decoration-[#C68E4E]/30">
-                    info@parhouse55.ru
+                  <a href="mailto:parhouse_55@mail.ru" className="text-[#C68E4E] text-base hover:underline underline-offset-4 decoration-[#C68E4E]/30">
+                    parhouse_55@mail.ru
                   </a>
                 </div>
               </div>
@@ -1770,8 +1770,8 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   )
 }
 
-/* ─── Отправка заявок на info@parhouse55.ru через mailto ─── */
-const FORM_EMAIL = 'info@parhouse55.ru'
+/* ─── Отправка заявок на parhouse_55@mail.ru через mailto ─── */
+const FORM_EMAIL = 'parhouse_55@mail.ru'
 
 function submitForm({ subject, body }: { subject: string; body: string }): void {
   const a = document.createElement('a')
@@ -1917,21 +1917,10 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
 
-  const handleOpenChange = (nextOpen: boolean) => {
-    setOpen(nextOpen)
-    if (nextOpen) {
-      setDialogTitle(_calcProjectName)
-    } else {
-      setStatus('idle')
-      _calcProjectName = ''
-    }
-  }
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.consent) return
     setStatus('sending')
-    // Read project name directly from module variable (synchronous, no React state lag)
     const proj = _calcProjectName || dialogTitle
     const subject = proj
       ? `Заявка на проект «${proj}» от ${formData.name}`
@@ -1953,14 +1942,14 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
     <>
       <button
         id="calc-dialog-trigger"
-        onClick={() => setOpen(true)}
+        onClick={() => { setDialogTitle(_calcProjectName); setOpen(true) }}
         className="sr-only"
         aria-label="Открыть форму расчёта"
       >
         trigger
       </button>
 
-      <Dialog open={open} onOpenChange={handleOpenChange}>
+      <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) { setStatus('idle'); setDialogTitle(''); _calcProjectName = '' } }}>
         <DialogContent className="bg-[#1E1E1E] border border-[#C68E4E]/20 text-white sm:max-w-lg rounded-lg shadow-[0_0_80px_rgba(198,142,78,0.1)]">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold tracking-[0.05em] uppercase text-white">
@@ -2231,7 +2220,7 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             По всем вопросам, связанным с обработкой персональных данных, обращайтесь:{' '}
             <a href="tel:+79048220007" className="text-[#C68E4E] hover:underline">+7 (904) 822-00-07</a>
             {' '}или{' '}
-            <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] hover:underline">info@parhouse55.ru</a>
+            <a href="mailto:parhouse_55@mail.ru" className="text-[#C68E4E] hover:underline">parhouse_55@mail.ru</a>
           </p>
           <p className="text-[#505860] text-xs mt-6">Дата последнего обновления: {new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
         </div>

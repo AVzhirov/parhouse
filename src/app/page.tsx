@@ -655,8 +655,6 @@ function HomePage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
     { val: s1.count, suf: '', label: 'Год гарантии' },
   ]
 
-  const marqueeItems = ['КАРКАСНЫЕ БАНИ', 'ДАЧНЫЕ ДОМИКИ', 'САУНЫ', '3D ПРОЕКТИРОВАНИЕ', 'МОНТАЖ ПОД КЛЮЧ', 'ТЕРМОДЕРЕВО', 'ЛИСТВЕННИЦА', 'ЛИПА', 'СОСНА']
-
   return (
     <>
       <HeroSection onNavigate={onNavigate} />
@@ -684,17 +682,6 @@ function HomePage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
           </div>
         </div>
       </section>
-
-      {/* Infinite marquee */}
-      <div className="relative bg-[#222222] border-y border-[#333]/50 py-4 overflow-hidden select-none">
-        <div className="marquee-track flex whitespace-nowrap">
-          {[...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span key={i} className="mx-6 sm:mx-10 text-xs sm:text-sm tracking-[0.25em] uppercase text-[#C68E4E]/30 font-semibold">
-              {item}
-            </span>
-          ))}
-        </div>
-      </div>
 
       {/* Advantages compact */}
       <section className="relative py-20 lg:py-28 bg-[#222222]">
@@ -767,15 +754,15 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="Портфолио" title="Избранные проекты" visible={visible} />
 
-        {/* Horizontal scroll on all screens for immersive feel */}
-        <div className="flex gap-5 overflow-x-auto scroll-snap-x scrollbar-hide pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        {/* Responsive grid — all cards fully visible */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {featured.map((project, idx) => (
             <motion.div
               key={project.slug}
               initial={false}
-              animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.6, delay: 0.1 * idx }}
-              className="group relative shrink-0 w-[300px] sm:w-[360px] lg:w-[400px] rounded-lg overflow-hidden h-80 sm:h-[360px] lg:h-[420px] border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
+              className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-[380px] border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
               onClick={() => onNavigate('projects')}
             >
               <div

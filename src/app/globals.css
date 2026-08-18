@@ -312,18 +312,6 @@ html {
   background-size: 180px 180px;
 }
 
-/* Infinite marquee — pure CSS, zero JS */
-@keyframes marquee-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.marquee-track {
-  animation: marquee-scroll 30s linear infinite;
-}
-.marquee-track:hover {
-  animation-play-state: paused;
-}
-
 /* Animated gradient border for CTA */
 @property --angle {
   syntax: "<angle>";

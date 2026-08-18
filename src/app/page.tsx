@@ -1770,21 +1770,21 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   )
 }
 
-/* ─── Отправка заявок на info@parhouse55.ru через Web3Forms ─── */
-const FORM_ENDPOINT = 'https://api.web3forms.com/submit'
-const WEB3FORMS_KEY = '14a1eaa5-9689-46ac-ba9e-7756a18a6eb4'
+/* ─── Отправка заявок на info@parhouse55.ru через mailto ─── */
+const FORM_EMAIL = 'info@parhouse55.ru'
 
-async function submitForm(fields: Record<string, string>): Promise<boolean> {
-  try {
-    const res = await fetch(FORM_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ access_key: WEB3FORMS_KEY, ...fields }),
-    })
-    return res.ok
-  } catch {
-    return false
+function submitForm(fields: Record<string, string>): boolean {
+  const subject = fields.subject || 'Заявка с сайта ПАР ХАУС'
+  let body = ''
+  for (const [key, val] of Object.entries(fields)) {
+    if (key === 'subject') continue
+    body += `${key}: ${val}\n`
   }
+  const a = document.createElement('a')
+  a.href = `mailto:${FORM_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  a.click()
+  a.remove()
+  return true
 }
 
 /* ─── Contact Form (Inline) ─── */

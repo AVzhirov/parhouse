@@ -1773,18 +1773,11 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 /* ─── Отправка заявок на info@parhouse55.ru через mailto ─── */
 const FORM_EMAIL = 'info@parhouse55.ru'
 
-function submitForm(fields: Record<string, string>): boolean {
-  const subject = fields.subject || 'Заявка с сайта ПАР ХАУС'
-  let body = ''
-  for (const [key, val] of Object.entries(fields)) {
-    if (key === 'subject') continue
-    body += `${key}: ${val}\n`
-  }
+function submitForm({ subject, body }: { subject: string; body: string }): void {
   const a = document.createElement('a')
   a.href = `mailto:${FORM_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   a.click()
   a.remove()
-  return true
 }
 
 /* ─── Contact Form (Inline) ─── */
@@ -1792,20 +1785,16 @@ function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.consent) return
-    setStatus('sending')
-    const ok = await submitForm({ name: formData.name, phone: formData.phone, message: formData.message || '—', subject: `Заявка с сайта ПАР ХАУС от ${formData.name}` })
-    setStatus(ok ? 'ok' : 'err')
-    if (ok) {
-      setTimeout(() => {
-        setStatus('idle')
-        setFormData({ name: '', phone: '', message: '', consent: false })
-      }, 3000)
-    } else {
-      setTimeout(() => setStatus('idle'), 4000)
-    }
+    const body = `Имя: ${formData.name}\nТелефон: ${formData.phone}${formData.message ? `\nСообщение: ${formData.message}` : ''}`
+    submitForm({ subject: `Заявка с сайта ПАР ХАУС от ${formData.name}`, body })
+    setStatus('ok')
+    setTimeout(() => {
+      setStatus('idle')
+      setFormData({ name: '', phone: '', message: '', consent: false })
+    }, 3000)
   }
 
   if (status === 'ok') {
@@ -1924,48 +1913,40 @@ function openCalcDialog(projectName?: string) {
 
 function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const [open, setOpen] = useState(false)
-  const [projectName, setProjectName] = useState('')
+  const [dialogTitle, setDialogTitle] = useState('')
   const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
 
-  // Sync module-level project name when dialog opens
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen)
     if (nextOpen) {
-      setProjectName(_calcProjectName)
-      _calcProjectName = '' // consume it
+      setDialogTitle(_calcProjectName)
     } else {
       setStatus('idle')
+      _calcProjectName = ''
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.consent) return
     setStatus('sending')
-    const subject = projectName
-      ? `Заявка на проект «${projectName}» от ${formData.name}`
+    // Read project name directly from module variable (synchronous, no React state lag)
+    const proj = _calcProjectName || dialogTitle
+    const subject = proj
+      ? `Заявка на проект «${proj}» от ${formData.name}`
       : `Расчёт проекта — заявка от ${formData.name}`
-    const payload: Record<string, string> = {
-      name: formData.name,
-      phone: formData.phone,
-      message: formData.message || '—',
-      subject,
-    }
-    if (projectName) {
-      payload['Проект'] = projectName
-    }
-    const ok = await submitForm(payload)
-    setStatus(ok ? 'ok' : 'err')
-    if (ok) {
-      setTimeout(() => {
-        setOpen(false)
-        setProjectName('')
-        setFormData({ name: '', phone: '', message: '', consent: false })
-      }, 2000)
-    } else {
-      setTimeout(() => setStatus('idle'), 4000)
-    }
+    const bodyParts = [`Имя: ${formData.name}`, `Телефон: ${formData.phone}`]
+    if (proj) bodyParts.push(`Проект: ${proj}`)
+    if (formData.message) bodyParts.push(`Комментарий: ${formData.message}`)
+    submitForm({ subject, body: bodyParts.join('\n') })
+    setStatus('ok')
+    setTimeout(() => {
+      setOpen(false)
+      setDialogTitle('')
+      _calcProjectName = ''
+      setFormData({ name: '', phone: '', message: '', consent: false })
+    }, 2000)
   }
 
   return (
@@ -1983,7 +1964,7 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         <DialogContent className="bg-[#1E1E1E] border border-[#C68E4E]/20 text-white sm:max-w-lg rounded-lg shadow-[0_0_80px_rgba(198,142,78,0.1)]">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold tracking-[0.05em] uppercase text-white">
-              {projectName ? `Заявка на «${projectName}»` : 'Рассчитать проект'}
+              {dialogTitle ? `Заявка на «${dialogTitle}»` : 'Рассчитать проект'}
             </DialogTitle>
             <DialogDescription className="text-[#8090A0]">
               Оставьте заявку и мы перезвоним вам в течение 30 минут

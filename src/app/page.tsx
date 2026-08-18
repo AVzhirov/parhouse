@@ -250,7 +250,7 @@ function Header({ currentPage, onNavigate }: { currentPage: PageId; onNavigate: 
             src="/logo.webp"
             alt="ПАР ХАУС — Производство бань и саун"
             fetchPriority="high"
-            className="h-14 sm:h-16 w-auto object-contain"
+            className="h-18 sm:h-20 w-auto object-contain"
           />
         </button>
 
@@ -2301,7 +2301,7 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
                 src="/logo.webp"
                 alt="ПАР ХАУС"
                 loading="lazy"
-                className="h-18 w-auto object-contain opacity-90"
+                className="h-24 w-auto object-contain opacity-90"
               />
             </div>
             <p className="text-[#8090A0] text-sm leading-relaxed">

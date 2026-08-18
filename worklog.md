@@ -46,3 +46,30 @@ Stage Summary:
 - One-line CSS fix: `max-w-[95vw] max-h-[90vh]` → `w-[95vw] h-[90vh]` in lightbox motion.img
 - All gallery images now display at full viewport size in lightbox mode
 - `object-contain` preserves aspect ratio within the forced dimensions
+
+---
+Task ID: 2
+Agent: main
+Task: Критическая ошибка + SEO + Производительность + Древесина
+
+Work Log:
+- Исправлен meta description: «гарантия 5 лет» → «1 год» (layout.tsx)
+- Добавлены SEO-теги: canonical, Twitter Card (summary_large_image), theme-color (#1A1A1A), format-detection
+- Создан sitemap.xml в public/
+- Создан manifest.json (PWA) в public/
+- Создан favicon.ico через sharp из logo.webp
+- robots.txt: добавлена ссылка на sitemap, упрощены директивы
+- Материалы (MATERIALS): термоясень→лиственница, лиственница→липа, карельская берёза→сосна
+- FAQ: обновлён ответ о древесине
+- About hero текст: обновлены породы древесины
+- Статистика: «5 Лет гарантия» → «1 Год гарантия» (stat5→stat1)
+- Удалён неиспользуемый импорт Hammer из lucide-react
+- Удалён Toaster из layout.tsx и файлы toaster.tsx, sonner.tsx, toast.tsx, use-toast.ts
+- Удалены 38 неиспользуемых UI-компонентов (5354 строк удалено)
+- lint: чисто, ошибок нет
+- Верификация в браузере: все мета-теги на месте, породы дерева корректны
+
+Stage Summary:
+- Все 6 задач выполнены, код закоммичен и отправлен в GitHub
+- 50 файлов изменено, -5354 строк (удалён мусор)
+- Page renders correctly with all fixes applied

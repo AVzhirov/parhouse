@@ -194,7 +194,7 @@ export default function RootLayout({
             src="/logo.webp"
             alt=""
             className="logo-glow"
-            style={{ width: 120, height: "auto", objectFit: "contain" }}
+            style={{ width: 200, height: "auto", objectFit: "contain" }}
           />
           {/* Brand text */}
           <div

@@ -79,7 +79,7 @@ export default function RootLayout({
               name: "ПАР ХАУС",
               description: "Производство и монтаж бань и саун под ключ в Омске",
               telephone: "+79048220007",
-              email: "parhouse_55@mail.ru",
+              email: "info@parhouse55.ru",
               url: "https://parhouse55.ru",
               address: {
                 "@type": "PostalAddress",

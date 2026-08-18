@@ -1705,8 +1705,8 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">Email</h3>
-                  <a href="mailto:parhouse_55@mail.ru" className="text-[#C68E4E] text-base hover:underline underline-offset-4 decoration-[#C68E4E]/30">
-                    parhouse_55@mail.ru
+                  <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] text-base hover:underline underline-offset-4 decoration-[#C68E4E]/30">
+                    info@parhouse55.ru
                   </a>
                 </div>
               </div>
@@ -1770,8 +1770,8 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   )
 }
 
-/* ─── Отправка заявок на parhouse_55@mail.ru через FormSubmit.co ─── */
-const FORM_EMAIL = 'parhouse_55@mail.ru'
+/* ─── Отправка заявок на info@parhouse55.ru через FormSubmit.co ─── */
+const FORM_EMAIL = 'info@parhouse55.ru'
 const FORM_ENDPOINT = `https://formsubmit.co/ajax/${FORM_EMAIL}`
 
 async function submitForm(data: { name: string; phone: string; message: string }, subject: string): Promise<boolean> {
@@ -2217,7 +2217,7 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             По всем вопросам, связанным с обработкой персональных данных, обращайтесь:{' '}
             <a href="tel:+79048220007" className="text-[#C68E4E] hover:underline">+7 (904) 822-00-07</a>
             {' '}или{' '}
-            <a href="mailto:parhouse_55@mail.ru" className="text-[#C68E4E] hover:underline">parhouse_55@mail.ru</a>
+            <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] hover:underline">info@parhouse55.ru</a>
           </p>
           <p className="text-[#505860] text-xs mt-6">Дата последнего обновления: {new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
         </div>

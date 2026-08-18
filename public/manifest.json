@@ -1,0 +1,18 @@
+{
+  "name": "ПАР ХАУС",
+  "short_name": "ПАР ХАУС",
+  "description": "Производство и монтаж бань и саун под ключ в Омске",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1A1A1A",
+  "theme_color": "#C68E4E",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "/logo.webp",
+      "sizes": "any",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ]
+}

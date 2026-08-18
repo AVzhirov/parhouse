@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://parhouse55.ru'),
   title: "ПАР ХАУС — Производство бань и саун под ключ",
   description:
-    "Строим бани, которые дышат. Инженерные решения для русского пара. Собственное производство, гарантия 5 лет, монтаж под ключ в Омске и Омской области.",
+    "Строим бани, которые дышат. Инженерные решения для русского пара. Собственное производство, гарантия 1 год, монтаж под ключ в Омске и Омской области.",
   keywords: [
     "бани",
     "сауны",
@@ -32,6 +31,16 @@ export const metadata: Metadata = {
   ],
   icons: {
     icon: "/logo.webp",
+    apple: "/logo.webp",
+  },
+  alternates: {
+    canonical: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ПАР ХАУС — Производство бань и саун под ключ",
+    description: "Строим бани, которые дышат. Инженерные решения для русского пара.",
+    images: ["/hero-bg.webp"],
   },
   robots: {
     index: true,
@@ -54,9 +63,11 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <meta name="theme-color" content="#1A1A1A" />
+        <meta name="format-detection" content="telephone=no" />
+        <link rel="manifest" href="/manifest.json" />
         <link rel="preload" as="image" href="/logo.webp" type="image/webp" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link
           rel="preload"
           as="image"
@@ -206,7 +217,6 @@ export default function RootLayout({
           </div>
         </noscript>
         {children}
-        <Toaster />
       </body>
     </html>
   );

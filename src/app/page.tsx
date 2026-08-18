@@ -1770,16 +1770,16 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   )
 }
 
-/* ─── Отправка заявок на info@parhouse55.ru через FormSubmit.co ─── */
-const FORM_EMAIL = 'info@parhouse55.ru'
-const FORM_ENDPOINT = `https://formsubmit.co/ajax/${FORM_EMAIL}`
+/* ─── Отправка заявок на info@parhouse55.ru через Web3Forms ─── */
+const FORM_ENDPOINT = 'https://api.web3forms.com/submit'
+const WEB3FORMS_KEY = '14a1eaa5-9689-46ac-ba9e-7756a18a6eb4'
 
 async function submitForm(data: { name: string; phone: string; message: string }, subject: string): Promise<boolean> {
   try {
     const res = await fetch(FORM_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ ...data, _subject: subject, _captcha: 'false', _template: 'table' }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ access_key: WEB3FORMS_KEY, ...data, subject }),
     })
     return res.ok
   } catch {

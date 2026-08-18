@@ -1251,14 +1251,21 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
 
 function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; onClose: () => void }) {
   const [currentIdx, setCurrentIdx] = useState(0)
+  const [lightbox, setLightbox] = useState(false)
   const gallery = project.gallery
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowRight') setCurrentIdx((i) => Math.min(i + 1, gallery.length - 1))
-      if (e.key === 'ArrowLeft') setCurrentIdx((i) => Math.max(i - 1, 0))
+      if (lightbox) {
+        if (e.key === 'Escape') setLightbox(false)
+        if (e.key === 'ArrowRight') setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1))
+        if (e.key === 'ArrowLeft') setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1))
+      } else {
+        if (e.key === 'Escape') onClose()
+        if (e.key === 'ArrowRight') setCurrentIdx((i) => Math.min(i + 1, gallery.length - 1))
+        if (e.key === 'ArrowLeft') setCurrentIdx((i) => Math.max(i - 1, 0))
+      }
     }
     window.addEventListener('keydown', handler)
     document.body.style.overflow = 'hidden'
@@ -1295,7 +1302,10 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
         {/* Main image with gallery controls */}
         <div className="relative">
-          <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-[#111] rounded-lg overflow-hidden border border-[#333]">
+          <div
+            className="relative aspect-[4/3] sm:aspect-[16/10] bg-[#111] rounded-lg overflow-hidden border border-[#333] cursor-zoom-in"
+            onClick={() => setLightbox(true)}
+          >
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentIdx}
@@ -1315,14 +1325,14 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
             {gallery.length > 1 && (
               <>
                 <button
-                  onClick={() => setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1))}
+                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1)) }}
                   className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/60 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/50 transition-all"
                   aria-label="Предыдущее фото"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
-                  onClick={() => setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1))}
+                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1)) }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/60 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/50 transition-all"
                   aria-label="Следующее фото"
                 >
@@ -1413,6 +1423,65 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
         {/* Bottom spacer */}
         <div className="h-16" />
       </div>
+
+      {/* Lightbox fullscreen */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[90] bg-black/95 flex items-center justify-center"
+            onClick={() => setLightbox(false)}
+          >
+            <button
+              type="button"
+              className="absolute top-4 right-4 z-10 w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors"
+              onClick={() => setLightbox(false)}
+              aria-label="Закрыть"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white/80 text-sm px-4 py-2 rounded-full border border-white/10">
+              {currentIdx + 1} / {gallery.length}
+            </div>
+            {gallery.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 flex items-center justify-center bg-black/50 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-full border border-white/10 hover:border-[#C68E4E]/50 transition-all"
+                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1)) }}
+                  aria-label="Предыдущее фото"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                  type="button"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 flex items-center justify-center bg-black/50 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-full border border-white/10 hover:border-[#C68E4E]/50 transition-all"
+                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1)) }}
+                  aria-label="Следующее фото"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </>
+            )}
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentIdx}
+                src={gallery[currentIdx]}
+                alt={`${project.title} — фото ${currentIdx + 1}`}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="max-w-[95vw] max-h-[90vh] object-contain rounded-lg"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }

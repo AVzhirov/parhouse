@@ -205,3 +205,26 @@ Stage Summary:
 - Fixed .htaccess with explicit skip rules for static assets
 - Push: 4569d59 -> main
 - User needs to re-download out/ folder and re-upload to Beget
+---
+Task ID: 2
+Agent: Main
+Task: Optimize images, add preloader, clean up layout
+
+Work Log:
+- Converted logo.png (2.2MB, 1664x928) to logo.webp (4.4KB, 300x168) - 99.8% reduction
+- Converted hero-bg.jpg (137KB) to hero-bg.webp (87KB) + hero-bg-sm.webp (37KB mobile)
+- Deleted all original heavy image files
+- Created inline CSS preloader with steam particles, pulsing logo, fade-in text
+- Added preloader dismiss in page.tsx useEffect (fades out on React hydrate)
+- Removed unused preconnect links (vk.com, yandex.ru)
+- Added display:swap to Google Fonts for better loading
+- Added preload hints for logo.webp and hero-bg.webp
+- Updated all image references in page.tsx from .png/.jpg to .webp
+- Added OpenGraph image and url to metadata
+- Build reduced from 14MB to 12MB
+
+Stage Summary:
+- Logo: 2.2MB → 4.4KB (99.8% saving)
+- Hero: 137KB → 87KB desktop + 37KB mobile
+- Preloader with steam animation added
+- Push: b21f212 → main

@@ -26,6 +26,7 @@ import {
   TreePine,
   Ruler,
   Hammer,
+  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CATALOG_ITEMS, PROJECTS, CATALOG_FILTER_LABELS, getTypeLabel } from '@/data/products'
@@ -1712,8 +1713,8 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">Email</h3>
-                  <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] text-base hover:underline underline-offset-4 decoration-[#C68E4E]/30">
-                    info@parhouse55.ru
+                  <a href="mailto:parhouse_55@mail.ru" className="text-[#C68E4E] text-base hover:underline underline-offset-4 decoration-[#C68E4E]/30">
+                    parhouse_55@mail.ru
                   </a>
                 </div>
               </div>
@@ -1777,22 +1778,45 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   )
 }
 
+/* ─── Отправка заявок на parhouse_55@mail.ru через FormSubmit.co ─── */
+const FORM_EMAIL = 'parhouse_55@mail.ru'
+const FORM_ENDPOINT = `https://formsubmit.co/ajax/${FORM_EMAIL}`
+
+async function submitForm(data: { name: string; phone: string; message: string }, subject: string): Promise<boolean> {
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ ...data, _subject: subject, _captcha: 'false', _template: 'table' }),
+    })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
 /* ─── Contact Form (Inline) ─── */
 function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.consent) return
-    setSubmitted(true)
-    setTimeout(() => {
-      setSubmitted(false)
-      setFormData({ name: '', phone: '', message: '', consent: false })
-    }, 3000)
+    setStatus('sending')
+    const ok = await submitForm(formData, `Заявка с сайта ПАР ХАУС от ${formData.name}`)
+    setStatus(ok ? 'ok' : 'err')
+    if (ok) {
+      setTimeout(() => {
+        setStatus('idle')
+        setFormData({ name: '', phone: '', message: '', consent: false })
+      }, 3000)
+    } else {
+      setTimeout(() => setStatus('idle'), 4000)
+    }
   }
 
-  if (submitted) {
+  if (status === 'ok') {
     return (
       <div className="glass-card rounded-lg p-10 text-center">
         <div className="w-16 h-16 rounded-full bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center mx-auto mb-4">
@@ -1800,6 +1824,17 @@ function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         </div>
         <p className="text-[#C68E4E] font-semibold text-lg mb-1">Сообщение отправлено!</p>
         <p className="text-[#8090A0] text-sm">Мы свяжемся с вами в ближайшее время</p>
+      </div>
+    )
+  }
+  if (status === 'err') {
+    return (
+      <div className="glass-card rounded-lg p-10 text-center">
+        <div className="w-16 h-16 rounded-full bg-red-500/20 border-2 border-red-500/50 flex items-center justify-center mx-auto mb-4">
+          <X className="w-8 h-8 text-red-400" />
+        </div>
+        <p className="text-red-400 font-semibold text-lg mb-1">Ошибка отправки</p>
+        <p className="text-[#8090A0] text-sm">Попробуйте ещё раз или позвоните нам</p>
       </div>
     )
   }
@@ -1867,11 +1902,17 @@ function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         </label>
         <Button
           type="submit"
-          disabled={!formData.consent}
+          disabled={!formData.consent || status === 'sending'}
           className="w-full bg-[#C68E4E] hover:bg-[#D4A762] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
         >
-          Отправить сообщение
-          <Send className="ml-2 w-4 h-4" />
+          {status === 'sending' ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <>
+              Отправить сообщение
+              <Send className="ml-2 w-4 h-4" />
+            </>
+          )}
         </Button>
       </form>
     </div>
@@ -1883,17 +1924,23 @@ function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.consent) return
-    setSubmitted(true)
-    setTimeout(() => {
-      setOpen(false)
-      setSubmitted(false)
-      setFormData({ name: '', phone: '', message: '', consent: false })
-    }, 2000)
+    setStatus('sending')
+    const ok = await submitForm(formData, `Расчёт проекта — заявка от ${formData.name}`)
+    setStatus(ok ? 'ok' : 'err')
+    if (ok) {
+      setTimeout(() => {
+        setOpen(false)
+        setStatus('idle')
+        setFormData({ name: '', phone: '', message: '', consent: false })
+      }, 2000)
+    } else {
+      setTimeout(() => setStatus('idle'), 4000)
+    }
   }
 
   return (
@@ -1918,7 +1965,7 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             </DialogDescription>
           </DialogHeader>
 
-          {submitted ? (
+          {status === 'ok' ? (
             <div className="py-12 text-center">
               <div className="w-16 h-16 rounded-full bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center mx-auto mb-4">
                 <Star className="w-8 h-8 text-[#C68E4E]" />
@@ -1927,6 +1974,14 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
               <p className="text-[#8090A0] text-sm mt-1">
                 Мы свяжемся с вами в ближайшее время
               </p>
+            </div>
+          ) : status === 'err' ? (
+            <div className="py-12 text-center">
+              <div className="w-16 h-16 rounded-full bg-red-500/20 border-2 border-red-500/50 flex items-center justify-center mx-auto mb-4">
+                <X className="w-8 h-8 text-red-400" />
+              </div>
+              <p className="text-red-400 font-semibold text-lg">Ошибка отправки</p>
+              <p className="text-[#8090A0] text-sm mt-1">Попробуйте ещё раз или позвоните нам</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">
@@ -1994,11 +2049,17 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
               </label>
               <Button
                 type="submit"
-                disabled={!formData.consent}
+                disabled={!formData.consent || status === 'sending'}
                 className="w-full bg-[#C68E4E] hover:bg-[#D4A762] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
               >
-                Отправить заявку
-                <ArrowRight className="ml-2 w-4 h-4" />
+                {status === 'sending' ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    Отправить заявку
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </>
+                )}
               </Button>
             </form>
           )}
@@ -2164,7 +2225,7 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             По всем вопросам, связанным с обработкой персональных данных, обращайтесь:{' '}
             <a href="tel:+79048220007" className="text-[#C68E4E] hover:underline">+7 (904) 822-00-07</a>
             {' '}или{' '}
-            <a href="mailto:info@parhouse55.ru" className="text-[#C68E4E] hover:underline">info@parhouse55.ru</a>
+            <a href="mailto:parhouse_55@mail.ru" className="text-[#C68E4E] hover:underline">parhouse_55@mail.ru</a>
           </p>
           <p className="text-[#505860] text-xs mt-6">Дата последнего обновления: {new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
         </div>

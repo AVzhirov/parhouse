@@ -20,6 +20,7 @@
 export const CATALOG_TYPE_LABELS: Record<string, string> = {
   'dacha':         'Дачный домик',
   'karkas-banya':  'Каркасная баня',
+  'banya':         'Баня',
   'mini-parnaya':  'Мини парная',
   'banya-teplym':  'Баня с тёплым полом',
   'mobile':        'Мобильное здание',
@@ -119,7 +120,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 6,
     name: 'Баня 4×2',
-    type: 'karkas-banya',
+    type: 'banya',
     price: '320 000 ₽',
     size: '4×2 м',
     image: '/product-6.jpg',
@@ -152,7 +153,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
   {
     id: 9,
     name: 'Баня 3,9×2,15',
-    type: 'karkas-banya',
+    type: 'banya',
     price: '350 000 ₽',
     size: '3,9×2,15 м',
     image: '/product-9.jpg',

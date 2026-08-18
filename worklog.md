@@ -30,3 +30,19 @@ Stage Summary:
 - Cookie consent banner fully ФЗ-420 compliant
 - Privacy policy updated with cookie section
 - No runtime errors, lint clean
+
+---
+Task ID: 1
+Agent: main
+Task: Fix lightbox — subsequent images displayed very small when navigating
+
+Work Log:
+- Identified bug: lightbox image used `max-w-[95vw] max-h-[90vh]` which only sets upper bounds
+- Small natural-dimension images rendered at their tiny intrinsic size instead of filling the viewport
+- Changed to `w-[95vw] h-[90vh] object-contain` to force all images to fill the viewport area
+- Verified with agent-browser: all images (1/6, 2/6, 3/6) consistently render at 1216×519px (95vw×90vh)
+
+Stage Summary:
+- One-line CSS fix: `max-w-[95vw] max-h-[90vh]` → `w-[95vw] h-[90vh]` in lightbox motion.img
+- All gallery images now display at full viewport size in lightbox mode
+- `object-contain` preserves aspect ratio within the forced dimensions

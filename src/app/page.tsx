@@ -1475,7 +1475,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="max-w-[95vw] max-h-[90vh] object-contain rounded-lg"
+                className="w-[95vw] h-[90vh] object-contain rounded-lg"
                 onClick={(e) => e.stopPropagation()}
               />
             </AnimatePresence>

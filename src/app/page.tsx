@@ -346,6 +346,8 @@ const PROJECTS = [
     price: '125 000 ₽',
     gallery: [
       '/projects/detskij-domik-25h2/main.jpg',
+      '/projects/detskij-domik-25h2/gallery-1.jpg',
+      '/projects/detskij-domik-25h2/gallery-2.jpg',
     ],
   },
 ]

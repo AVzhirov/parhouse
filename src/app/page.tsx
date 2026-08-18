@@ -337,6 +337,17 @@ const PROJECTS = [
       '/projects/banya-brus-52-24/gallery-5.jpg',
     ],
   },
+  {
+    slug: 'detskij-domik-25h2',
+    title: 'Каркасный домик 2,5х2 м для детей',
+    description: 'Игровой домик 2,5х2 м для детей — внутри как настоящая квартира! Размер позволяет поставить детский столик и кресло, есть окошко и дверь на щеколду (безопасно).',
+    image: '/projects/detskij-domik-25h2/main.jpg',
+    year: '2025',
+    price: '125 000 ₽',
+    gallery: [
+      '/projects/detskij-domik-25h2/main.jpg',
+    ],
+  },
 ]
 
 const REVIEWS = [

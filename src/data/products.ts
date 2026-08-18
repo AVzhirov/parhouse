@@ -17,6 +17,7 @@ export interface CatalogItem {
   image: string
   description: string
   features: string[]
+  projectSlug?: string
 }
 
 export interface Project {
@@ -41,6 +42,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-1.jpg',
     description: 'Дачный домик 4х6 с террасой — это классика, которая дает хороший простор для планировки. С террасой полезная площадь визуально и функционально расширяется, а само строение выглядит законченным.',
     features: ['Терраса', 'Просторная планировка', 'Каркасная технология'],
+    projectSlug: 'dachny-domik-46-terasa',
   },
   {
     id: 2,
@@ -51,6 +53,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-2.jpg',
     description: 'Просторная каркасная баня с продуманной планировкой. Оптимальные размеры для комфортной парной и зоны отдыха.',
     features: ['Парная', 'Помывочная', 'Комната отдыха'],
+    projectSlug: 'karkasnaya-banya-55-25',
   },
   {
     id: 3,
@@ -61,6 +64,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-3.jpg',
     description: 'Компактная мини-парная с электрокаменкой — идеальное решение для небольшого участка. Быстрый прогрев, экономичный расход электроэнергии.',
     features: ['Электрокаменка', 'Компактная', 'Быстрый прогрев'],
+    projectSlug: 'mini-parnaya-elektrokamenka',
   },
   {
     id: 4,
@@ -71,6 +75,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-4.jpg',
     description: 'Баня с системой тёплого пола для дополнительного комфорта. Оптимальные габариты, продуманная внутренняя планировка.',
     features: ['Тёплый пол', 'Компактная', 'Утеплённая'],
+    projectSlug: 'banya-39-teplym-polom',
   },
   {
     id: 5,
@@ -81,6 +86,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-5.jpg',
     description: 'Мобильный офис на базе каркасной технологии. Быстрое развёртывание, транспортируется на любой участок.',
     features: ['Мобильный', 'Каркасный', 'Транспортируемый'],
+    projectSlug: 'mobilny-ofis',
   },
   {
     id: 6,
@@ -91,6 +97,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-6.jpg',
     description: 'Компактная баня 4 на 2 метра — бюджетное решение для тех, кому нужна качественная парная на небольшом участке.',
     features: ['Компактная', 'Бюджетная', 'Каркасная'],
+    projectSlug: 'banya-42',
   },
   {
     id: 7,
@@ -101,6 +108,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-7.jpg',
     description: 'Удобный дачный домик для сезонного проживания. Каркасная технология обеспечивает быстрое строительство и отличную теплоизоляцию.',
     features: ['Сезонный', 'Каркасный', 'Теплоизоляция'],
+    projectSlug: 'dachny-domik-64',
   },
   {
     id: 8,
@@ -111,6 +119,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-8.jpg',
     description: 'Каркасная баня с размерами 2,5 на 4 метра. Продуманная внутренняя планировка с парной и зоной отдыха.',
     features: ['Парная', 'Зона отдыха', 'Каркасная'],
+    projectSlug: 'karkasnaya-banya-25-4',
   },
   {
     id: 9,
@@ -121,6 +130,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-9.jpg',
     description: 'Баня 3,9 на 2,15 м — одно из самых популярных решений. Оптимальное сочетание цены, размеров и функциональности.',
     features: ['Парная', 'Компактная', 'Популярная'],
+    projectSlug: 'banya-39-215',
   },
   {
     id: 10,
@@ -131,6 +141,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     image: '/product-10.jpg',
     description: 'Игровой домик 2,5х2 м для детей — внутри как настоящая квартира! Размер позволяет поставить детский столик и кресло, есть окошко и дверь на щеколду (безопасно).',
     features: ['Окошко', 'Дверь на щеколду', 'Для детей'],
+    projectSlug: 'detskij-domik-25h2',
   },
 ]
 

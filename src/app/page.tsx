@@ -970,7 +970,13 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.4, delay: 0.05 * idx }}
                 className="group bg-[#242424] rounded-lg overflow-hidden border border-[#333333] hover:border-[#C68E4E]/40 transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)] cursor-pointer flex flex-col"
-                onClick={() => setSelectedItem(item)}
+                onClick={() => {
+                  if (item.projectSlug) {
+                    onOpenProject(item.projectSlug)
+                  } else {
+                    setSelectedItem(item)
+                  }
+                }}
               >
                 <div className="relative h-48 sm:h-56 overflow-hidden">
                   <div
@@ -1010,7 +1016,7 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
                     ))}
                   </div>
                   <div className="mt-auto flex items-center justify-center gap-2 text-[#C68E4E] text-xs tracking-[0.1em] uppercase font-semibold group-hover:gap-3 transition-all duration-300">
-                    Подробнее
+                    Фото проекта
                     <ArrowRight className="w-3.5 h-3.5" />
                   </div>
                 </div>
@@ -1183,16 +1189,23 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
 function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectSlug: string | null; onProjectOpened: () => void }) {
   const { ref, visible } = useOnScreen(0.1)
   const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null)
+  const [hasOpenedSlug, setHasOpenedSlug] = useState(false)
 
-  useEffect(() => {
-    if (initialProjectSlug && !selectedProject) {
-      const p = PROJECTS.find((pr) => pr.slug === initialProjectSlug)
-      if (p) {
-        setSelectedProject(p)
-        onProjectOpened()
-      }
+  // Adjust state when prop changes (React supports setState during render)
+  if (initialProjectSlug && !hasOpenedSlug) {
+    const p = PROJECTS.find((pr) => pr.slug === initialProjectSlug)
+    if (p) {
+      setSelectedProject(p)
+      setHasOpenedSlug(true)
     }
-  }, [initialProjectSlug])
+  }
+
+  // Notify parent that slug was consumed (calls parent setState, not local)
+  useEffect(() => {
+    if (hasOpenedSlug) {
+      onProjectOpened()
+    }
+  }, [hasOpenedSlug, onProjectOpened])
 
   return (
     <div className="pt-28 pb-16">

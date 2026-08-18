@@ -497,7 +497,7 @@ function Header({ currentPage, onNavigate }: { currentPage: PageId; onNavigate: 
           className="flex items-center group"
         >
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt="ПАР ХАУС — Производство бань и саун"
             fetchPriority="high"
             className="h-11 sm:h-13 w-auto object-contain mix-blend-screen brightness-110"
@@ -671,7 +671,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/hero-bg.jpg"
+          src="/hero-bg.webp"
           alt="ПАР ХАУС — интерьер бани из кедра"
           className="absolute inset-0 w-full h-full object-cover scale-105"
           fetchPriority="high"
@@ -2230,7 +2230,7 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="mb-5">
               <img
-                src="/logo.png"
+                src="/logo.webp"
                 alt="ПАР ХАУС"
                 loading="lazy"
                 className="h-14 w-auto object-contain mix-blend-screen brightness-110 opacity-80"
@@ -2389,6 +2389,15 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 export default function Home() {
   const [currentPage, setCurrentPage] = useState<PageId>('home')
   const mainRef = useRef<HTMLDivElement>(null)
+
+  // Dismiss inline preloader once React hydrates
+  useEffect(() => {
+    const el = document.getElementById('preloader')
+    if (!el) return
+    el.style.opacity = '0'
+    el.style.visibility = 'hidden'
+    setTimeout(() => el.remove(), 700)
+  }, [])
 
   const handleNavigate = useCallback((page: PageId) => {
     setCurrentPage(page)

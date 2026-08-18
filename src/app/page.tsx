@@ -402,8 +402,8 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
       ref={ref}
       className="relative min-h-screen flex flex-col justify-center overflow-hidden"
     >
-      {/* Background image */}
-      <div className="absolute inset-0 z-0">
+      {/* Background image + grain */}
+      <div className="absolute inset-0 z-0 noise-overlay">
         <img
           src="/hero-bg.webp"
           alt="ПАР ХАУС — интерьер бани из кедра"
@@ -411,7 +411,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
           fetchPriority="high"
         />
         {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/60 via-[#1A1A1A]/40 to-[#1A1A1A]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/70 via-[#1A1A1A]/50 to-[#1A1A1A]" />
         {/* Side vignettes for drama */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#1A1A1A_100%)]" />
         {/* Light beams */}
@@ -461,13 +461,13 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         style={{ opacity }}
         className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-24"
       >
-        <div className="max-w-4xl">
+        <div className="max-w-5xl">
           {/* Tagline */}
           <motion.div
             initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="flex items-center gap-3 mb-6"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex items-center gap-3 mb-8"
           >
             <div className="w-14 h-[2px] bg-[#C68E4E]" />
             <span className="text-[#C68E4E] text-xs sm:text-sm tracking-[0.3em] uppercase font-semibold">
@@ -475,25 +475,33 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             </span>
           </motion.div>
 
+          {/* Big headline with word reveal */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.03em] uppercase leading-[1.1] mb-8" style={{ perspective: '600px' }}>
+            {['Бани,', 'которые', 'дышат'].map((word, i) => (
+              <span key={i}>
+                <span className={`word-reveal ${i === 2 ? 'text-[#C68E4E] text-gold-glow' : 'text-white'}`} style={{ animationDelay: `${0.5 + i * 0.15}s` }}>
+                  {word}
+                </span>
+                {i < 2 && ' '}
+              </span>
+            ))}
+          </h1>
+
           {/* Subtitle */}
           <motion.p
             initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="text-lg sm:text-xl lg:text-2xl text-[#D0D6DC] max-w-2xl leading-relaxed font-light"
+            transition={{ duration: 0.8, delay: 1.0 }}
+            className="text-base sm:text-lg lg:text-xl text-[#B0B8C0] max-w-2xl leading-relaxed"
           >
-            Строим бани, которые дышат.
-            <br className="hidden sm:block" />
-            <span className="text-white font-normal">
-              {' '}Инженерные решения для русского пара.
-            </span>
+            Инженерные решения для русского пара. Собственное производство в Омске, монтаж под ключ.
           </motion.p>
 
           {/* CTA Buttons */}
           <motion.div
             initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
             className="mt-10 flex flex-col sm:flex-row gap-4"
           >
             <Button
@@ -609,12 +617,84 @@ function ProcessTimeline({ compact = false }: { compact?: boolean }) {
   )
 }
 
-/* ───────────────────────── HOME PAGE ───────────────────────── */
+/* ────────────────────── HOME PAGE ────────────────────── */
 
 function HomePage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
+  /* ── stats bar hooks ── */
+  const statsRef = useRef<HTMLDivElement>(null)
+  const [statsVisible, setStatsVisible] = useState(true)
+  const s8 = useCountUp(8, 2000)
+  const s200 = useCountUp(200, 2000)
+  const s100 = useCountUp(100, 2000)
+  const s1 = useCountUp(1, 1000)
+
+  useEffect(() => {
+    const el = statsRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setStatsVisible(true) },
+      { threshold: 0.3 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (statsVisible) {
+      s8.start()
+      s200.start()
+      s100.start()
+      s1.start()
+    }
+  }, [statsVisible])
+
+  const statsItems = [
+    { val: s8.count, suf: '+', label: 'Лет опыта' },
+    { val: s200.count, suf: '+', label: 'Проектов выполнено' },
+    { val: s100.count, suf: '%', label: 'Натуральные материалы' },
+    { val: s1.count, suf: '', label: 'Год гарантии' },
+  ]
+
+  const marqueeItems = ['КАРКАСНЫЕ БАНИ', 'ДАЧНЫЕ ДОМИКИ', 'САУНЫ', '3D ПРОЕКТИРОВАНИЕ', 'МОНТАЖ ПОД КЛЮЧ', 'ТЕРМОДЕРЕВО', 'ЛИСТВЕННИЦА', 'ЛИПА', 'СОСНА']
+
   return (
     <>
       <HeroSection onNavigate={onNavigate} />
+
+      {/* Animated stats bar */}
+      <section ref={statsRef} className="relative bg-[#1A1A1A] border-y border-[#C68E4E]/15">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {statsItems.map((it, idx) => (
+              <motion.div
+                key={it.label}
+                initial={{ opacity: 0, y: 15 }}
+                animate={statsVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+                transition={{ duration: 0.5, delay: 0.1 * idx }}
+                className="text-center"
+              >
+                <div className="text-3xl sm:text-4xl font-bold text-[#C68E4E] tabular-nums">
+                  {it.val}{it.suf}
+                </div>
+                <div className="text-[#8090A0] text-xs sm:text-sm mt-1 tracking-wide">
+                  {it.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Infinite marquee */}
+      <div className="relative bg-[#222222] border-y border-[#333]/50 py-4 overflow-hidden select-none">
+        <div className="marquee-track flex whitespace-nowrap">
+          {[...marqueeItems, ...marqueeItems].map((item, i) => (
+            <span key={i} className="mx-6 sm:mx-10 text-xs sm:text-sm tracking-[0.25em] uppercase text-[#C68E4E]/30 font-semibold">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* Advantages compact */}
       <section className="relative py-20 lg:py-28 bg-[#222222]">
@@ -679,7 +759,7 @@ function AdvantagesCompact() {
 
 function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const { ref, visible } = useOnScreen(0.1)
-  const featured = PROJECTS.slice(0, 3)
+  const featured = PROJECTS.slice(0, 5)
 
   return (
     <section ref={ref} className="relative py-20 lg:py-28 bg-[#1A1A1A]">
@@ -687,21 +767,22 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="Портфолио" title="Избранные проекты" visible={visible} />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Horizontal scroll on all screens for immersive feel */}
+        <div className="flex gap-5 overflow-x-auto scroll-snap-x scrollbar-hide pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           {featured.map((project, idx) => (
             <motion.div
               key={project.slug}
               initial={false}
-              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
               transition={{ duration: 0.6, delay: 0.1 * idx }}
-              className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
+              className="group relative shrink-0 w-[300px] sm:w-[360px] lg:w-[400px] rounded-lg overflow-hidden h-80 sm:h-[360px] lg:h-[420px] border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
               onClick={() => onNavigate('projects')}
             >
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                 style={{ backgroundImage: `url('${project.image}')` }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/40 to-transparent" />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="w-14 h-14 rounded-full bg-[#C68E4E]/20 border border-[#C68E4E]/50 flex items-center justify-center">
                   <ArrowRight className="w-6 h-6 text-[#C68E4E]" />
@@ -726,7 +807,7 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
           initial={false}
           animate={visible ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-12 text-center"
+          className="mt-10 text-center"
         >
           <Button
             variant="outline"
@@ -866,36 +947,39 @@ function CTABanner() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(198,142,78,0.08)_0%,transparent_70%)]" />
       <div className="section-divider absolute top-0 left-0 right-0" />
 
-      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={false}
           animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8 }}
+          className="relative rounded-lg p-[1px] animated-border"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.04em] uppercase text-white mb-6">
-            Готовы построить
-            <br />
-            <span className="text-[#C68E4E]">баню мечты?</span>
-          </h2>
-          <p className="text-[#B0B8C0] text-base lg:text-lg max-w-xl mx-auto mb-10">
-            Оставьте заявку и получите бесплатный расчёт проекта за 30 минут
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,142,78,0.4)]"
-              onClick={() => openCalcDialog()}
-            >
-              Рассчитать проект
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-            <a
-              href="tel:+79048220007"
-              className="inline-flex items-center justify-center gap-2 border border-[#C68E4E]/50 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300"
-            >
-              <Phone className="w-4 h-4" />
-              Позвонить
-            </a>
+          <div className="bg-[#1A1A1A]/95 backdrop-blur rounded-[7px] p-10 sm:p-14 lg:p-16 text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.04em] uppercase text-white mb-6">
+              Готовы построить
+              <br />
+              <span className="text-[#C68E4E] text-gold-glow">баню мечты?</span>
+            </h2>
+            <p className="text-[#B0B8C0] text-base lg:text-lg max-w-xl mx-auto mb-10">
+              Оставьте заявку и получите бесплатный расчёт проекта за 30 минут
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                className="bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,142,78,0.4)]"
+                onClick={() => openCalcDialog()}
+              >
+                Рассчитать проект
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+              <a
+                href="tel:+79048220007"
+                className="inline-flex items-center justify-center gap-2 border border-[#C68E4E]/50 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300"
+              >
+                <Phone className="w-4 h-4" />
+                Позвонить
+              </a>
+            </div>
           </div>
         </motion.div>
       </div>

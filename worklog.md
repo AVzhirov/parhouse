@@ -73,3 +73,21 @@ Stage Summary:
 - Все 6 задач выполнены, код закоммичен и отправлен в GitHub
 - 50 файлов изменено, -5354 строк (удалён мусор)
 - Page renders correctly with all fixes applied
+---
+Task ID: 3
+Agent: fix-parser
+Task: Fix TSX parse error and inline stats/marquee into HomePage
+
+Work Log:
+- Read page.tsx lines 620-727: found standalone HeroStatsBar, MarqueeStrip, and HomePage
+- Parse error at line 700 caused by TSX parser failing on standalone components
+- Removed HeroStatsBar, MARQUEE_ITEMS const, and MarqueeStrip component definitions
+- Rewrote HomePage to inline stats bar (useRef + IntersectionObserver + useCountUp) and marquee (pure JSX)
+- Stats: 2x2 mobile / 4-col desktop grid with gold numbers
+- Marquee: doubled items array, marquee-track CSS class for animation
+- Used Python for editing due to Unicode U+2500 box-drawing chars in comments
+- eslint: 0 errors, tsc --noEmit: 0 errors
+
+Stage Summary:
+- Removed 2 standalone components, inlined into HomePage
+- Parse error fixed: lint and TypeScript compilation pass cleanly

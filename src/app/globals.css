@@ -299,3 +299,62 @@ html {
 .timeline-line {
   background: linear-gradient(90deg, rgba(198,142,78,0.1) 0%, rgba(198,142,78,0.4) 50%, rgba(198,142,78,0.1) 100%);
 }
+
+/* Noise/grain texture overlay — pure CSS, no image */
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* Infinite marquee — pure CSS, zero JS */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-scroll 30s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Animated gradient border for CTA */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes rotate-gradient {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
+}
+.animated-border {
+  background: conic-gradient(from var(--angle), transparent 30%, #C68E4E 50%, transparent 70%);
+  animation: rotate-gradient 4s linear infinite;
+}
+
+/* Hero word reveal */
+@keyframes word-reveal {
+  0% { opacity: 0; transform: translateY(40px) rotateX(-15deg); filter: blur(6px); }
+  100% { opacity: 1; transform: translateY(0) rotateX(0deg); filter: blur(0); }
+}
+.word-reveal {
+  display: inline-block;
+  opacity: 0;
+  animation: word-reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Horizontal scroll snap for projects */
+.scroll-snap-x {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll-snap-x > * {
+  scroll-snap-align: start;
+}

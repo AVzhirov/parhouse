@@ -1849,7 +1849,7 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             {/* Social Links */}
             <div className="flex gap-4">
               <a
-                href="https://vk.com/parhouse55"
+                href="https://vk.ru/mobil_bani55"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="glass-card rounded-lg w-12 h-12 flex items-center justify-center hover:border-[#C68E4E]/50 transition-colors group"

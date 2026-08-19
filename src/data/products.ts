@@ -220,7 +220,6 @@ export const PROJECTS: Project[] = [
       '/projects/mini-parnaya-elektrokamenka/gallery-2.jpg',
       '/projects/mini-parnaya-elektrokamenka/gallery-3.jpg',
       '/projects/mini-parnaya-elektrokamenka/gallery-4.jpg',
-      '/projects/mini-parnaya-elektrokamenka/gallery-5.jpg',
     ],
   },
   {

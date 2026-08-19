@@ -189,8 +189,6 @@ export const PROJECTS: Project[] = [
       '/projects/dachny-domik-46-terasa/gallery-1.jpg',
       '/projects/dachny-domik-46-terasa/gallery-2.jpg',
       '/projects/dachny-domik-46-terasa/gallery-3.jpg',
-      '/projects/dachny-domik-46-terasa/gallery-4.jpg',
-      '/projects/dachny-domik-46-terasa/gallery-5.jpg',
     ],
   },
   {

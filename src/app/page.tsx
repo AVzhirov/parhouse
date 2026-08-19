@@ -766,9 +766,11 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
               className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-[380px] border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
               onClick={() => onNavigate('projects')}
             >
-              <div
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: `url('${project.image}')` }}
+              <img
+                loading="lazy"
+                src={project.image}
+                alt={project.title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/40 to-transparent" />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -1036,9 +1038,11 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
                 }}
               >
                 <div className="relative h-48 sm:h-56 overflow-hidden">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                    style={{ backgroundImage: `url('${item.image}')` }}
+                  <img
+                    loading="lazy"
+                    src={item.image}
+                    alt={item.name}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#242424] via-transparent to-transparent" />
                   <div className="absolute top-3 left-3">
@@ -1148,9 +1152,10 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
         {/* Large image */}
         <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-[#111] rounded-lg overflow-hidden border border-[#333] mb-10">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${item.image}')` }}
+          <img
+            src={item.image}
+            alt={item.name}
+            className="absolute inset-0 w-full h-full object-cover"
           />
         </div>
 
@@ -1279,9 +1284,11 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
               onClick={() => setSelectedProject(project)}
               className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
             >
-              <div
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: `url('${project.image}')` }}
+              <img
+                loading="lazy"
+                src={project.image}
+                alt={project.title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/50 to-transparent" />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -1596,9 +1603,11 @@ function AboutHero() {
             transition={{ duration: 0.8 }}
             className="relative rounded-lg overflow-hidden h-[400px] lg:h-[500px] border-2 border-[#C68E4E]/20"
           >
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: "url('/hero-bg-sauna.jpg')" }}
+            <img
+              loading="lazy"
+              src="/hero-bg-sauna.webp"
+              alt="Производство ПАР ХАУС"
+              className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/60 to-transparent" />
             <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#C68E4E]/40" />
@@ -2300,7 +2309,6 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
               <img
                 src="/logo.webp"
                 alt="ПАР ХАУС"
-                loading="lazy"
                 className="h-24 w-auto object-contain opacity-90"
               />
             </div>

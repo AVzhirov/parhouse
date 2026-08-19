@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     description:
       "Строим бани, которые дышат. Инженерные решения для русского пара.",
     type: "website",
-    images: [{ url: "/hero-bg.webp", width: 1344, height: 768 }],
+    images: [{ url: "/hero-bg.webp", width: 1536, height: 1024 }],
   },
 };
 

@@ -253,8 +253,6 @@ export const PROJECTS: Project[] = [
       '/projects/mobilny-ofis/gallery-1.jpg',
       '/projects/mobilny-ofis/gallery-2.jpg',
       '/projects/mobilny-ofis/gallery-3.jpg',
-      '/projects/mobilny-ofis/gallery-4.jpg',
-      '/projects/mobilny-ofis/gallery-5.jpg',
     ],
   },
   {

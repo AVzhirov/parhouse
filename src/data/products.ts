@@ -110,7 +110,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     id: 5,
     name: 'Мобильный офис',
     type: 'mobile',
-    price: '290 000 ₽',
+    price: 'от 290 000 ₽',
     size: 'Мобильный',
     image: '/product-5.jpg',
     description: 'Мобильный офис на базе каркасной технологии. Быстрое развёртывание, транспортируется на любой участок.',
@@ -244,7 +244,7 @@ export const PROJECTS: Project[] = [
     description: 'Мобильный офис продаж размер 3,5×2,5 для круглогодичного использования.',
     image: '/projects/mobilny-ofis/main.jpg',
     year: '2024',
-    price: '290 000 ₽',
+    price: 'от 290 000 ₽',
     gallery: [
       '/projects/mobilny-ofis/main.jpg',
       '/projects/mobilny-ofis/gallery-1.jpg',

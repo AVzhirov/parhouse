@@ -83,6 +83,12 @@ const REVIEWS = [
   { name: 'Алексей К.', text: 'Заказывали баню 5,5×2,5 под ключ. Качество на высоте, монтаж занял всего 3 дня. Печём уже полгода — никаких проблем!', rating: 5, location: 'Омск' },
   { name: 'Марина С.', text: 'Дачный домик превзошёл все ожидания. Тёплый, уютный, собран очень аккуратно. Рекомендую ПАР ХАУС всем знакомым.', rating: 5, location: 'Омская область' },
   { name: 'Дмитрий В.', text: 'Мини-парная для загородного дома — идеальное решение. Быстрый прогрев, экономично. Спасибо команде за профессионализм!', rating: 5, location: 'Омск' },
+  { name: 'Игорь П.', text: 'Ставили баню с тёплым полом на участке в Черлаке. Тёплый пол реально меняет всё — заходишь после парной и не мёрзнешь. Жена в восторге.', rating: 5, location: 'Черлак' },
+  { name: 'Елена М.', text: 'Выбрала ПАР ХАУС потому что у них реально своё производство, а не перекупы. Видела цех, видела материал — всё честно. Дачный домик собран на совесть.', rating: 5, location: 'Омск' },
+  { name: 'Сергей Т.', text: 'Заказывали мобильный офис для торговли на трассе. За месяц окупился. Тёплый зимой, не продувается. Хорошие ребята, сделали быстро.', rating: 5, location: 'Тюкалинск' },
+  { name: 'Ольга Р.', text: 'Дети не выходят из домика! Собрали за 2 дня, всё аккуратно, без щелей, покрасили в цвет который мы хотели. Лучший подарок для детей.', rating: 5, location: 'Омск' },
+  { name: 'Виктор Н.', text: 'Баня 3,9×2,15 из кедра — запах стоит невероятный. Монтажники работали чисто, убрали за собой. Три месяца пользуемся, никаких нареканий.', rating: 5, location: 'Калачинск' },
+  { name: 'Анна Д.', text: 'Пятая баня, которую мы ставим на свои базы отдыха. Всегда одни и те же ребята из ПАР ХАУС — надёжные, сроки соблюдают, цена договорённая.', rating: 5, location: 'Омская область' },
 ]
 
 const FAQ_DATA = [
@@ -817,6 +823,61 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
 
 function ReviewsSection() {
   const { ref, visible } = useOnScreen(0.15)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
+  const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const isPausedRef = useRef(false)
+
+  const CARDS_PER_VIEW = 3
+  const CARDS_PER_SLIDE = 1
+  const AUTO_SCROLL_MS = 4000
+
+  const updateArrows = useCallback(() => {
+    const el = scrollRef.current
+    if (!el) return
+    setCanScrollLeft(el.scrollLeft > 2)
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2)
+  }, [])
+
+  const scrollBy = useCallback((direction: 'left' | 'right') => {
+    const el = scrollRef.current
+    if (!el) return
+    const card = el.firstElementChild as HTMLElement | null
+    if (!card) return
+    const gap = 24 // gap-6 = 24px
+    const cardW = card.offsetWidth
+    const step = (cardW + gap) * CARDS_PER_SLIDE
+    el.scrollBy({ left: direction === 'left' ? -step : step, behavior: 'smooth' })
+  }, [])
+
+  // Auto-scroll
+  useEffect(() => {
+    if (!visible) return
+    autoScrollRef.current = setInterval(() => {
+      if (isPausedRef.current) return
+      const el = scrollRef.current
+      if (!el) return
+      if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 2) {
+        el.scrollTo({ left: 0, behavior: 'smooth' })
+      } else {
+        scrollBy('right')
+      }
+    }, AUTO_SCROLL_MS)
+    return () => { if (autoScrollRef.current) clearInterval(autoScrollRef.current) }
+  }, [visible, scrollBy])
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    updateArrows()
+    el.addEventListener('scroll', updateArrows, { passive: true })
+    window.addEventListener('resize', updateArrows)
+    return () => {
+      el.removeEventListener('scroll', updateArrows)
+      window.removeEventListener('resize', updateArrows)
+    }
+  }, [updateArrows])
 
   return (
     <section ref={ref} className="relative py-20 lg:py-28 bg-[#222222]">
@@ -824,39 +885,75 @@ function ReviewsSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="Отзывы" title="Наши клиенты" visible={visible} />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {REVIEWS.map((review, idx) => (
-            <motion.div
-              key={review.name}
-              initial={false}
-              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: 0.15 * idx }}
-              className="glass-card rounded-lg p-6 lg:p-8"
+        <div className="relative group/reviews">
+          {/* Fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#222222] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#222222] to-transparent z-10 pointer-events-none" />
+
+          {/* Arrow left */}
+          {canScrollLeft && (
+            <button
+              onClick={() => { isPausedRef.current = true; scrollBy('left') }}
+              onMouseLeave={() => { isPausedRef.current = false }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-[#1A1A1A]/90 border border-[#C68E4E]/30 hover:border-[#C68E4E]/60 text-[#C68E4E] rounded-sm transition-all hover:bg-[#C68E4E]/10"
+              aria-label="Предыдущий отзыв"
             >
-              {/* Stars */}
-              <div className="flex gap-1 mb-4">
-                {Array.from({ length: review.rating }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-[#C68E4E] fill-[#C68E4E]" />
-                ))}
-              </div>
-              {/* Quote */}
-              <p className="text-[#D0D6DC] text-sm leading-relaxed mb-6 italic">
-                &ldquo;{review.text}&rdquo;
-              </p>
-              {/* Author */}
-              <div className="flex items-center gap-3 pt-4 border-t border-[#333]">
-                <div className="w-10 h-10 rounded-full bg-[#C68E4E]/20 border border-[#C68E4E]/30 flex items-center justify-center">
-                  <span className="text-[#C68E4E] font-bold text-sm">
-                    {review.name.charAt(0)}
-                  </span>
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          )}
+
+          {/* Arrow right */}
+          {canScrollRight && (
+            <button
+              onClick={() => { isPausedRef.current = true; scrollBy('right') }}
+              onMouseLeave={() => { isPausedRef.current = false }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-[#1A1A1A]/90 border border-[#C68E4E]/30 hover:border-[#C68E4E]/60 text-[#C68E4E] rounded-sm transition-all hover:bg-[#C68E4E]/10"
+              aria-label="Следующий отзыв"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          )}
+
+          {/* Scrollable track */}
+          <div
+            ref={scrollRef}
+            className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 sm:-mx-6 sm:px-6"
+            onMouseEnter={() => { isPausedRef.current = true }}
+            onMouseLeave={() => { isPausedRef.current = false }}
+          >
+            {REVIEWS.map((review, idx) => (
+              <motion.div
+                key={review.name}
+                initial={false}
+                animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.6, delay: 0.08 * idx }}
+                className="glass-card rounded-lg p-6 lg:p-8 shrink-0 w-[320px] sm:w-[340px] lg:w-[360px] snap-start"
+              >
+                {/* Stars */}
+                <div className="flex gap-1 mb-4">
+                  {Array.from({ length: review.rating }).map((_, i) => (
+                    <Star key={i} className="w-4 h-4 text-[#C68E4E] fill-[#C68E4E]" />
+                  ))}
                 </div>
-                <div>
-                  <p className="text-white font-semibold text-sm">{review.name}</p>
-                  <p className="text-[#8090A0] text-xs">{review.location}</p>
+                {/* Quote */}
+                <p className="text-[#D0D6DC] text-sm leading-relaxed mb-6 italic">
+                  &ldquo;{review.text}&rdquo;
+                </p>
+                {/* Author */}
+                <div className="flex items-center gap-3 pt-4 border-t border-[#333]">
+                  <div className="w-10 h-10 rounded-full bg-[#C68E4E]/20 border border-[#C68E4E]/30 flex items-center justify-center">
+                    <span className="text-[#C68E4E] font-bold text-sm">
+                      {review.name.charAt(0)}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold text-sm">{review.name}</p>
+                    <p className="text-[#8090A0] text-xs">{review.location}</p>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

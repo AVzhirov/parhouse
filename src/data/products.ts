@@ -310,7 +310,6 @@ export const PROJECTS: Project[] = [
       '/projects/banya-39-215/gallery-1.jpg',
       '/projects/banya-39-215/gallery-2.jpg',
       '/projects/banya-39-215/gallery-3.jpg',
-      '/projects/banya-39-215/gallery-4.jpg',
     ],
   },
   {

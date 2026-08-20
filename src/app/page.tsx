@@ -2030,8 +2030,11 @@ function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.consent) return
-    const body = `Имя: ${formData.name}\nТелефон: ${formData.phone}${formData.message ? `\nСообщение: ${formData.message}` : ''}`
-    submitForm({ subject: `Заявка с сайта ПАР ХАУС от ${formData.name}`, body })
+    const sanitize = (s: string) => s.replace(/[<>"'&]/g, '').trim()
+    const name = sanitize(formData.name)
+    if (!name) return
+    const body = `Имя: ${name}\nТелефон: ${formData.phone}${formData.message ? `\nСообщение: ${sanitize(formData.message)}` : ''}`
+    submitForm({ subject: `Заявка с сайта ПАР ХАУС от ${name}`, body })
     setStatus('ok')
     setTimeout(() => {
       setStatus('idle')
@@ -2162,14 +2165,17 @@ function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.consent) return
+    const sanitize = (s: string) => s.replace(/[<>"'&]/g, '').trim()
+    const name = sanitize(formData.name)
+    if (!name) return
     setStatus('sending')
     const proj = _calcProjectName || dialogTitle
     const subject = proj
-      ? `Заявка на проект «${proj}» от ${formData.name}`
-      : `Расчёт проекта — заявка от ${formData.name}`
-    const bodyParts = [`Имя: ${formData.name}`, `Телефон: ${formData.phone}`]
-    if (proj) bodyParts.push(`Проект: ${proj}`)
-    if (formData.message) bodyParts.push(`Комментарий: ${formData.message}`)
+      ? `Заявка на проект «${sanitize(proj)}» от ${name}`
+      : `Расчёт проекта — заявка от ${name}`
+    const bodyParts = [`Имя: ${name}`, `Телефон: ${formData.phone}`]
+    if (proj) bodyParts.push(`Проект: ${sanitize(proj)}`)
+    if (formData.message) bodyParts.push(`Комментарий: ${sanitize(formData.message)}`)
     submitForm({ subject, body: bodyParts.join('\n') })
     setStatus('ok')
     setTimeout(() => {

@@ -65,6 +65,9 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#1A1A1A" />
         <meta name="format-detection" content="telephone=no" />
+        <meta httpEquiv="X-Frame-Options" content="SAMEORIGIN" />
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="preload" as="image" href="/logo.webp" type="image/webp" />
         <link rel="icon" href="/favicon.ico" sizes="any" />

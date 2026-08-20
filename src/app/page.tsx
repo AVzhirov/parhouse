@@ -40,6 +40,38 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 
+/* ───────────────────────── LIVE PRICE OVERRIDES ─────────────────────────
+   Цены загружаются из /prices.json (редактируется бухгалтером на GitHub).
+   Если файл недоступен — используются цены из products.ts по умолчанию.
+   ──────────────────────────────────────────────────────────────────────── */
+
+let _priceOverrides: { catalog?: Record<string, string>; projects?: Record<string, string> } = {}
+let _pricesLoaded = false
+
+function loadPriceOverrides() {
+  if (_pricesLoaded || typeof window === 'undefined') return
+  _pricesLoaded = true
+  fetch('/prices.json')
+    .then(r => r.json())
+    .then(data => {
+      _priceOverrides = data
+      // Force re-render by dispatching a custom event
+      window.dispatchEvent(new Event('prices-updated'))
+    })
+    .catch(() => {}) // silently fallback to defaults
+}
+
+/** Get price with live override support */
+function getPrice(catalogId?: number, projectSlug?: string, fallback?: string): string {
+  if (catalogId != null && _priceOverrides.catalog?.[String(catalogId)]) {
+    return _priceOverrides.catalog[String(catalogId)]
+  }
+  if (projectSlug && _priceOverrides.projects?.[projectSlug]) {
+    return _priceOverrides.projects[projectSlug]
+  }
+  return fallback ?? ''
+}
+
 const CURRENT_YEAR = new Date().getFullYear()
 
 /* ───────────────────────── TYPES ───────────────────────── */
@@ -789,7 +821,7 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
                   <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
                     {project.gallery.length} фото
                   </span>
-                  <span className="text-[#C68E4E] font-bold text-sm">{project.price}</span>
+                  <span className="text-[#C68E4E] font-bold text-sm">{getPrice(undefined, project.slug, project.price)}</span>
                 </div>
                 <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase">
                   {project.title}
@@ -1149,7 +1181,7 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
                   </div>
                   <div className="absolute bottom-3 right-3">
                     <span className="text-xl font-bold text-[#C68E4E] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                      {item.price}
+                      {getPrice(item.id, item.projectSlug, item.price)}
                     </span>
                   </div>
                 </div>
@@ -1242,7 +1274,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm tracking-[0.05em] uppercase">Назад к каталогу</span>
           </button>
-          <span className="text-[#C68E4E] font-bold text-lg">{item.price}</span>
+          <span className="text-[#C68E4E] font-bold text-lg">{getPrice(item.id, item.projectSlug, item.price)}</span>
         </div>
       </div>
 
@@ -1291,7 +1323,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
               <div className="text-[#8090A0] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
                 Стоимость
               </div>
-              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{item.price}</div>
+              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{getPrice(item.id, item.projectSlug, item.price)}</div>
               <div className="space-y-3">
                 <Button
                   className="w-full bg-[#C68E4E] hover:bg-[#B37D42] text-white font-bold tracking-[0.05em] uppercase text-sm rounded-sm h-11 transition-colors"
@@ -1398,7 +1430,7 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
                   <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
                     {project.gallery.length} фото
                   </span>
-                  <span className="text-[#C68E4E] font-bold text-sm">{project.price}</span>
+                  <span className="text-[#C68E4E] font-bold text-sm">{getPrice(undefined, project.slug, project.price)}</span>
                 </div>
                 <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase">
                   {project.title}
@@ -1470,7 +1502,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm tracking-[0.05em] uppercase">Назад к проектам</span>
           </button>
-          <span className="text-[#C68E4E] font-bold text-lg">{project.price}</span>
+          <span className="text-[#C68E4E] font-bold text-lg">{getPrice(undefined, project.slug, project.price)}</span>
         </div>
       </div>
 
@@ -1561,7 +1593,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
               <div className="text-[#8090A0] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
                 Стоимость
               </div>
-              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{project.price}</div>
+              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{getPrice(undefined, project.slug, project.price)}</div>
               <div className="space-y-3">
                 <a
                   href="tel:+79048220007"
@@ -2588,8 +2620,15 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState<PageId>('home')
   const [openProjectSlug, setOpenProjectSlug] = useState<string | null>(null)
   const mainRef = useRef<HTMLDivElement>(null)
+  const [, setTick] = useState(0)
 
-  // Dismiss inline preloader once React hydrates
+  // Load live prices from /prices.json
+  useEffect(() => {
+    loadPriceOverrides()
+    const handler = () => setTick(t => t + 1)
+    window.addEventListener('prices-updated', handler)
+    return () => window.removeEventListener('prices-updated', handler)
+  }, [])
   useEffect(() => {
     const el = document.getElementById('preloader')
     if (!el) return

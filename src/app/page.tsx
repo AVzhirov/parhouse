@@ -62,12 +62,12 @@ function loadPriceOverrides() {
 }
 
 /** Get price with live override support */
-function getPrice(catalogId?: number, projectSlug?: string, fallback?: string): string {
-  if (catalogId != null && _priceOverrides.catalog?.[String(catalogId)]) {
-    return _priceOverrides.catalog[String(catalogId)]
+function getPrice(catalogName?: string, projectTitle?: string, fallback?: string): string {
+  if (catalogName && _priceOverrides.catalog?.[catalogName]) {
+    return _priceOverrides.catalog[catalogName]
   }
-  if (projectSlug && _priceOverrides.projects?.[projectSlug]) {
-    return _priceOverrides.projects[projectSlug]
+  if (projectTitle && _priceOverrides.projects?.[projectTitle]) {
+    return _priceOverrides.projects[projectTitle]
   }
   return fallback ?? ''
 }
@@ -821,7 +821,7 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
                   <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
                     {project.gallery.length} фото
                   </span>
-                  <span className="text-[#C68E4E] font-bold text-sm">{getPrice(undefined, project.slug, project.price)}</span>
+                  <span className="text-[#C68E4E] font-bold text-sm">{getPrice(undefined, project.title, project.price)}</span>
                 </div>
                 <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase">
                   {project.title}
@@ -1181,7 +1181,7 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
                   </div>
                   <div className="absolute bottom-3 right-3">
                     <span className="text-xl font-bold text-[#C68E4E] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                      {getPrice(item.id, item.projectSlug, item.price)}
+                      {getPrice(item.name, undefined, item.price)}
                     </span>
                   </div>
                 </div>
@@ -1274,7 +1274,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm tracking-[0.05em] uppercase">Назад к каталогу</span>
           </button>
-          <span className="text-[#C68E4E] font-bold text-lg">{getPrice(item.id, item.projectSlug, item.price)}</span>
+          <span className="text-[#C68E4E] font-bold text-lg">{getPrice(item.name, undefined, item.price)}</span>
         </div>
       </div>
 
@@ -1323,7 +1323,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
               <div className="text-[#8090A0] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
                 Стоимость
               </div>
-              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{getPrice(item.id, item.projectSlug, item.price)}</div>
+              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{getPrice(item.name, undefined, item.price)}</div>
               <div className="space-y-3">
                 <Button
                   className="w-full bg-[#C68E4E] hover:bg-[#B37D42] text-white font-bold tracking-[0.05em] uppercase text-sm rounded-sm h-11 transition-colors"
@@ -1430,7 +1430,7 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
                   <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
                     {project.gallery.length} фото
                   </span>
-                  <span className="text-[#C68E4E] font-bold text-sm">{getPrice(undefined, project.slug, project.price)}</span>
+                  <span className="text-[#C68E4E] font-bold text-sm">{getPrice(undefined, project.title, project.price)}</span>
                 </div>
                 <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase">
                   {project.title}
@@ -1502,7 +1502,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm tracking-[0.05em] uppercase">Назад к проектам</span>
           </button>
-          <span className="text-[#C68E4E] font-bold text-lg">{getPrice(undefined, project.slug, project.price)}</span>
+          <span className="text-[#C68E4E] font-bold text-lg">{getPrice(undefined, project.title, project.price)}</span>
         </div>
       </div>
 
@@ -1593,7 +1593,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
               <div className="text-[#8090A0] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
                 Стоимость
               </div>
-              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{getPrice(undefined, project.slug, project.price)}</div>
+              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{getPrice(undefined, project.title, project.price)}</div>
               <div className="space-y-3">
                 <a
                   href="tel:+79048220007"

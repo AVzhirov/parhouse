@@ -91,3 +91,26 @@ Work Log:
 Stage Summary:
 - Removed 2 standalone components, inlined into HomePage
 - Parse error fixed: lint and TypeScript compilation pass cleanly
+---
+Task ID: 4
+Agent: main
+Task: Полная система редактирования данных для бухгалтера через products.json
+
+Work Log:
+- Создан public/products.json — единый файл со всеми данными (товары, проекты, цены, описания, фото, типы)
+- Русские ключи JSON для удобства бухгалтера: «название», «цена», «описание», «фото», «преимущества», «галерея»
+- Встроенная инструкция (_инструкция) с шагами по добавлению товара и фото
+- Добавлен runtime-загрузчик в page.tsx: loadProductsData() + useLiveVersion() хук
+- liveCatalog, liveProjects, liveFilterLabels, liveTypeLabels — модульные переменные, обновляемые из JSON
+- Все обращения к CATALOG_ITEMS/PROJECTS заменены на live-переменные в FeaturedProjects, CatalogPage, ProjectsPage, CatalogDetailModal
+- getTypeLabel → getTypeLabelLive (читает из liveTypeLabels)
+- CATALOG_FILTER_LABELS → liveFilterLabels
+- Fallback на products.ts если products.json недоступен
+- Браузерная проверка: главная (5 проектов, цены из JSON), каталог (10 товаров, фильтры), проекты (11 проектов)
+- Console errors: 0, lint: clean
+
+Stage Summary:
+- products.json — единый файл для бухгалтера (цены, описания, фото, типы)
+- Данные загружаются runtime без пересборки
+- Добавить новый товар = скопировать блок в JSON + загрузить фото на GitHub
+- prices.json больше не нужен (цены теперь в products.json)

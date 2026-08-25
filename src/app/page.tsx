@@ -22,54 +22,74 @@ import {
   Star,
   Plus,
   MessageCircle,
-  Send,
   TreePine,
   Ruler,
-  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { CATALOG_ITEMS, PROJECTS, CATALOG_FILTER_LABELS, getTypeLabel } from '@/data/products'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
+import { CATALOG_ITEMS, PROJECTS, CATALOG_FILTER_LABELS, getTypeLabel, CATALOG_TYPE_LABELS, type CatalogItem, type Project } from '@/data/products'
 
-/* ───────────────────────── LIVE PRICE OVERRIDES ─────────────────────────
-   Цены загружаются из /prices.json (редактируется бухгалтером на GitHub).
-   Если файл недоступен — используются цены из products.ts по умолчанию.
-   ──────────────────────────────────────────────────────────────────────── */
+/* ───────────────────────── LIVE DATA FROM products.json ─────────────────────────
+   Бухгалтер редактирует public/products.json на GitHub.
+   Сайт загружает его при первом визите и обновляет данные без пересборки.
+   Если файл недоступен — используются значения из products.ts по умолчанию.
+   ──────────────────────────────────────────────────────────────────────────── */
 
-let _priceOverrides: { catalog?: Record<string, string>; projects?: Record<string, string> } = {}
-let _pricesLoaded = false
+let liveCatalog: CatalogItem[] = CATALOG_ITEMS
+let liveProjects: Project[] = PROJECTS
+let liveFilterLabels: string[] = [...CATALOG_FILTER_LABELS]
+let liveTypeLabels: Record<string, string> = { ...CATALOG_TYPE_LABELS }
 
-function loadPriceOverrides() {
-  if (_pricesLoaded || typeof window === 'undefined') return
-  _pricesLoaded = true
-  fetch('/prices.json')
+let _productsLoaded = false
+
+function loadProductsData() {
+  if (_productsLoaded || typeof window === 'undefined') return
+  _productsLoaded = true
+  fetch('/products.json')
     .then(r => r.json())
     .then(data => {
-      _priceOverrides = data
-      // Force re-render by dispatching a custom event
-      window.dispatchEvent(new Event('prices-updated'))
+      if (data.типы_товаров) liveTypeLabels = data.типы_товаров
+      if (Array.isArray(data.каталог)) {
+        liveCatalog = data.каталог.map((item: Record<string, unknown>, idx: number) => ({
+          id: idx + 1,
+          name: (item.название as string) ?? '',
+          type: (item.тип as string) ?? 'banya',
+          price: (item.цена as string) ?? '',
+          size: (item.размер as string) ?? '',
+          image: (item.фото as string) ?? '',
+          description: (item.описание as string) ?? '',
+          features: (item.преимущества as string[]) ?? [],
+          projectSlug: (item.проект as string) || undefined,
+        }))
+      }
+      if (Array.isArray(data.проекты)) {
+        liveProjects = data.проекты.map((p: Record<string, unknown>) => ({
+          slug: (p.код as string) ?? '',
+          title: (p.название as string) ?? '',
+          description: (p.описание as string) ?? '',
+          image: (p.главное_фото as string) ?? '',
+          year: 'n',
+          price: (p.цена as string) ?? '',
+          gallery: (p.галерея as string[]) ?? [],
+        }))
+      }
+      liveFilterLabels = ['Все', ...Object.values(liveTypeLabels)]
+      window.dispatchEvent(new Event('data-updated'))
     })
-    .catch(() => {}) // silently fallback to defaults
+    .catch(() => {})
 }
 
-/** Get price with live override support */
-function getPrice(catalogName?: string, projectTitle?: string, fallback?: string): string {
-  if (catalogName && _priceOverrides.catalog?.[catalogName]) {
-    return _priceOverrides.catalog[catalogName]
-  }
-  if (projectTitle && _priceOverrides.projects?.[projectTitle]) {
-    return _priceOverrides.projects[projectTitle]
-  }
-  return fallback ?? ''
+/** Хук: компонент перерисовывается когда products.json загрузился */
+function useLiveVersion() {
+  const [, setV] = useState(0)
+  useEffect(() => {
+    const h = () => setV(x => x + 1)
+    window.addEventListener('data-updated', h)
+    return () => window.removeEventListener('data-updated', h)
+  }, [])
+}
+
+function getTypeLabelLive(key: string): string {
+  return liveTypeLabels[key] ?? key
 }
 
 const CURRENT_YEAR = new Date().getFullYear()
@@ -543,14 +563,13 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             transition={{ duration: 0.8, delay: 1.2 }}
             className="mt-10 flex flex-col sm:flex-row gap-4"
           >
-            <Button
-              size="lg"
-              className="bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,142,78,0.4)]"
-              onClick={() => openCalcDialog()}
+            <a
+              href="tel:+79048220007"
+              className="inline-flex items-center justify-center gap-2 bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,142,78,0.4)]"
             >
-              Рассчитать проект
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
+              <Phone className="w-4 h-4" />
+              Позвонить
+            </a>
             <Button
               variant="outline"
               size="lg"
@@ -784,8 +803,9 @@ function AdvantagesCompact() {
 /* ───────────────────────── FEATURED PROJECTS (HOME) ───────────────────────── */
 
 function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }) {
+  useLiveVersion()
   const { ref, visible } = useOnScreen(0.1)
-  const featured = PROJECTS.slice(0, 5)
+  const featured = liveProjects.slice(0, 5)
 
   return (
     <section ref={ref} className="relative py-20 lg:py-28 bg-[#1A1A1A]">
@@ -821,7 +841,7 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
                   <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
                     {project.gallery.length} фото
                   </span>
-                  <span className="text-[#C68E4E] font-bold text-sm">{getPrice(undefined, project.title, project.price)}</span>
+                  <span className="text-[#C68E4E] font-bold text-sm">{project.price}</span>
                 </div>
                 <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase">
                   {project.title}
@@ -1080,17 +1100,9 @@ function CTABanner() {
               <span className="text-[#C68E4E] text-gold-glow">баню мечты?</span>
             </h2>
             <p className="text-[#B0B8C0] text-base lg:text-lg max-w-xl mx-auto mb-10">
-              Оставьте заявку и получите бесплатный расчёт проекта за 30 минут
+              Свяжитесь с нами для бесплатного расчёта проекта
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,142,78,0.4)]"
-                onClick={() => openCalcDialog()}
-              >
-                Рассчитать проект
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
               <a
                 href="tel:+79048220007"
                 className="inline-flex items-center justify-center gap-2 border border-[#C68E4E]/50 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-semibold tracking-[0.1em] uppercase text-sm px-8 py-6 h-auto rounded-none transition-all duration-300"
@@ -1109,13 +1121,14 @@ function CTABanner() {
 /* ───────────────────────── CATALOG PAGE ───────────────────────── */
 
 function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId) => void; onOpenProject: (slug: string) => void }) {
+  useLiveVersion()
   const { ref, visible } = useOnScreen(0.1)
   const [activeFilter, setActiveFilter] = useState('Все')
   const [selectedItem, setSelectedItem] = useState<typeof CATALOG_ITEMS[0] | null>(null)
 
   const filtered = activeFilter === 'Все'
-    ? CATALOG_ITEMS
-    : CATALOG_ITEMS.filter((item) => getTypeLabel(item.type) === activeFilter)
+    ? liveCatalog
+    : liveCatalog.filter((item) => getTypeLabelLive(item.type) === activeFilter)
 
   return (
     <div className="pt-28 pb-16">
@@ -1132,7 +1145,7 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
 
         {/* Filter buttons */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {CATALOG_FILTER_LABELS.map((type) => (
+          {liveFilterLabels.map((type) => (
             <button
               key={type}
               onClick={() => setActiveFilter(type)}
@@ -1176,12 +1189,12 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
                   <div className="absolute inset-0 bg-gradient-to-t from-[#242424] via-transparent to-transparent" />
                   <div className="absolute top-3 left-3">
                     <span className="inline-block px-2.5 py-1 text-[10px] tracking-[0.12em] uppercase font-bold bg-[#C68E4E] text-white">
-                      {getTypeLabel(item.type)}
+                      {getTypeLabelLive(item.type)}
                     </span>
                   </div>
                   <div className="absolute bottom-3 right-3">
                     <span className="text-xl font-bold text-[#C68E4E] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                      {getPrice(item.name, undefined, item.price)}
+                      {item.price}
                     </span>
                   </div>
                 </div>
@@ -1236,7 +1249,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const normalize = (s: string) => s.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '')
-  const matchedProject = PROJECTS.find((p) => {
+  const matchedProject = liveProjects.find((p) => {
     const ni = normalize(item.name)
     const np = normalize(p.title)
     return ni.includes(np) || np.includes(ni) || (ni.split('x').length > 1 && np.split('x').length > 1 && ni.split('x')[0] === np.split('x')[0] && ni.split('x')[1] === np.split('x')[1])
@@ -1274,7 +1287,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm tracking-[0.05em] uppercase">Назад к каталогу</span>
           </button>
-          <span className="text-[#C68E4E] font-bold text-lg">{getPrice(item.name, undefined, item.price)}</span>
+          <span className="text-[#C68E4E] font-bold text-lg">{item.price}</span>
         </div>
       </div>
 
@@ -1294,7 +1307,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-[2px] bg-[#C68E4E]" />
               <span className="inline-block px-2.5 py-1 text-[10px] tracking-[0.12em] uppercase font-bold bg-[#C68E4E] text-white">
-                {getTypeLabel(item.type)}
+                {getTypeLabelLive(item.type)}
               </span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold tracking-[0.03em] uppercase text-white mb-4">
@@ -1323,24 +1336,21 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
               <div className="text-[#8090A0] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
                 Стоимость
               </div>
-              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{getPrice(item.name, undefined, item.price)}</div>
+              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{item.price}</div>
               <div className="space-y-3">
-                <Button
-                  className="w-full bg-[#C68E4E] hover:bg-[#B37D42] text-white font-bold tracking-[0.05em] uppercase text-sm rounded-sm h-11 transition-colors"
-                  onClick={() => {
-                    onClose()
-                    setTimeout(() => openCalcDialog(item.name), 100)
-                  }}
-                >
-                  Заказать
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
                 <a
                   href="tel:+79048220007"
-                  className="flex items-center justify-center gap-2 w-full py-3 border border-[#C68E4E]/40 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-bold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
+                  className="flex items-center justify-center gap-2 w-full py-3 bg-[#C68E4E] hover:bg-[#B37D42] text-white font-bold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
                 >
                   <Phone className="w-4 h-4" />
                   Позвонить
+                </a>
+                <a
+                  href="mailto:parhouse_55@mail.ru"
+                  className="flex items-center justify-center gap-2 w-full py-3 border border-[#C68E4E]/40 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-bold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
+                >
+                  <Mail className="w-4 h-4" />
+                  Написать на почту
                 </a>
                 {matchedProject && (
                   <button
@@ -1378,13 +1388,14 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
 /* ───────────────────────── PROJECTS PAGE ───────────────────────── */
 
 function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectSlug: string | null; onProjectOpened: () => void }) {
+  useLiveVersion()
   const { ref, visible } = useOnScreen(0.1)
   const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null)
   const [hasOpenedSlug, setHasOpenedSlug] = useState(false)
 
   // Adjust state when prop changes (React supports setState during render)
   if (initialProjectSlug && !hasOpenedSlug) {
-    const p = PROJECTS.find((pr) => pr.slug === initialProjectSlug)
+    const p = liveProjects.find((pr) => pr.slug === initialProjectSlug)
     if (p) {
       setSelectedProject(p)
       setHasOpenedSlug(true)
@@ -1404,7 +1415,7 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
         <SectionHeading label="Портфолио" title="Наши проекты" visible={visible} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROJECTS.map((project, idx) => (
+          {liveProjects.map((project, idx) => (
             <motion.div
               key={project.slug}
               initial={false}
@@ -1430,7 +1441,7 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
                   <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
                     {project.gallery.length} фото
                   </span>
-                  <span className="text-[#C68E4E] font-bold text-sm">{getPrice(undefined, project.title, project.price)}</span>
+                  <span className="text-[#C68E4E] font-bold text-sm">{project.price}</span>
                 </div>
                 <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase">
                   {project.title}
@@ -1502,7 +1513,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm tracking-[0.05em] uppercase">Назад к проектам</span>
           </button>
-          <span className="text-[#C68E4E] font-bold text-lg">{getPrice(undefined, project.title, project.price)}</span>
+          <span className="text-[#C68E4E] font-bold text-lg">{project.price}</span>
         </div>
       </div>
 
@@ -1593,7 +1604,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
               <div className="text-[#8090A0] text-xs tracking-[0.2em] uppercase font-semibold mb-2">
                 Стоимость
               </div>
-              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{getPrice(undefined, project.title, project.price)}</div>
+              <div className="text-[#C68E4E] text-3xl font-bold mb-4">{project.price}</div>
               <div className="space-y-3">
                 <a
                   href="tel:+79048220007"
@@ -1602,13 +1613,13 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
                   <Phone className="w-4 h-4" />
                   Позвонить
                 </a>
-                <button
-                  onClick={() => { onClose(); setTimeout(() => openCalcDialog(project.title), 350) }}
+                <a
+                  href="mailto:parhouse_55@mail.ru"
                   className="flex items-center justify-center gap-2 w-full py-3 border border-[#C68E4E]/40 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-bold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
                 >
-                  <MessageCircle className="w-4 h-4" />
-                  Оставить заявку
-                </button>
+                  <Mail className="w-4 h-4" />
+                  Написать на почту
+                </a>
               </div>
             </div>
             <div className="glass-card rounded-lg p-6">
@@ -2009,16 +2020,12 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             </div>
           </motion.div>
 
-          {/* Right: Contact Form + Map */}
+          {/* Right: Map */}
           <motion.div
             initial={false}
             animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-8"
           >
-            {/* Contact Form */}
-            <ContactForm onNavigate={onNavigate} />
-
             {/* Yandex Map */}
             <div
               ref={ref}
@@ -2041,306 +2048,6 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         </div>
       </div>
     </div>
-  )
-}
-
-/* ─── Отправка заявок на parhouse_55@mail.ru через mailto ─── */
-const FORM_EMAIL = 'parhouse_55@mail.ru'
-
-function submitForm({ subject, body }: { subject: string; body: string }): void {
-  const a = document.createElement('a')
-  a.href = `mailto:${FORM_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-  a.click()
-  a.remove()
-}
-
-/* ─── Contact Form (Inline) ─── */
-function ContactForm({ onNavigate }: { onNavigate: (page: PageId) => void }) {
-  const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
-  const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData.consent) return
-    const sanitize = (s: string) => s.replace(/[<>"'&]/g, '').trim()
-    const name = sanitize(formData.name)
-    if (!name) return
-    const body = `Имя: ${name}\nТелефон: ${formData.phone}${formData.message ? `\nСообщение: ${sanitize(formData.message)}` : ''}`
-    submitForm({ subject: `Заявка с сайта ПАР ХАУС от ${name}`, body })
-    setStatus('ok')
-    setTimeout(() => {
-      setStatus('idle')
-      setFormData({ name: '', phone: '', message: '', consent: false })
-    }, 3000)
-  }
-
-  if (status === 'ok') {
-    return (
-      <div className="glass-card rounded-lg p-10 text-center">
-        <div className="w-16 h-16 rounded-full bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center mx-auto mb-4">
-          <Star className="w-8 h-8 text-[#C68E4E]" />
-        </div>
-        <p className="text-[#C68E4E] font-semibold text-lg mb-1">Сообщение отправлено!</p>
-        <p className="text-[#8090A0] text-sm">Мы свяжемся с вами в ближайшее время</p>
-      </div>
-    )
-  }
-  if (status === 'err') {
-    return (
-      <div className="glass-card rounded-lg p-10 text-center">
-        <div className="w-16 h-16 rounded-full bg-red-500/20 border-2 border-red-500/50 flex items-center justify-center mx-auto mb-4">
-          <X className="w-8 h-8 text-red-400" />
-        </div>
-        <p className="text-red-400 font-semibold text-lg mb-1">Ошибка отправки</p>
-        <p className="text-[#8090A0] text-sm">Попробуйте ещё раз или позвоните нам</p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="glass-card rounded-lg p-6 lg:p-8">
-      <h3 className="text-white font-bold text-lg tracking-[0.05em] uppercase mb-6">Напишите нам</h3>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="contact-name" className="text-[#B0B8C0] text-sm">Ваше имя</Label>
-          <Input
-            id="contact-name"
-            required
-            autoComplete="name"
-            maxLength={50}
-            value={formData.name}
-            onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-            placeholder="Иван Иванов"
-            className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="contact-phone" className="text-[#B0B8C0] text-sm">Телефон</Label>
-          <Input
-            id="contact-phone"
-            type="tel"
-            required
-            autoComplete="tel"
-            pattern="[+]?[0-9\s\-()]{7,18}"
-            value={formData.phone}
-            onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
-            placeholder="+7 (___) ___-__-__"
-            className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="contact-message" className="text-[#B0B8C0] text-sm">Сообщение</Label>
-          <Textarea
-            id="contact-message"
-            value={formData.message}
-            onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
-            placeholder="Опишите ваш вопрос..."
-            rows={4}
-            className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none resize-none"
-          />
-        </div>
-        <label className="flex items-start gap-3 cursor-pointer group">
-          <input
-            type="checkbox"
-            required
-            checked={formData.consent}
-            onChange={(e) => setFormData((p) => ({ ...p, consent: e.target.checked }))}
-            className="mt-1 accent-[#C68E4E] w-4 h-4 shrink-0"
-          />
-          <span className="text-[#8090A0] text-xs leading-relaxed">
-            Нажимая кнопку, вы соглашаетесь с{' '}
-            <button
-              type="button"
-              onClick={() => onNavigate('privacy')}
-              className="text-[#C68E4E] underline underline-offset-2 hover:text-[#D4A762] transition-colors"
-            >
-              Политикой обработки персональных данных
-            </button>
-          </span>
-        </label>
-        <Button
-          type="submit"
-          disabled={!formData.consent || status === 'sending'}
-          className="w-full bg-[#C68E4E] hover:bg-[#D4A762] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
-        >
-          {status === 'sending' ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <>
-              Отправить сообщение
-              <Send className="ml-2 w-4 h-4" />
-            </>
-          )}
-        </Button>
-      </form>
-    </div>
-  )
-}
-
-/* ───────────────────────── CALC DIALOG ───────────────────────── */
-
-/** Module-level: stores project name for the next CalcDialog open */
-let _calcProjectName = ''
-
-/** Open CalcDialog, optionally pre-filling project context */
-function openCalcDialog(projectName?: string) {
-  _calcProjectName = projectName || ''
-  document.getElementById('calc-dialog-trigger')?.click()
-}
-
-function CalcDialog({ onNavigate }: { onNavigate: (page: PageId) => void }) {
-  const [open, setOpen] = useState(false)
-  const [dialogTitle, setDialogTitle] = useState('')
-  const [formData, setFormData] = useState({ name: '', phone: '', message: '', consent: false })
-  const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData.consent) return
-    const sanitize = (s: string) => s.replace(/[<>"'&]/g, '').trim()
-    const name = sanitize(formData.name)
-    if (!name) return
-    setStatus('sending')
-    const proj = _calcProjectName || dialogTitle
-    const subject = proj
-      ? `Заявка на проект «${sanitize(proj)}» от ${name}`
-      : `Расчёт проекта — заявка от ${name}`
-    const bodyParts = [`Имя: ${name}`, `Телефон: ${formData.phone}`]
-    if (proj) bodyParts.push(`Проект: ${sanitize(proj)}`)
-    if (formData.message) bodyParts.push(`Комментарий: ${sanitize(formData.message)}`)
-    submitForm({ subject, body: bodyParts.join('\n') })
-    setStatus('ok')
-    setTimeout(() => {
-      setOpen(false)
-      setDialogTitle('')
-      _calcProjectName = ''
-      setFormData({ name: '', phone: '', message: '', consent: false })
-    }, 2000)
-  }
-
-  return (
-    <>
-      <button
-        id="calc-dialog-trigger"
-        onClick={() => { setDialogTitle(_calcProjectName); setOpen(true) }}
-        className="sr-only"
-        aria-label="Открыть форму расчёта"
-      >
-        trigger
-      </button>
-
-      <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) { setStatus('idle'); setDialogTitle(''); _calcProjectName = '' } }}>
-        <DialogContent className="bg-[#1E1E1E] border border-[#C68E4E]/20 text-white sm:max-w-lg rounded-lg shadow-[0_0_80px_rgba(198,142,78,0.1)]">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold tracking-[0.05em] uppercase text-white">
-              {dialogTitle ? `Заявка на «${dialogTitle}»` : 'Рассчитать проект'}
-            </DialogTitle>
-            <DialogDescription className="text-[#8090A0]">
-              Оставьте заявку и мы перезвоним вам в течение 30 минут
-            </DialogDescription>
-          </DialogHeader>
-
-          {status === 'ok' ? (
-            <div className="py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-[#C68E4E]/20 border-2 border-[#C68E4E]/50 flex items-center justify-center mx-auto mb-4">
-                <Star className="w-8 h-8 text-[#C68E4E]" />
-              </div>
-              <p className="text-[#C68E4E] font-semibold text-lg">Заявка отправлена!</p>
-              <p className="text-[#8090A0] text-sm mt-1">
-                Мы свяжемся с вами в ближайшее время
-              </p>
-            </div>
-          ) : status === 'err' ? (
-            <div className="py-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-red-500/20 border-2 border-red-500/50 flex items-center justify-center mx-auto mb-4">
-                <X className="w-8 h-8 text-red-400" />
-              </div>
-              <p className="text-red-400 font-semibold text-lg">Ошибка отправки</p>
-              <p className="text-[#8090A0] text-sm mt-1">Попробуйте ещё раз или позвоните нам</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-[#B0B8C0] text-sm">Ваше имя</Label>
-                <Input
-                  id="name"
-                  required
-                  autoComplete="name"
-                  maxLength={50}
-                  value={formData.name}
-                  onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-                  placeholder="Иван Иванов"
-                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="phone" className="text-[#B0B8C0] text-sm">Телефон</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  required
-                  autoComplete="tel"
-                  pattern="[+]?[0-9\s\-()]{7,18}"
-                  value={formData.phone}
-                  onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
-                  placeholder="+7 (___) ___-__-__"
-                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="message" className="text-[#B0B8C0] text-sm">Комментарий</Label>
-                <Textarea
-                  id="message"
-                  value={formData.message}
-                  onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
-                  placeholder="Опишите вашу идею бани..."
-                  rows={3}
-                  className="bg-[#2A2A2A] border-[#444] text-white placeholder:text-[#555] focus:border-[#C68E4E]/60 rounded-none resize-none"
-                />
-              </div>
-              {/* 152-ФЗ: согласие на обработку персональных данных */}
-              <label className="flex items-start gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  required
-                  checked={formData.consent}
-                  onChange={(e) => setFormData((p) => ({ ...p, consent: e.target.checked }))}
-                  className="mt-1 accent-[#C68E4E] w-4 h-4 shrink-0"
-                />
-                <span className="text-[#8090A0] text-xs leading-relaxed">
-                  Нажимая кнопку, вы соглашаетесь с{' '}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setOpen(false)
-                      onNavigate('privacy')
-                    }}
-                    className="text-[#C68E4E] underline underline-offset-2 hover:text-[#D4A762] transition-colors"
-                  >
-                    Политикой обработки персональных данных
-                  </button>
-                </span>
-              </label>
-              <Button
-                type="submit"
-                disabled={!formData.consent || status === 'sending'}
-                className="w-full bg-[#C68E4E] hover:bg-[#D4A762] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold tracking-[0.1em] uppercase text-sm h-12 rounded-none transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,142,78,0.3)]"
-              >
-                {status === 'sending' ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <>
-                    Отправить заявку
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </>
-                )}
-              </Button>
-            </form>
-          )}
-        </DialogContent>
-      </Dialog>
-    </>
   )
 }
 
@@ -2620,16 +2327,9 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState<PageId>('home')
   const [openProjectSlug, setOpenProjectSlug] = useState<string | null>(null)
   const mainRef = useRef<HTMLDivElement>(null)
-  const [, setTick] = useState(0)
-
-  // Load live prices from /prices.json
+  // Load live data from /products.json & dismiss preloader
   useEffect(() => {
-    loadPriceOverrides()
-    const handler = () => setTick(t => t + 1)
-    window.addEventListener('prices-updated', handler)
-    return () => window.removeEventListener('prices-updated', handler)
-  }, [])
-  useEffect(() => {
+    loadProductsData()
     const el = document.getElementById('preloader')
     if (!el) return
     el.style.opacity = '0'
@@ -2732,7 +2432,6 @@ export default function Home() {
       </main>
 
       <Footer onNavigate={handleNavigate} />
-      <CalcDialog onNavigate={handleNavigate} />
       <CookieBanner onNavigate={handleNavigate} />
 
       {/* Global floating elements */}

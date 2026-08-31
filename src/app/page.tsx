@@ -1370,6 +1370,31 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
           </div>
         )}
 
+        {/* Project gallery */}
+        {matchedProject && matchedProject.gallery.length > 0 && (
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-[2px] bg-[#C68E4E]" />
+              <span className="text-xs tracking-[0.12em] uppercase font-bold text-[#C68E4E]">
+                Фото проекта ({matchedProject.gallery.length})
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {matchedProject.gallery.map((img, idx) => (
+                <div key={idx} className="relative aspect-[4/3] bg-[#111] rounded-lg overflow-hidden border border-[#333] hover:border-[#C68E4E]/40 transition-colors duration-300">
+                  <img
+                    src={img}
+                    alt={`${item.name} — фото ${idx + 1}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left: description */}
           <div className="lg:col-span-2">

@@ -2222,12 +2222,9 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-[#C68E4E]/10 flex flex-col items-center gap-3">
+        <div className="mt-12 pt-6 border-t border-[#C68E4E]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[#606870] text-xs tracking-wider">
             © {CURRENT_YEAR} ПАР ХАУС. Все права защищены.
-          </p>
-          <p className="text-[#505860] text-[10px] tracking-wider text-center leading-relaxed">
-            ИП Жиров А.В. &nbsp;|&nbsp; ОГРНИП: [укажите] &nbsp;|&nbsp; ИНН: [укажите] &nbsp;|&nbsp; Юр. адрес: Омская обл., [укажите]
           </p>
           <div className="flex items-center gap-4">
             <button

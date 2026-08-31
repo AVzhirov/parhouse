@@ -68,6 +68,7 @@ export default function RootLayout({
         <meta httpEquiv="X-Frame-Options" content="SAMEORIGIN" />
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
+        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-src https://yandex.ru/map-widget/; worker-src 'self' blob:" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="preload" as="image" href="/logo.webp" type="image/webp" />
         <link rel="icon" href="/favicon.ico" sizes="any" />

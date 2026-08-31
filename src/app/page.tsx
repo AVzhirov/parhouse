@@ -45,32 +45,46 @@ function loadProductsData() {
   if (_productsLoaded || typeof window === 'undefined') return
   _productsLoaded = true
   fetch('/products.json')
-    .then(r => r.json())
+    .then(r => {
+      if (!r.ok) throw new Error('fetch failed')
+      return r.json()
+    })
     .then(data => {
-      if (data.типы_товаров) liveTypeLabels = data.типы_товаров
+      if (!data || typeof data !== 'object') return
+      if (data.типы_товаров && typeof data.типы_товаров === 'object') {
+        liveTypeLabels = data.типы_товаров
+      }
       if (Array.isArray(data.каталог)) {
-        liveCatalog = data.каталог.map((item: Record<string, unknown>, idx: number) => ({
-          id: idx + 1,
-          name: (item.название as string) ?? '',
-          type: (item.тип as string) ?? 'banya',
-          price: (item.цена as string) ?? '',
-          size: (item.размер as string) ?? '',
-          image: (item.фото as string) ?? '',
-          description: (item.описание as string) ?? '',
-          features: (item.преимущества as string[]) ?? [],
-          projectSlug: (item.проект as string) || undefined,
-        }))
+        liveCatalog = data.каталог
+          .filter((item: Record<string, unknown>) =>
+            item && typeof item === 'object' && typeof item.название === 'string'
+          )
+          .map((item: Record<string, unknown>, idx: number) => ({
+            id: idx + 1,
+            name: String(item.название),
+            type: typeof item.тип === 'string' ? item.тип : 'banya',
+            price: typeof item.цена === 'string' ? item.цена : '',
+            size: typeof item.размер === 'string' ? item.размер : '',
+            image: typeof item.фото === 'string' ? item.фото : '',
+            description: typeof item.описание === 'string' ? item.описание : '',
+            features: Array.isArray(item.преимущества) ? item.преимущества.filter((f: unknown) => typeof f === 'string') : [],
+            projectSlug: typeof item.проект === 'string' ? item.проект : undefined,
+          }))
       }
       if (Array.isArray(data.проекты)) {
-        liveProjects = data.проекты.map((p: Record<string, unknown>) => ({
-          slug: (p.код as string) ?? '',
-          title: (p.название as string) ?? '',
-          description: (p.описание as string) ?? '',
-          image: (p.главное_фото as string) ?? '',
-          year: 'n',
-          price: (p.цена as string) ?? '',
-          gallery: (p.галерея as string[]) ?? [],
-        }))
+        liveProjects = data.проекты
+          .filter((p: Record<string, unknown>) =>
+            p && typeof p === 'object' && typeof p.код === 'string'
+          )
+          .map((p: Record<string, unknown>) => ({
+            slug: String(p.код),
+            title: typeof p.название === 'string' ? p.название : '',
+            description: typeof p.описание === 'string' ? p.описание : '',
+            image: typeof p.главное_фото === 'string' ? p.главное_фото : '',
+            year: 'n',
+            price: typeof p.цена === 'string' ? p.цена : '',
+            gallery: Array.isArray(p.галерея) ? p.галерея.filter((g: unknown) => typeof g === 'string') : [],
+          }))
       }
       liveFilterLabels = ['Все', ...Object.values(liveTypeLabels)]
       window.dispatchEvent(new Event('data-updated'))
@@ -2038,7 +2052,7 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
                   height="100%"
                   frameBorder="0"
                   title="Яндекс Карта — ПАР ХАУС"
-                  sandbox="allow-scripts allow-same-origin allow-popups"
+                  sandbox="allow-scripts allow-same-origin"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="grayscale hover:grayscale-0 transition-all duration-500"
                 />
@@ -2106,8 +2120,8 @@ function CookieBanner({ onNavigate }: { onNavigate: (page: PageId) => void }) {
     >
       <div className="max-w-4xl mx-auto bg-[#1E1E1E] border border-[#C68E4E]/20 rounded-lg p-5 sm:p-6 shadow-[0_-4px_40px_rgba(0,0,0,0.5)]">
         <p className="text-[#B0B8C0] text-sm leading-relaxed mb-5">
-          Мы используем файлы cookie для улучшения работы сайта и анализа посещаемости.
-          Нажимая «Принять», вы даёте согласие на использование аналитических cookie.
+          Сайт использует технические cookie для корректной работы.
+          Аналитические cookie в данный момент не устанавливаются.
           {' '}
           <button
             type="button"
@@ -2123,7 +2137,7 @@ function CookieBanner({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             onClick={handleReject}
             className="flex-1 px-6 py-3 text-sm font-semibold tracking-[0.08em] uppercase border border-[#555] text-[#B0B8C0] hover:bg-[#2A2A2A] hover:border-[#8090A0] transition-all duration-300 rounded-none"
           >
-            Отказаться
+            Закрыть
           </button>
           <button
             type="button"
@@ -2208,9 +2222,12 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-[#C68E4E]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-6 border-t border-[#C68E4E]/10 flex flex-col items-center gap-3">
           <p className="text-[#606870] text-xs tracking-wider">
             © {CURRENT_YEAR} ПАР ХАУС. Все права защищены.
+          </p>
+          <p className="text-[#505860] text-[10px] tracking-wider text-center leading-relaxed">
+            ИП Жиров А.В. &nbsp;|&nbsp; ОГРНИП: [укажите] &nbsp;|&nbsp; ИНН: [укажите] &nbsp;|&nbsp; Юр. адрес: Омская обл., [укажите]
           </p>
           <div className="flex items-center gap-4">
             <button
@@ -2259,22 +2276,32 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
             определённому или определяемому физическому лицу (субъекту персональных данных).
           </p>
           <p><strong className="text-[#B0B8C0]">3. Какие данные собираем</strong></p>
-          <ul className="list-disc list-inside space-y-1 ml-2">
-            <li>ФИО — при заполнении формы заявки</li>
-            <li>Номер телефона — для обратной связи</li>
-            <li>Комментарий — по желанию пользователя</li>
-          </ul>
+          <p>
+            Сайт <strong className="text-[#909AA4]">не собирает персональные данные</strong> пользователей.
+            На сайте отсутствуют формы ввода, регистрация и авторизация. Пользователь
+            самостоятельно связывается с Оператором по указанным контактам (телефон, email,
+            мессенджеры), передавая информацию по своему усмотрению.
+          </p>
           <p><strong className="text-[#B0B8C0]">4. Цели обработки</strong></p>
+          <p>
+            Персональные данные, полученные Оператором при непосредственном обращении
+            пользователя по телефонам, email или мессенджерам, обрабатываются в целях:
+          </p>
           <ul className="list-disc list-inside space-y-1 ml-2">
-            <li>Обработка входящих заявок и обратная связь</li>
             <li>Консультирование по вопросам продукции и услуг</li>
+            <li>Заключение и исполнение договоров подряда</li>
             <li>Улучшение качества сервиса</li>
           </ul>
           <p><strong className="text-[#B0B8C0]">5. Правовые основания</strong></p>
           <p>
-            Обработка персональных данных осуществляется на основании согласия субъекта
-            персональных данных, выраженного путём отметки в форме обратной связи на сайте.
+            Обработка персональных данных, полученных при непосредственном обращении
+            пользователя, осуществляется на основании:
           </p>
+          <ul className="list-disc list-inside space-y-1 ml-2">
+            <li>п. 5 ч. 1 ст. 6 Федерального закона № 152-ФЗ — для заключения и исполнения договора;</li>
+            <li>п. 1 ч. 1 ст. 6 Федерального закона № 152-ФЗ — на основании согласия субъекта,
+              выраженного при обращении к Оператору.</li>
+          </ul>
           <p><strong className="text-[#B0B8C0]">6. Защита данных</strong></p>
           <p>
             Оператор принимает необходимые организационные и технические меры для защиты
@@ -2295,13 +2322,17 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
           </p>
           <ul className="list-disc list-inside space-y-1 ml-2">
             <li><strong className="text-[#909AA4]">Технические (необходимые) cookie</strong> — обеспечивают корректную работу сайта,
-              запоминание выбранной страницы и настроек отображения. Эти cookie устанавливаются
-              автоматически и не требуют согласия пользователя.</li>
-            <li><strong className="text-[#909AA4]">Аналитические cookie</strong> — используются для сбора обезличенной статистики
-              посещаемости и поведения пользователей на сайте (например, Яндекс.Метрика).
-              Установка таких cookie производится только после получения согласия пользователя
+              запоминание состояния (например, согласие на cookie, выбранная страница).
+              Эти cookie устанавливаются автоматически и не требуют согласия пользователя.</li>
+            <li><strong className="text-[#909AA4]">Аналитические cookie</strong> — могут использоваться для сбора обезличенной статистики
+              посещаемости (например, Яндекс.Метрика). Установка таких cookie
+              производится только после получения явного согласия пользователя
               посредством баннера на сайте.</li>
           </ul>
+          <p>
+            На данный момент аналитические cookie <strong className="text-[#909AA4]">не используются</strong>.
+            Сайт устанавливает только технические cookie, необходимые для его работы.
+          </p>
           <p>
             Вы можете в любой момент отказаться от аналитических cookie, очистив
             соответствующую запись в localStorage браузера (ключ: <code className="text-[#C68E4E] text-xs">parhouse_cookie_consent</code>)

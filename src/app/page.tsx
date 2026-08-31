@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import {
   Phone,
@@ -69,6 +69,7 @@ function loadProductsData() {
             description: typeof item.описание === 'string' ? item.описание : '',
             features: Array.isArray(item.преимущества) ? item.преимущества.filter((f: unknown) => typeof f === 'string') : [],
             projectSlug: typeof item.проект === 'string' ? item.проект : undefined,
+            video: typeof item.видео === 'string' ? item.видео : undefined,
           }))
       }
       if (Array.isArray(data.проекты)) {
@@ -1257,6 +1258,51 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
   )
 }
 
+/* ───────────────────────── VK VIDEO PLAYER ───────────────────────── */
+
+function VkVideoPlayer({ url }: { url: string }) {
+  const embedUrl = useMemo(() => {
+    // vkvideo.ru/video-OWNER_ID_ID  или  vk.com/video-OWNER_ID_ID
+    const m = url.match(/video(-?\d+)_(\d+)/)
+    if (!m) return url
+    return `https://vk.com/video_ext.php?oid=${m[1]}&id=${m[2]}&hd=2`
+  }, [url])
+
+  const [visible, setVisible] = useState(false)
+
+  if (!visible) {
+    return (
+      <button
+        onClick={() => setVisible(true)}
+        className="absolute inset-0 w-full h-full flex items-center justify-center gap-3 bg-[#111] hover:bg-[#1A1A1A] transition-colors group cursor-pointer"
+      >
+        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#C68E4E]/20 border-2 border-[#C68E4E] flex items-center justify-center group-hover:bg-[#C68E4E]/30 group-hover:scale-110 transition-all duration-300">
+          <svg className="w-7 h-7 sm:w-8 sm:h-8 text-[#C68E4E] ml-1" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+        <span className="text-[#8090A0] text-sm tracking-[0.05em] uppercase group-hover:text-[#C68E4E] transition-colors">
+          Смотреть видео
+        </span>
+      </button>
+    )
+  }
+
+  return (
+    <iframe
+      src={embedUrl}
+      width="100%"
+      height="100%"
+      allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+      frameBorder="0"
+      sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+      referrerPolicy="no-referrer-when-downgrade"
+      className="absolute inset-0 w-full h-full"
+      allowFullScreen
+    />
+  )
+}
+
 /* ───────────────────────── CATALOG DETAIL MODAL ───────────────────────── */
 
 function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CATALOG_ITEMS[0]; onClose: () => void; onOpenProject: (slug: string) => void }) {
@@ -1314,6 +1360,19 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
             className="absolute inset-0 w-full h-full object-cover"
           />
         </div>
+
+        {/* Video */}
+        {item.video && (
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-[2px] bg-[#C68E4E]" />
+              <span className="text-xs tracking-[0.12em] uppercase font-bold text-[#C68E4E]">Видео</span>
+            </div>
+            <div className="relative aspect-video bg-[#111] rounded-lg overflow-hidden border border-[#333]">
+              <VkVideoPlayer url={item.video} />
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left: description */}

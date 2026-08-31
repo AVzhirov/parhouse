@@ -47,6 +47,7 @@ export interface CatalogItem {
   description: string
   features: string[]
   projectSlug?: string
+  video?: string          // URL видео для встраивания (VK Video, YouTube и т.д.)
 }
 
 export interface Project {
@@ -83,6 +84,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     description: 'Просторная каркасная баня с продуманной планировкой. Оптимальные размеры для комфортной парной и зоны отдыха.',
     features: ['Парная', 'Помывочная', 'Комната отдыха'],
     projectSlug: 'karkasnaya-banya-55-25',
+    video: 'https://vkvideo.ru/video-232348817_456239035',
   },
   {
     id: 3,

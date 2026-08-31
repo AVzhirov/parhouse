@@ -1187,11 +1187,7 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
                 transition={{ duration: 0.4, delay: 0.05 * idx }}
                 className="group bg-[#242424] rounded-lg overflow-hidden border border-[#333333] hover:border-[#C68E4E]/40 transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)] cursor-pointer flex flex-col"
                 onClick={() => {
-                  if (item.projectSlug) {
-                    onOpenProject(item.projectSlug)
-                  } else {
-                    setSelectedItem(item)
-                  }
+                  setSelectedItem(item)
                 }}
               >
                 <div className="relative h-48 sm:h-56 overflow-hidden">

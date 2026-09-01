@@ -213,7 +213,6 @@ export const PROJECTS: Project[] = [
     year: 'n',
     price: 'от 350 000 ₽',
     gallery: [
-      '/projects/karkasnaya-banya-55-25/main.webp',
       '/projects/karkasnaya-banya-55-25/gallery-1.webp',
       '/projects/karkasnaya-banya-55-25/gallery-2.webp',
       '/projects/karkasnaya-banya-55-25/gallery-3.webp',

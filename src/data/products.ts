@@ -80,7 +80,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     type: 'karkas-banya',
     price: 'от 350 000 ₽',
     size: '5,5×2,5 м',
-    image: '/product-2.webp',
+    image: '/projects/karkasnaya-banya-55-25/main.webp',
     description: 'Просторная каркасная баня с продуманной планировкой. Оптимальные размеры для комфортной парной и зоны отдыха.',
     features: ['Парная', 'Помывочная', 'Комната отдыха'],
     projectSlug: 'karkasnaya-banya-55-25',

@@ -136,7 +136,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     type: 'dacha',
     price: 'от 650 000 ₽',
     size: 'Стандартный',
-    image: '/product-7.webp',
+    image: '/projects/dachny-domik-64/main.webp',
     description: 'Удобный дачный домик для сезонного проживания из профилированного кедрового мини бруса. Отличная теплоизоляция.',
     features: ['Сезонный', 'Теплоизоляция'],
     projectSlug: 'dachny-domik-64',

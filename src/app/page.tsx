@@ -1305,11 +1305,13 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const normalize = (s: string) => s.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '')
-  const matchedProject = liveProjects.find((p) => {
-    const ni = normalize(item.name)
-    const np = normalize(p.title)
-    return ni.includes(np) || np.includes(ni) || (ni.split('x').length > 1 && np.split('x').length > 1 && ni.split('x')[0] === np.split('x')[0] && ni.split('x')[1] === np.split('x')[1])
-  })
+  const matchedProject = item.projectSlug
+    ? liveProjects.find((p) => p.slug === item.projectSlug)
+    : liveProjects.find((p) => {
+        const ni = normalize(item.name)
+        const np = normalize(p.title)
+        return ni.includes(np) || np.includes(ni) || (ni.split('x').length > 1 && np.split('x').length > 1 && ni.split('x')[0] === np.split('x')[0] && ni.split('x')[1] === np.split('x')[1])
+      })
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -1371,16 +1373,19 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
         )}
 
         {/* Project gallery */}
-        {matchedProject && matchedProject.gallery.length > 0 && (
+        {matchedProject && (() => {
+          const galleryFiltered = matchedProject.gallery.filter(g => g !== item.image)
+          if (galleryFiltered.length === 0) return null
+          return (
           <div className="mb-10">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-[2px] bg-[#C68E4E]" />
               <span className="text-xs tracking-[0.12em] uppercase font-bold text-[#C68E4E]">
-                Фото проекта ({matchedProject.gallery.length})
+                Фото проекта ({galleryFiltered.length})
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {matchedProject.gallery.map((img, idx) => (
+              {galleryFiltered.map((img, idx) => (
                 <div key={idx} className="relative aspect-[4/3] bg-[#111] rounded-lg overflow-hidden border border-[#333] hover:border-[#C68E4E]/40 transition-colors duration-300">
                   <img
                     src={img}
@@ -1393,7 +1398,8 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
               ))}
             </div>
           </div>
-        )}
+          )
+        })()}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left: description */}

@@ -165,6 +165,17 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     projectSlug: 'banya-39-215',
   },
   {
+    id: 11,
+    name: 'Баня из профилированного бруса 5×2,4',
+    type: 'banya',
+    price: 'от 490 000 ₽',
+    size: '5×2,4 м',
+    image: '/projects/banya-brus-52-24/main.webp',
+    description: 'Баня 5×2,4 на 3 отделения, высота потолка 2,10м, ширина парилки 2,25м. Выдвижной нижний полок, мойка из лиственницы.',
+    features: ['Профилированный брус', '3 отделения', 'Мебель в подарок'],
+    projectSlug: 'banya-brus-52-24',
+  },
+  {
     id: 10,
     name: 'Каркасный домик 2,5х2 м для детей',
     type: 'detskiy',

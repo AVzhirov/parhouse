@@ -333,7 +333,6 @@ export const PROJECTS: Project[] = [
     year: 'n',
     price: 'от 350 000 ₽',
     gallery: [
-      '/projects/banya-brus-52-24/main.webp',
       '/projects/banya-brus-52-24/gallery-1.webp',
       '/projects/banya-brus-52-24/gallery-2.webp',
       '/projects/banya-brus-52-24/gallery-3.webp',

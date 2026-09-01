@@ -854,7 +854,7 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
-                    {project.gallery.length} фото
+                    {project.gallery.includes(project.image) ? project.gallery.length : project.gallery.length + 1} фото
                   </span>
                   <span className="text-[#C68E4E] font-bold text-sm">{project.price}</span>
                 </div>
@@ -1539,7 +1539,7 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
-                    {project.gallery.length} фото
+                    {project.gallery.includes(project.image) ? project.gallery.length : project.gallery.length + 1} фото
                   </span>
                   <span className="text-[#C68E4E] font-bold text-sm">{project.price}</span>
                 </div>
@@ -1570,18 +1570,18 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
 function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; onClose: () => void }) {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [lightbox, setLightbox] = useState(false)
-  const gallery = project.gallery
+  const allPhotos = [project.image, ...project.gallery.filter(g => g !== project.image)]
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (lightbox) {
         if (e.key === 'Escape') setLightbox(false)
-        if (e.key === 'ArrowRight') setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1))
-        if (e.key === 'ArrowLeft') setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1))
+        if (e.key === 'ArrowRight') setCurrentIdx((i) => (i === allPhotos.length - 1 ? 0 : i + 1))
+        if (e.key === 'ArrowLeft') setCurrentIdx((i) => (i === 0 ? allPhotos.length - 1 : i - 1))
       } else {
         if (e.key === 'Escape') onClose()
-        if (e.key === 'ArrowRight') setCurrentIdx((i) => Math.min(i + 1, gallery.length - 1))
+        if (e.key === 'ArrowRight') setCurrentIdx((i) => Math.min(i + 1, allPhotos.length - 1))
         if (e.key === 'ArrowLeft') setCurrentIdx((i) => Math.max(i - 1, 0))
       }
     }
@@ -1592,7 +1592,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
       window.removeEventListener('keydown', handler)
       document.body.style.overflow = ''
     }
-  }, [gallery.length, onClose])
+  }, [allPhotos.length, onClose])
 
   return (
     <motion.div
@@ -1627,7 +1627,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentIdx}
-                src={gallery[currentIdx]}
+                src={allPhotos[currentIdx]}
                 alt={`${project.title} — фото ${currentIdx + 1}`}
                 initial={{ opacity: 0, scale: 1.02 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -1640,17 +1640,17 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
             </AnimatePresence>
 
             {/* Nav arrows */}
-            {gallery.length > 1 && (
+            {allPhotos.length > 1 && (
               <>
                 <button
-                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1)) }}
+                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === 0 ? allPhotos.length - 1 : i - 1)) }}
                   className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/60 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/50 transition-all"
                   aria-label="Предыдущее фото"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
-                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1)) }}
+                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === allPhotos.length - 1 ? 0 : i + 1)) }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-black/60 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-sm border border-white/10 hover:border-[#C68E4E]/50 transition-all"
                   aria-label="Следующее фото"
                 >
@@ -1661,14 +1661,14 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
 
             {/* Counter badge */}
             <div className="absolute bottom-3 right-3 bg-black/70 text-white/80 text-xs px-3 py-1.5 rounded-sm border border-white/10">
-              {currentIdx + 1} / {gallery.length}
+              {currentIdx + 1} / {allPhotos.length}
             </div>
           </div>
 
           {/* Thumbnails strip */}
-          {gallery.length > 1 && (
+          {allPhotos.length > 1 && (
             <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
-              {gallery.map((img, idx) => (
+              {allPhotos.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentIdx(idx)}
@@ -1762,14 +1762,14 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
               <X className="w-6 h-6" />
             </button>
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white/80 text-sm px-4 py-2 rounded-full border border-white/10">
-              {currentIdx + 1} / {gallery.length}
+              {currentIdx + 1} / {allPhotos.length}
             </div>
-            {gallery.length > 1 && (
+            {allPhotos.length > 1 && (
               <>
                 <button
                   type="button"
                   className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 flex items-center justify-center bg-black/50 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-full border border-white/10 hover:border-[#C68E4E]/50 transition-all"
-                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === 0 ? gallery.length - 1 : i - 1)) }}
+                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === 0 ? allPhotos.length - 1 : i - 1)) }}
                   aria-label="Предыдущее фото"
                 >
                   <ChevronLeft className="w-6 h-6" />
@@ -1777,7 +1777,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
                 <button
                   type="button"
                   className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 flex items-center justify-center bg-black/50 hover:bg-[#C68E4E]/30 text-white/80 hover:text-white rounded-full border border-white/10 hover:border-[#C68E4E]/50 transition-all"
-                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === gallery.length - 1 ? 0 : i + 1)) }}
+                  onClick={(e) => { e.stopPropagation(); setCurrentIdx((i) => (i === allPhotos.length - 1 ? 0 : i + 1)) }}
                   aria-label="Следующее фото"
                 >
                   <ChevronRight className="w-6 h-6" />
@@ -1787,7 +1787,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentIdx}
-                src={gallery[currentIdx]}
+                src={allPhotos[currentIdx]}
                 alt={`${project.title} — фото ${currentIdx + 1}`}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}

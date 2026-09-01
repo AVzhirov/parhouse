@@ -1627,7 +1627,7 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.25 }}
-                className="absolute inset-0 w-full h-full object-contain"
+                className="absolute inset-0 w-full h-full object-cover"
                 loading="lazy"
                 decoding="async"
               />

@@ -1259,7 +1259,7 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
 function VkVideoPlayer({ url }: { url: string }) {
   const embedUrl = useMemo(() => {
     // vkvideo.ru/video-OWNER_ID_ID  или  vk.com/video-OWNER_ID_ID
-    const m = url.match(/video(-?\d+)_(\d+)/)
+    const m = url.match(/(?:video|clip)(-?\d+)_(\d+)/)
     if (!m) return url
     return `https://vk.com/video_ext.php?oid=${m[1]}&id=${m[2]}&hd=2`
   }, [url])

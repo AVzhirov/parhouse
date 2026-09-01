@@ -140,6 +140,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     description: 'Удобный дачный домик для сезонного проживания из профилированного кедрового мини бруса. Отличная теплоизоляция.',
     features: ['Сезонный', 'Теплоизоляция'],
     projectSlug: 'dachny-domik-64',
+    video: 'https://vk.ru/clip-232348817_456239028',
   },
   {
     id: 8,
@@ -281,7 +282,6 @@ export const PROJECTS: Project[] = [
       '/projects/dachny-domik-64/main.webp',
       '/projects/dachny-domik-64/gallery-1.webp',
       '/projects/dachny-domik-64/gallery-2.webp',
-      '/projects/dachny-domik-64/gallery-3.webp',
     ],
   },
   {

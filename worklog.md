@@ -133,3 +133,102 @@ Stage Summary:
 - Исправлен критический баг мэтчинга проектов (нечёткий vs точный по slug)
 - Галерея в модале не дублирует главное фото
 - lint: чисто
+
+---
+Task ID: 3-a
+Agent: ui-animator
+Task: Floating CTA, Mobile menu animation, FAQ accordion, Scroll reveal animations
+
+Work Log:
+- Создан компонент FadeInSection (строка 244): обёртка на IntersectionObserver + Framer Motion (useOnScreen), fade-up y:20→0, duration 0.5, поддерживает delay, className, onClick
+- Создан компонент FloatingCallButton (строка 483):
+  - Fixed position bottom-40/right-5, z-[90], gold bg #C68E4E
+  - Mobile: иконка Phone, Desktop: иконка + текст «Позвонить»
+  - Ссылка tel:+79048220007
+  - Pulse-анимация на иконке (scale 1→1.2→1, repeat Infinity)
+  - Скрытие при открытых модалах (MutationObserver на body.style.overflow === 'hidden')
+  - Framer Motion enter/exit (opacity + scale)
+- Мобильное меню: заменён height-collapse на slide-in справа:
+  - Backdrop: motion.div fixed inset-0, opacity fade 0.3s, z-[55], клик закрывает
+  - Panel: motion.div fixed top-0 right-0 bottom-0, x: '100%'→0, ease [0.32,0.72,0,1], z-[56], w-72
+  - Навигационные элементы анимируются по-отдельности (stagger 0.05s)
+  - Кнопка закрытия (X) в правом верхнем углу панели
+  - Разделители border-b между пунктами
+- FAQ accordion: иконка Plus→ChevronDown, вращение 45°→180° при открытии
+- Применён FadeInSection к:
+  - Stats numbers в HomePage (4 элемента, stagger 0.1s)
+  - Featured projects cards (5 карточек, stagger 0.1s)
+  - Projects page cards (все проекты, stagger 0.1s)
+  - FAQ items (6 вопросов, stagger 0.08s)
+  - Catalog grid container (целая сетка товаров)
+- Удалён неиспользуемый импорт Plus из lucide-react
+- Добавлен FloatingCallButton в render Home компонента
+- lint: 0 ошибок, компиляция успешна
+
+Stage Summary:
+- 4 новые UI-фичи реализованы в page.tsx без новых файлов
+- FadeInSection — переиспользуемый компонент для scroll-reveal анимаций
+- Мобильное меню теперь слайдит справа с бэкдропом
+- FAQ использует ChevronDown вместо Plus
+- Плавающая кнопка «Позвонить» с pulse-анимацией и автоскрытием при модалах
+- lint clean, dev server компилирует без ошибок
+
+---
+Task ID: 3-b
+Agent: ui-animator
+Task: Splash screen, smooth scroll, skeleton loading
+
+Work Log:
+- layout.tsx: добавлен `<style>` тег с `html { scroll-behavior: smooth; }` (dangerouslySetInnerHTML)
+- layout.tsx: добавлен `<div id="splash">` после preloader, перед noscript:
+  - Full viewport, bg-[#1A1A1A], z-index 9998 (ниже preloader 9999)
+  - CSS keyframe `splash-fadein`: opacity 0→1, scale 0.95→1 за 0.6s
+  - Текст «ПАР ХАУС» — gold #C68E4E, font-weight 800, responsive clamp(2rem, 8vw, 4rem)
+  - CSS transition на opacity для плавного исчезновения
+- page.tsx Home компонент: добавлен useEffect для удаления splash (DOM manipulation, без React state):
+  - Ждёт 800ms, затем opacity→0, через 500ms remove()
+  - Избегает hydration mismatch для static export
+- page.tsx Home компонент: добавлено состояние `loaded` (useState, default false)
+  - useEffect: setLoaded(true) через 300ms после mount
+- page.tsx: skeleton UI когда `!loaded`:
+  - Hero: полный width aspect-video прямоугольник + 2 текстовых бара (w-48, w-32)
+  - Сетка: 3 карточки (1/2/3 колонки), каждая с aspect-[4/3] + 3 линии текста
+  - Все элементы bg-[#2a2a2a] animate-pulse
+- Smooth scroll при навигации: уже реализован в handleNavigate (window.scrollTo behavior: smooth)
+- lint: 0 ошибок
+
+Stage Summary:
+- 3 фичи: splash screen (CSS анимация + DOM removal), smooth scroll (CSS + существующий JS), skeleton loading (React state + animate-pulse)
+- Splash не использует React state — прямое DOM манипулирование для избежания hydration mismatch
+- Skeleton показывается 300ms перед основной контентом
+- lint clean, dev server компилирует без ошибок
+
+---
+Task ID: 3-c
+Agent: seo-analytics
+Task: SEO JSON-LD structured data + Yandex.Metrika with cookie consent gating
+
+Work Log:
+- Обновлён статический LocalBusiness JSON-LD в layout.tsx: description → «…в Омске и Омской области», priceRange → «от 125 000 ₽»
+- Обновлён CSP в layout.tsx: добавлен https://mc.yandex.ru в script-src, connect-src, img-src
+- Добавлен inline <script> в layout.tsx для Yandex.Metrika:
+  - Функция loadMetrika(id) со стандартным сниппетом Яндекса
+  - Проверка typeof id !== 'number' → ничего не грузит пока ID не заменён
+  - DOMContentLoaded: если consent=accepted → загружает Metrika сразу
+  - window.__loadTrackers = function() → вызывается из CookieBanner при принятии
+  - Плейсхолдер ID 99999999 с TODO-комментарием для замены
+  - Noscript img fallback при динамической загрузке
+- Добавлена функция injectJsonLd() в page.tsx:
+  - Удаляет предыдущие инъекции (data-parhouse-jsonld атрибут) перед повторной вставкой
+  - LocalBusiness JSON-LD: name, description, url, telephone, email, PostalAddress, priceRange
+  - ItemList JSON-LD: все товары из liveCatalog как ListItem с Product (name, description, image, price, brand)
+  - Изображения получают полный URL (baseUrl + path) если относительный
+  - Вызывается в useEffect при монтировании + на событии data-updated (live data)
+- lint: 0 ошибок, dev server компилирует без ошибок
+
+Stage Summary:
+- Динамический JSON-LD: LocalBusiness + ItemList/Products из liveCatalog, обновляется при загрузке products.json
+- Статический JSON-LD в layout.tsx обновлён для non-JS краулеров
+- Yandex.Metrika с cookie consent gating: грузится только после принятия, плейсхолдер 99999999
+- CSP обновлён для mc.yandex.ru
+- lint clean

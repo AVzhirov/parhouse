@@ -20,7 +20,6 @@ import {
   X,
   ArrowRight,
   Star,
-  Plus,
   MessageCircle,
   TreePine,
   Ruler,
@@ -105,6 +104,69 @@ function useLiveVersion() {
 
 function getTypeLabelLive(key: string): string {
   return liveTypeLabels[key] ?? key
+}
+
+/* ───────────────────────── JSON-LD STRUCTURED DATA ───────────────────────── */
+
+const JSONLD_ATTR = 'data-parhouse-jsonld'
+
+function injectJsonLd() {
+  if (typeof document === 'undefined') return
+  // Remove previously injected JSON-LD to avoid duplicates on re-renders
+  document.head.querySelectorAll(`script[${JSONLD_ATTR}]`).forEach(el => el.remove())
+
+  // 1) LocalBusiness
+  const localBusiness: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: 'ПАР ХАУС',
+    description: 'Производство и монтаж бань и саун под ключ в Омске и Омской области',
+    url: 'https://parhouse55.ru',
+    telephone: '+79048220007',
+    email: 'parhouse_55@mail.ru',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Омск',
+      addressRegion: 'Омская область',
+      addressCountry: 'RU',
+    },
+    priceRange: 'от 125 000 ₽',
+  }
+
+  const lbScript = document.createElement('script')
+  lbScript.type = 'application/ld+json'
+  lbScript.setAttribute(JSONLD_ATTR, 'localbusiness')
+  lbScript.textContent = JSON.stringify(localBusiness)
+  document.head.appendChild(lbScript)
+
+  // 2) ItemList with Products
+  const baseUrl = 'https://parhouse55.ru'
+  const productList = liveCatalog.map((item, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    item: {
+      '@type': 'Product',
+      name: item.name ?? '',
+      description: item.description ?? '',
+      image: (item.image && item.image.startsWith('http')) ? item.image : baseUrl + (item.image || ''),
+      price: item.price ?? '',
+      brand: { '@type': 'Brand', name: 'ПАР ХАУС' },
+    },
+  }))
+
+  const itemList: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Каталог бань и саун ПАР ХАУС',
+    numberOfItems: productList.length,
+    itemListElement: productList,
+  }
+
+  const ilScript = document.createElement('script')
+  ilScript.type = 'application/ld+json'
+  ilScript.setAttribute(JSONLD_ATTR, 'itemlist')
+  ilScript.textContent = JSON.stringify(itemList)
+  document.head.appendChild(ilScript)
 }
 
 const CURRENT_YEAR = new Date().getFullYear()
@@ -239,6 +301,25 @@ function useCountUp(end: number, duration = 2000, startVal = 0) {
   }, [triggered, end, duration, startVal])
 
   return { count, start: () => setTriggered(true) }
+}
+
+/* ───────────────────────── FADE IN SECTION ───────────────────────── */
+
+function FadeInSection({ children, delay = 0, className = '', onClick }: { children: React.ReactNode; delay?: number; className?: string; onClick?: () => void }) {
+  const { ref, visible } = useOnScreen(0.15)
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={false}
+      animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay, ease: 'easeOut' }}
+      className={className}
+      onClick={onClick}
+    >
+      {children}
+    </motion.div>
+  )
 }
 
 /* ───────────────────────── PAGE TRANSITION VARIANTS ───────────────────────── */
@@ -376,38 +457,66 @@ function Header({ currentPage, onNavigate }: { currentPage: PageId; onNavigate: 
       {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden glass overflow-hidden"
-          >
-            <nav className="flex flex-col px-4 py-4 gap-4">
-              {NAV_LINKS.map((link) => {
-                const isActive = currentPage === link.pageId
-                return (
-                  <button
-                    key={link.pageId}
-                    onClick={() => handleNav(link.pageId)}
-                    className={`text-sm tracking-[0.15em] uppercase transition-colors py-2 text-left ${
-                      isActive
-                        ? 'text-[#C68E4E]'
-                        : 'text-[#C0C8D0] hover:text-[#C68E4E]'
-                    }`}
-                  >
-                    {link.label}
-                  </button>
-                )
-              })}
-              <a
-                href="tel:+79048220007"
-                className="flex items-center gap-2 text-[#C68E4E] text-sm font-medium pt-2 border-t border-[#C68E4E]/20"
-              >
-                <Phone className="w-4 h-4" />
-                +7 (904) 822-00-07
-              </a>
-            </nav>
-          </motion.div>
+          <div className="lg:hidden" key="mobile-menu">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black/60 z-[55]"
+              onClick={() => setMobileOpen(false)}
+            />
+            {/* Slide-in panel */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+              className="fixed top-0 right-0 bottom-0 w-72 bg-[#1A1A1A] z-[56] overflow-y-auto shadow-[-4px_0_40px_rgba(0,0,0,0.6)]"
+            >
+              <div className="flex justify-end p-4">
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="p-2 text-[#C0C8D0] hover:text-[#C68E4E] transition-colors"
+                  aria-label="Закрыть меню"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <nav className="flex flex-col px-6 pb-8 gap-1">
+                {NAV_LINKS.map((link, idx) => {
+                  const isActive = currentPage === link.pageId
+                  return (
+                    <motion.button
+                      key={link.pageId}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.05 * idx + 0.1 }}
+                      onClick={() => handleNav(link.pageId)}
+                      className={`text-sm tracking-[0.15em] uppercase transition-colors py-3 text-left border-b border-[#333]/30 ${
+                        isActive
+                          ? 'text-[#C68E4E]'
+                          : 'text-[#C0C8D0] hover:text-[#C68E4E]'
+                      }`}
+                    >
+                      {link.label}
+                    </motion.button>
+                  )
+                })}
+                <motion.a
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.05 * NAV_LINKS.length + 0.15 }}
+                  href="tel:+79048220007"
+                  className="flex items-center gap-2 text-[#C68E4E] text-sm font-medium pt-4 mt-2 border-t border-[#C68E4E]/20"
+                >
+                  <Phone className="w-4 h-4" />
+                  +7 (904) 822-00-07
+                </motion.a>
+              </nav>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </header>
@@ -460,6 +569,45 @@ function BackToTop() {
   )
 }
 
+
+/* ───────────────────────── FLOATING CALL BUTTON ───────────────────────── */
+
+function FloatingCallButton() {
+  const [modalOpen, setModalOpen] = useState(false)
+
+  useEffect(() => {
+    const check = () => setModalOpen(document.body.style.overflow === 'hidden')
+    const observer = new MutationObserver(check)
+    observer.observe(document.body, { attributes: true, attributeFilter: ['style'] })
+    check()
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <AnimatePresence>
+      {!modalOpen && (
+        <motion.a
+          href="tel:+79048220007"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.3 }}
+          className="fixed bottom-40 sm:bottom-36 right-5 z-[90] flex items-center gap-2 bg-[#C68E4E] hover:bg-[#D4A762] text-white font-semibold tracking-[0.08em] uppercase text-xs sm:text-sm px-4 sm:px-5 py-3 sm:py-3.5 rounded-lg shadow-[0_4px_20px_rgba(198,142,78,0.4)] hover:shadow-[0_4px_30px_rgba(198,142,78,0.6)] transition-colors duration-300"
+          aria-label="Позвонить"
+        >
+          <motion.span
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex items-center justify-center"
+          >
+            <Phone className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+          </motion.span>
+          <span className="hidden sm:inline">Позвонить</span>
+        </motion.a>
+      )}
+    </AnimatePresence>
+  )
+}
 
 /* ───────────────────────── HERO SECTION ───────────────────────── */
 
@@ -737,20 +885,16 @@ function HomePage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {statsItems.map((it, idx) => (
-              <motion.div
-                key={it.label}
-                initial={{ opacity: 0, y: 15 }}
-                animate={statsVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-                transition={{ duration: 0.5, delay: 0.1 * idx }}
-                className="text-center"
-              >
-                <div className="text-3xl sm:text-4xl font-bold text-[#C68E4E] tabular-nums">
-                  {it.val}{it.suf}
+              <FadeInSection key={it.label} delay={0.1 * idx}>
+                <div className="text-center">
+                  <div className="text-3xl sm:text-4xl font-bold text-[#C68E4E] tabular-nums">
+                    {it.val}{it.suf}
+                  </div>
+                  <div className="text-[#8090A0] text-xs sm:text-sm mt-1 tracking-wide">
+                    {it.label}
+                  </div>
                 </div>
-                <div className="text-[#8090A0] text-xs sm:text-sm mt-1 tracking-wide">
-                  {it.label}
-                </div>
-              </motion.div>
+              </FadeInSection>
             ))}
           </div>
         </div>
@@ -831,11 +975,9 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
         {/* Responsive grid — all cards fully visible */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {featured.map((project, idx) => (
-            <motion.div
+            <FadeInSection
               key={project.slug}
-              initial={false}
-              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: 0.1 * idx }}
+              delay={0.1 * idx}
               className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-[380px] border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
               onClick={() => onNavigate('projects')}
             >
@@ -862,7 +1004,7 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
                   {project.title}
                 </h3>
               </div>
-            </motion.div>
+            </FadeInSection>
           ))}
         </div>
 
@@ -1043,44 +1185,40 @@ function FAQSection() {
           {FAQ_DATA.map((item, idx) => {
             const isOpen = openIdx === idx
             return (
-              <motion.div
-                key={idx}
-                initial={false}
-                animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.5, delay: 0.08 * idx }}
-                className="glass-card rounded-lg overflow-hidden"
-              >
-                <button
-                  onClick={() => setOpenIdx(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between p-5 lg:p-6 text-left group"
-                >
-                  <span className={`text-sm font-semibold tracking-[0.02em] transition-colors duration-300 ${isOpen ? 'text-[#C68E4E]' : 'text-white group-hover:text-[#D0D6DC]'}`}>
-                    {item.q}
-                  </span>
-                  <motion.div
-                    animate={{ rotate: isOpen ? 45 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="shrink-0 ml-4 w-8 h-8 rounded-full bg-[#C68E4E]/10 border border-[#C68E4E]/30 flex items-center justify-center"
+              <FadeInSection key={idx} delay={0.08 * idx}>
+                <div className="glass-card rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => setOpenIdx(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between p-5 lg:p-6 text-left group"
                   >
-                    <Plus className="w-4 h-4 text-[#C68E4E]" />
-                  </motion.div>
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
+                    <span className={`text-sm font-semibold tracking-[0.02em] transition-colors duration-300 ${isOpen ? 'text-[#C68E4E]' : 'text-white group-hover:text-[#D0D6DC]'}`}>
+                      {item.q}
+                    </span>
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      className="overflow-hidden"
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="shrink-0 ml-4 w-8 h-8 rounded-full bg-[#C68E4E]/10 border border-[#C68E4E]/30 flex items-center justify-center"
                     >
-                      <div className="px-5 lg:px-6 pb-5 lg:pb-6 text-[#B0B8C0] text-sm leading-relaxed border-t border-[#333]/50 pt-4">
-                        {item.a}
-                      </div>
+                      <ChevronDown className="w-4 h-4 text-[#C68E4E]" />
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 lg:px-6 pb-5 lg:pb-6 text-[#B0B8C0] text-sm leading-relaxed border-t border-[#333]/50 pt-4">
+                          {item.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </FadeInSection>
             )
           })}
         </div>
@@ -1176,7 +1314,8 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
         </div>
 
         {/* Product grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <FadeInSection>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence mode="wait">
             {filtered.map((item, idx) => (
               <motion.div
@@ -1237,7 +1376,8 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
               </motion.div>
             ))}
           </AnimatePresence>
-        </div>
+          </div>
+        </FadeInSection>
       </div>
 
       {/* Catalog Detail Modal */}
@@ -1516,13 +1656,11 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {liveProjects.map((project, idx) => (
-            <motion.div
+            <FadeInSection
               key={project.slug}
-              initial={false}
-              animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: 0.06 * idx }}
-              onClick={() => setSelectedProject(project)}
+              delay={0.1 * idx}
               className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-96 border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
+              onClick={() => setSelectedProject(project)}
             >
               <img
                 loading="lazy"
@@ -1547,7 +1685,7 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
                   {project.title}
                 </h3>
               </div>
-            </motion.div>
+            </FadeInSection>
           ))}
         </div>
       </div>
@@ -2440,6 +2578,7 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 export default function Home() {
   const [currentPage, setCurrentPage] = useState<PageId>('home')
   const [openProjectSlug, setOpenProjectSlug] = useState<string | null>(null)
+  const [loaded, setLoaded] = useState(false)
   const mainRef = useRef<HTMLDivElement>(null)
   // Load live data from /products.json & dismiss preloader
   useEffect(() => {
@@ -2449,6 +2588,28 @@ export default function Home() {
     el.style.opacity = '0'
     el.style.visibility = 'hidden'
     setTimeout(() => el.remove(), 700)
+  }, [])
+  // Dismiss splash screen via direct DOM manipulation (no React state — avoids hydration mismatch)
+  useEffect(() => {
+    const splash = document.getElementById('splash')
+    if (!splash) return
+    const timer = setTimeout(() => {
+      splash.style.opacity = '0'
+      setTimeout(() => splash.remove(), 500)
+    }, 800)
+    return () => clearTimeout(timer)
+  }, [])
+  // Skeleton loading state
+  useEffect(() => {
+    const timer = setTimeout(() => setLoaded(true), 300)
+    return () => clearTimeout(timer)
+  }, [])
+  // JSON-LD structured data: inject on mount and re-inject when live data loads
+  useEffect(() => {
+    injectJsonLd()
+    const h = () => injectJsonLd()
+    window.addEventListener('data-updated', h)
+    return () => window.removeEventListener('data-updated', h)
   }, [])
 
   const handleNavigate = useCallback((page: PageId) => {
@@ -2464,6 +2625,29 @@ export default function Home() {
       {currentPage === 'home' && <ScrollProgressBar mainRef={mainRef} />}
 
       <main className="flex-1 relative" ref={mainRef}>
+        {!loaded ? (
+          <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            {/* Hero skeleton */}
+            <div className="w-full aspect-video rounded-sm bg-[#2a2a2a] animate-pulse" />
+            <div className="mt-6 flex flex-col sm:flex-row gap-4">
+              <div className="h-5 w-48 rounded bg-[#2a2a2a] animate-pulse" />
+              <div className="h-5 w-32 rounded bg-[#2a2a2a] animate-pulse" />
+            </div>
+            {/* Card grid skeleton */}
+            <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="rounded-sm overflow-hidden">
+                  <div className="w-full aspect-[4/3] bg-[#2a2a2a] animate-pulse" />
+                  <div className="p-4 space-y-3">
+                    <div className="h-4 w-3/4 rounded bg-[#2a2a2a] animate-pulse" />
+                    <div className="h-3 w-1/2 rounded bg-[#2a2a2a] animate-pulse" />
+                    <div className="h-3 w-full rounded bg-[#2a2a2a] animate-pulse" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
         <AnimatePresence mode="wait">
           {currentPage === 'home' && (
             <motion.div
@@ -2543,6 +2727,7 @@ export default function Home() {
             </motion.div>
           )}
         </AnimatePresence>
+        )}
       </main>
 
       <Footer onNavigate={handleNavigate} />
@@ -2550,6 +2735,7 @@ export default function Home() {
 
       {/* Global floating elements */}
       <BackToTop />
+      <FloatingCallButton />
     </div>
   )
 }

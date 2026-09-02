@@ -68,7 +68,8 @@ export default function RootLayout({
         <meta httpEquiv="X-Frame-Options" content="SAMEORIGIN" />
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
-        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://vk.com; frame-src https://yandex.ru/map-widget/ https://vk.com; worker-src 'self' blob:" />
+        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://mc.yandex.ru; connect-src 'self' https://vk.com https://mc.yandex.ru; frame-src https://yandex.ru/map-widget/ https://vk.com; worker-src 'self' blob:" />
+        <style dangerouslySetInnerHTML={{ __html: `html { scroll-behavior: smooth; }` }} />
         <link rel="manifest" href="/manifest.json" />
         <link rel="preload" as="image" href="/logo.webp" type="image/webp" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -93,7 +94,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
               name: "ПАР ХАУС",
-              description: "Производство и монтаж бань и саун под ключ в Омске",
+              description: "Производство и монтаж бань и саун под ключ в Омске и Омской области",
               telephone: "+79048220007",
               email: "parhouse_55@mail.ru",
               url: "https://parhouse55.ru",
@@ -129,7 +130,7 @@ export default function RootLayout({
                   closes: "16:00",
                 },
               ],
-              priceRange: "₽₽",
+              priceRange: "от 125 000 ₽",
               image: "/logo.webp",
             }),
           }}
@@ -214,6 +215,78 @@ export default function RootLayout({
             Производство бань и саун
           </div>
         </div>
+
+        {/* Splash screen — shows ПАР ХАУС branding, removed by JS */}
+        <div
+          id="splash"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9998,
+            background: '#1A1A1A',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'opacity 0.5s ease',
+          }}
+        >
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+                @keyframes splash-fadein {
+                  0% { opacity: 0; transform: scale(0.95); }
+                  100% { opacity: 1; transform: scale(1); }
+                }
+                #splash .splash-brand {
+                  animation: splash-fadein 0.6s ease-out forwards;
+                }
+              `,
+            }}
+          />
+          <div
+            className="splash-brand"
+            style={{
+              color: '#C68E4E',
+              fontSize: 'clamp(2rem, 8vw, 4rem)',
+              fontWeight: 800,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+            }}
+          >
+            ПАР ХАУС
+          </div>
+        </div>
+
+        {/* Yandex.Metrika — загружается только после согласия на cookie */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // TODO: заменить 99999999 на реальный ID Яндекс.Метрики
+              function loadMetrika(id) {
+                if (typeof id !== 'number') return;
+                (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                m[i].l=1*new Date();
+                for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+                k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+                (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+                ym(id, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+                var noscript = document.createElement("noscript");
+                var img = document.createElement("img");
+                img.src = "https://mc.yandex.ru/watch/" + id;
+                img.style.cssText = "position:absolute; left:-9999px;";
+                img.alt = "";
+                noscript.appendChild(img);
+                document.body.appendChild(noscript);
+              }
+              document.addEventListener("DOMContentLoaded", function() {
+                if (localStorage.getItem("parhouse_cookie_consent") === "accepted") {
+                  loadMetrika(99999999);
+                }
+                window.__loadTrackers = function() { loadMetrika(99999999); };
+              });
+            `,
+          }}
+        />
 
         <noscript>
           <div style={{ padding: "2rem", textAlign: "center", color: "#C68E4E", fontSize: "1.2rem" }}>

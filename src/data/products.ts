@@ -69,6 +69,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     type: 'dacha',
     price: 'от 650 000 ₽',
     size: '4×6 м + терраса',
+    image: '/projects/dachny-domik-46-terasa/main.webp',
     description: 'Дачный домик 4х6 с террасой — это классика, которая дает хороший простор для планировки. С террасой полезная площадь визуально и функционально расширяется, а само строение выглядит законченным.',
     features: ['Терраса', 'Просторная планировка'],
     projectSlug: 'dachny-domik-46-terasa',

@@ -310,7 +310,6 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // TODO: заменить 99999999 на реальный ID Яндекс.Метрики
               function loadMetrika(id) {
                 if (typeof id !== 'number') return;
                 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -318,7 +317,7 @@ export default function RootLayout({
                 for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
                 k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
                 (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-                ym(id, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+                ym(id, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, triggerEvent:true });
                 var noscript = document.createElement("noscript");
                 var img = document.createElement("img");
                 img.src = "https://mc.yandex.ru/watch/" + id;
@@ -329,9 +328,9 @@ export default function RootLayout({
               }
               document.addEventListener("DOMContentLoaded", function() {
                 if (localStorage.getItem("parhouse_cookie_consent") === "accepted") {
-                  loadMetrika(99999999);
+                  loadMetrika(44147844);
                 }
-                window.__loadTrackers = function() { loadMetrika(99999999); };
+                window.__loadTrackers = function() { loadMetrika(44147844); };
               });
             `,
           }}

@@ -155,7 +155,6 @@ type PageId = 'home' | 'catalog' | 'projects' | 'about' | 'contacts' | 'privacy'
 
 const NAV_LINKS: { label: string; pageId: PageId }[] = [
   { label: 'Главная', pageId: 'home' },
-  { label: 'Проекты', pageId: 'projects' },
   { label: 'Каталог', pageId: 'catalog' },
   { label: 'О производстве', pageId: 'about' },
   { label: 'Контакты', pageId: 'contacts' },
@@ -1013,7 +1012,7 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
               {/* Image */}
               <div
                 className="relative aspect-[4/3] rounded-lg overflow-hidden border border-[#333] cursor-pointer group"
-                onClick={() => onNavigate('projects')}
+                onClick={() => onNavigate('catalog')}
               >
                 <img
                   loading="lazy"
@@ -1044,7 +1043,7 @@ function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }
                   {project.description}
                 </p>
                 <button
-                  onClick={() => onNavigate('projects')}
+                  onClick={() => onNavigate('catalog')}
                   className="self-start inline-flex items-center gap-2 mt-2 text-[#C68E4E] hover:text-[#D4A762] text-sm tracking-[0.1em] uppercase font-semibold transition-colors group"
                 >
                   <span>Подробнее</span>
@@ -1336,7 +1335,7 @@ function CTABanner() {
 
 /* ───────────────────────── CATALOG PAGE ───────────────────────── */
 
-function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId) => void; onOpenProject: (slug: string) => void }) {
+function CatalogPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   useLiveVersion()
   const { ref, visible } = useOnScreen(0.1)
   const [activeFilter, setActiveFilter] = useState('Все')
@@ -1449,7 +1448,6 @@ function CatalogPage({ onNavigate, onOpenProject }: { onNavigate: (page: PageId)
           <CatalogDetailModal
             item={selectedItem}
             onClose={() => setSelectedItem(null)}
-            onOpenProject={onOpenProject}
           />
         )}
       </AnimatePresence>
@@ -1504,7 +1502,7 @@ function VkVideoPlayer({ url }: { url: string }) {
 
 /* ───────────────────────── CATALOG DETAIL MODAL ───────────────────────── */
 
-function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CATALOG_ITEMS[0]; onClose: () => void; onOpenProject: (slug: string) => void }) {
+function CatalogDetailModal({ item, onClose }: { item: typeof CATALOG_ITEMS[0]; onClose: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const normalize = (s: string) => s.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '')
@@ -1657,15 +1655,6 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
                   <Mail className="w-4 h-4" />
                   Написать на почту
                 </a>
-                {matchedProject && (
-                  <button
-                    onClick={() => { onClose(); onOpenProject(matchedProject.slug) }}
-                    className="flex items-center justify-center gap-2 w-full py-3 border border-[#8090A0]/30 hover:border-[#8090A0] hover:bg-[#8090A0]/10 text-[#8090A0] hover:text-white font-semibold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
-                  >
-                    <ShoppingBag className="w-4 h-4" />
-                    Смотреть проект ({matchedProject.gallery.length} фото)
-                  </button>
-                )}
               </div>
             </div>
             <div className="glass-card rounded-lg p-6">
@@ -2681,7 +2670,6 @@ function PrivacyPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState<PageId>('home')
-  const [openProjectSlug, setOpenProjectSlug] = useState<string | null>(null)
   const [loaded, setLoaded] = useState(false)
   const mainRef = useRef<HTMLDivElement>(null)
   // Load live data from /products.json & dismiss preloader
@@ -2776,21 +2764,7 @@ export default function Home() {
               transition={pageTransition}
             >
               <Breadcrumbs pageId="catalog" />
-              <CatalogPage onNavigate={handleNavigate} onOpenProject={(slug) => { setOpenProjectSlug(slug); handleNavigate('projects') }} />
-            </motion.div>
-          )}
-
-          {currentPage === 'projects' && (
-            <motion.div
-              key="projects"
-              variants={pageVariants}
-              initial={false}
-              animate="animate"
-              exit="exit"
-              transition={pageTransition}
-            >
-              <Breadcrumbs pageId="projects" />
-              <ProjectsPage initialProjectSlug={openProjectSlug} onProjectOpened={() => setOpenProjectSlug(null)} onNavigate={handleNavigate} />
+              <CatalogPage onNavigate={handleNavigate} />
             </motion.div>
           )}
 

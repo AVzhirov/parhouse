@@ -2233,6 +2233,20 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
               </div>
             </div>
 
+            {/* Organization Details */}
+            <div className="glass-card rounded-lg p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-sm bg-[#C68E4E]/15 border border-[#C68E4E]/30 flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-[#C68E4E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div>
+                  <h3 className="text-white font-bold text-sm tracking-[0.1em] uppercase mb-1">Реквизиты</h3>
+                  <p className="text-[#D0D6DC] text-base font-medium">ИП Арзамасов Роман Борисович</p>
+                  <p className="text-[#8090A0] text-sm mt-1">ИНН 550726246970</p>
+                </div>
+              </div>
+            </div>
+
             {/* Social Links */}
             <div className="flex gap-4">
               <a
@@ -2447,9 +2461,10 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-[#C68E4E]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[#606870] text-xs tracking-wider">
-            © {CURRENT_YEAR} ПАР ХАУС. Все права защищены.
-          </p>
+          <div className="text-[#606870] text-xs tracking-wider space-y-1">
+            <p>© {CURRENT_YEAR} ПАР ХАУС. Все права защищены.</p>
+            <p>ИП Арзамасов Р.Б. · ИНН 550726246970</p>
+          </div>
           <div className="flex items-center gap-4">
             <button
               type="button"

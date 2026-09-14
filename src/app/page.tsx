@@ -155,8 +155,8 @@ type PageId = 'home' | 'catalog' | 'projects' | 'about' | 'contacts' | 'privacy'
 
 const NAV_LINKS: { label: string; pageId: PageId }[] = [
   { label: 'Главная', pageId: 'home' },
-  { label: 'Каталог', pageId: 'catalog' },
   { label: 'Проекты', pageId: 'projects' },
+  { label: 'Каталог', pageId: 'catalog' },
   { label: 'О производстве', pageId: 'about' },
   { label: 'Контакты', pageId: 'contacts' },
 ]
@@ -972,65 +972,120 @@ function AdvantagesCompact() {
 function FeaturedProjects({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   useLiveVersion()
   const { ref, visible } = useOnScreen(0.1)
-  const featured = liveProjects.slice(0, 5)
+  const [current, setCurrent] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const total = liveProjects.length
+
+  // Auto-rotate every 4s
+  useEffect(() => {
+    if (paused || total <= 1) return
+    const timer = setInterval(() => {
+      setCurrent((i) => (i + 1) % total)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [paused, total])
+
+  const go = (dir: number) => setCurrent((i) => (i + dir + total) % total)
+  const project = liveProjects[current]
 
   return (
-    <section ref={ref} className="relative py-20 lg:py-28 bg-[#1A1A1A]">
+    <section
+      ref={ref}
+      className="relative py-20 lg:py-28 bg-[#1A1A1A]"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className="section-divider absolute top-0 left-0 right-0" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading label="Портфолио" title="Избранные проекты" visible={visible} />
+        <SectionHeading label="Портфолио" title="Наши проекты" visible={visible} />
 
-        {/* Responsive grid — all cards fully visible */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {featured.map((project, idx) => (
-            <FadeInSection
+        {/* Carousel */}
+        <div className="relative">
+          <AnimatePresence mode="wait">
+            <motion.div
               key={project.slug}
-              delay={0.1 * idx}
-              className="group relative rounded-lg overflow-hidden h-72 sm:h-80 lg:h-[380px] border border-[#333] hover:border-[#C68E4E]/40 transition-all duration-500 cursor-pointer"
-              onClick={() => onNavigate('projects')}
+              initial={{ opacity: 0, x: 60 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -60 }}
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center"
             >
-              <img
-                loading="lazy"
-                src={project.image}
-                alt={project.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/40 to-transparent" />
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="w-14 h-14 rounded-full bg-[#C68E4E]/20 border border-[#C68E4E]/50 flex items-center justify-center">
-                  <ArrowRight className="w-6 h-6 text-[#C68E4E]" />
+              {/* Image */}
+              <div
+                className="relative aspect-[4/3] rounded-lg overflow-hidden border border-[#333] cursor-pointer group"
+                onClick={() => onNavigate('projects')}
+              >
+                <img
+                  loading="lazy"
+                  src={project.image}
+                  alt={project.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/30 to-transparent" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="w-16 h-16 rounded-full bg-[#C68E4E]/20 border border-[#C68E4E]/50 flex items-center justify-center">
+                    <ArrowRight className="w-7 h-7 text-[#C68E4E]" />
+                  </div>
                 </div>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2 py-0.5 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
+
+              {/* Info */}
+              <div className="flex flex-col justify-center gap-4 py-4">
+                <div className="flex items-center gap-3">
+                  <span className="inline-block text-[#C68E4E] text-xs tracking-[0.2em] uppercase font-semibold px-2.5 py-1 bg-[#C68E4E]/10 border border-[#C68E4E]/20 rounded-sm">
                     {project.gallery.includes(project.image) ? project.gallery.length : project.gallery.length + 1} фото
                   </span>
-                  <span className="text-[#C68E4E] font-bold text-sm">{project.price}</span>
+                  <span className="text-[#C68E4E] font-bold text-lg">{project.price}</span>
                 </div>
-                <h3 className="text-white font-bold text-lg tracking-[0.02em] uppercase">
+                <h3 className="text-white font-bold text-2xl sm:text-3xl tracking-[0.02em] uppercase leading-tight">
                   {project.title}
                 </h3>
+                <p className="text-[#B0B8C0] leading-relaxed text-base">
+                  {project.description}
+                </p>
+                <button
+                  onClick={() => onNavigate('projects')}
+                  className="self-start inline-flex items-center gap-2 mt-2 text-[#C68E4E] hover:text-[#D4A762] text-sm tracking-[0.1em] uppercase font-semibold transition-colors group"
+                >
+                  <span>Подробнее</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
               </div>
-            </FadeInSection>
-          ))}
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Navigation arrows */}
+          <button
+            onClick={() => go(-1)}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-5 w-11 h-11 flex items-center justify-center bg-[#222]/80 hover:bg-[#C68E4E]/30 text-[#8090A0] hover:text-white rounded-sm border border-[#333] hover:border-[#C68E4E]/50 transition-all z-10"
+            aria-label="Предыдущий проект"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => go(1)}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-5 w-11 h-11 flex items-center justify-center bg-[#222]/80 hover:bg-[#C68E4E]/30 text-[#8090A0] hover:text-white rounded-sm border border-[#333] hover:border-[#C68E4E]/50 transition-all z-10"
+            aria-label="Следующий проект"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
 
-        <motion.div
-          initial={false}
-          animate={visible ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-10 text-center"
-        >
-          <Button
-            variant="outline"
-            className="border-[#C68E4E]/50 hover:border-[#C68E4E] hover:bg-[#C68E4E]/10 text-[#C68E4E] font-semibold tracking-[0.1em] uppercase text-sm px-8 py-5 h-auto rounded-none transition-all duration-300"
-            onClick={() => onNavigate('projects')}
-          >
-            Все проекты
-            <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
-        </motion.div>
+        {/* Dots indicator */}
+        <div className="flex items-center justify-center gap-2 mt-8">
+          {liveProjects.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrent(idx)}
+              className={`transition-all duration-300 rounded-full ${
+                idx === current
+                  ? 'w-6 h-2 bg-[#C68E4E]'
+                  : 'w-2 h-2 bg-[#505860] hover:bg-[#8090A0]'
+              }`}
+              aria-label={`Проект ${idx + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )

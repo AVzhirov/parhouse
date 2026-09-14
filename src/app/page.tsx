@@ -1637,7 +1637,7 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
 
 /* ───────────────────────── PROJECTS PAGE ───────────────────────── */
 
-function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectSlug: string | null; onProjectOpened: () => void }) {
+function ProjectsPage({ initialProjectSlug, onProjectOpened, onNavigate }: { initialProjectSlug: string | null; onProjectOpened: () => void; onNavigate: (page: PageId) => void }) {
   useLiveVersion()
   const { ref, visible } = useOnScreen(0.1)
   const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null)
@@ -1663,6 +1663,16 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
     <div className="pt-28 pb-16">
       <div ref={ref} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="Портфолио" title="Наши проекты" visible={visible} />
+
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => onNavigate('catalog')}
+            className="inline-flex items-center gap-2 text-[#C68E4E] hover:text-[#D4A762] text-sm tracking-[0.1em] uppercase font-semibold transition-colors group"
+          >
+            <span>Смотреть каталог с ценами</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {liveProjects.map((project, idx) => (
@@ -1706,6 +1716,7 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
           <ProjectDetailPage
             project={selectedProject}
             onClose={() => setSelectedProject(null)}
+            onNavigate={onNavigate}
           />
         )}
       </AnimatePresence>
@@ -1715,7 +1726,7 @@ function ProjectsPage({ initialProjectSlug, onProjectOpened }: { initialProjectS
 
 /* ───────────────────────── PROJECT DETAIL PAGE (KEEP EXISTING) ───────────────────────── */
 
-function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; onClose: () => void }) {
+function ProjectDetailPage({ project, onClose, onNavigate }: { project: typeof PROJECTS[0]; onClose: () => void; onNavigate?: (page: PageId) => void }) {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [lightbox, setLightbox] = useState(false)
   const allPhotos = [project.image, ...project.gallery.filter(g => g !== project.image)]
@@ -1762,6 +1773,15 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
             <span className="text-sm tracking-[0.05em] uppercase">Назад к проектам</span>
           </button>
           <span className="text-[#C68E4E] font-bold text-lg">{project.price}</span>
+          {onNavigate && (
+            <button
+              onClick={() => { onClose(); onNavigate('catalog') }}
+              className="hidden sm:flex items-center gap-1.5 text-[#8090A0] hover:text-[#C68E4E] text-xs tracking-[0.1em] uppercase font-semibold transition-colors"
+            >
+              <span>Каталог</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -2715,7 +2735,7 @@ export default function Home() {
               transition={pageTransition}
             >
               <Breadcrumbs pageId="projects" />
-              <ProjectsPage initialProjectSlug={openProjectSlug} onProjectOpened={() => setOpenProjectSlug(null)} />
+              <ProjectsPage initialProjectSlug={openProjectSlug} onProjectOpened={() => setOpenProjectSlug(null)} onNavigate={handleNavigate} />
             </motion.div>
           )}
 

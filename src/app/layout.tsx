@@ -65,6 +65,8 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#1A1A1A" />
         <meta name="format-detection" content="telephone=no" />
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="MobileOptimized" content="width" />
         <meta httpEquiv="X-Frame-Options" content="SAMEORIGIN" />
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -98,6 +100,12 @@ export default function RootLayout({
               telephone: "+79048220007",
               email: "parhouse_55@mail.ru",
               url: "https://parhouse55.ru",
+              taxID: "550726246970",
+              founder: {
+                "@type": "Person",
+                name: "Арзамасов Роман Борисович",
+                jobTitle: "Индивидуальный предприниматель",
+              },
               address: {
                 "@type": "PostalAddress",
                 streetAddress: "ул. Тополиная, 31",
@@ -132,6 +140,47 @@ export default function RootLayout({
               ],
               priceRange: "от 125 000 ₽",
               image: "/logo.webp",
+              datePublished: "2024-01-01",
+              dateModified: "2026-09-14",
+              author: {
+                "@type": "Organization",
+                name: "ПАР ХАУС",
+                url: "https://parhouse55.ru",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "ПАР ХАУС",
+              url: "https://parhouse55.ru",
+              description: "Производство и монтаж бань и саун под ключ в Омске и Омской области",
+              publisher: {
+                "@type": "Organization",
+                name: "ИП Арзамасов Р.Б.",
+                taxID: "550726246970",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                { "@type": "Question", name: "Сколько стоит баня под ключ?", acceptedAnswer: { "@type": "Answer", text: "Стоимость зависит от размеров и комплектации. Базовые модели начинаются от 320 000 ₽. Точную стоимость рассчитаем после консультации — это бесплатно." } },
+                { "@type": "Question", name: "Какой срок изготовления?", acceptedAnswer: { "@type": "Answer", text: "Стандартный срок производства — 2-4 недели в зависимости от сложности проекта. Монтаж на участке занимает 1-3 дня." } },
+                { "@type": "Question", name: "Какую древесину вы используете?", acceptedAnswer: { "@type": "Answer", text: "Работаем с термически модифицированной древесиной: лиственницу, липу и сосну. Также используем кедровый мини брус." } },
+                { "@type": "Question", name: "Есть ли доставка и монтаж?", acceptedAnswer: { "@type": "Answer", text: "Да, осуществляем доставку по Омску и Омской области. Монтаж выполняют наши специалисты с соблюдением всех технологических норм." } },
+                { "@type": "Question", name: "Какая гарантия на продукцию?", acceptedAnswer: { "@type": "Answer", text: "Предоставляем гарантию 1 год на все конструкции и инженерные системы. Также даём рекомендации по уходу." } },
+                { "@type": "Question", name: "Можно ли заказать индивидуальный проект?", acceptedAnswer: { "@type": "Answer", text: "Конечно! Разработаем 3D-проект с учётом всех ваших пожеланий и особенностей участка. Проектирование включено в стоимость." } },
+              ],
             }),
           }}
         />

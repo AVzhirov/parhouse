@@ -367,6 +367,38 @@ function SectionHeading({ label, title, visible, delay = 0 }: { label: string; t
   )
 }
 
+/* ───────────────────────── BREADCRUMBS ───────────────────────── */
+
+const PAGE_NAMES: Record<PageId, string> = {
+  home: 'Главная',
+  catalog: 'Каталог',
+  projects: 'Проекты',
+  about: 'О компании',
+  contacts: 'Контакты',
+  privacy: 'Политика конфиденциальности',
+}
+
+function Breadcrumbs({ pageId }: { pageId: PageId }) {
+  if (pageId === 'home') return null
+  return (
+    <nav aria-label="Хлебные крошки" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-4 pb-2">
+      <ol className="flex items-center gap-2 text-sm text-[#8090A0]" itemScope itemType="https://schema.org/BreadcrumbList">
+        <li className="flex items-center gap-2" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+          <a href="/" itemProp="item" className="hover:text-[#C68E4E] transition-colors">
+            <span itemProp="name">Главная</span>
+          </a>
+          <meta itemProp="position" content="1" />
+          <ChevronRight className="w-3.5 h-3.5 text-[#505860]" />
+        </li>
+        <li className="flex items-center gap-2" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+          <span itemProp="name" className="text-[#C68E4E]">{PAGE_NAMES[pageId]}</span>
+          <meta itemProp="position" content="2" />
+        </li>
+      </ol>
+    </nav>
+  )
+}
+
 /* ───────────────────────── HEADER ───────────────────────── */
 
 function Header({ currentPage, onNavigate }: { currentPage: PageId; onNavigate: (page: PageId) => void }) {
@@ -1495,6 +1527,8 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
           <img
             src={item.image}
             alt={item.name}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
         </div>
@@ -1550,9 +1584,9 @@ function CatalogDetailModal({ item, onClose, onOpenProject }: { item: typeof CAT
                 {getTypeLabelLive(item.type)}
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-[0.03em] uppercase text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-[0.03em] uppercase text-white mb-4">
               {item.name}
-            </h1>
+            </h2>
             <p className="text-[#8090A0] text-sm mb-6">{item.size}</p>
             <div className="w-16 h-[2px] bg-[#C68E4E] mb-6" />
             <p className="text-[#B0B8C0] leading-relaxed text-base lg:text-lg mb-8">
@@ -1827,9 +1861,9 @@ function ProjectDetailPage({ project, onClose }: { project: typeof PROJECTS[0]; 
         <div className="mt-10 lg:mt-14 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left: description */}
           <div className="lg:col-span-2">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.03em] uppercase text-white mb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-[0.03em] uppercase text-white mb-6">
               {project.title}
-            </h1>
+            </h2>
             <div className="w-16 h-[2px] bg-[#C68E4E] mb-6" />
             <p className="text-[#B0B8C0] leading-relaxed text-base lg:text-lg">
               {project.description}
@@ -2403,6 +2437,8 @@ function Footer({ onNavigate }: { onNavigate: (page: PageId) => void }) {
               <img
                 src="/logo.webp"
                 alt="ПАР ХАУС"
+                loading="lazy"
+                decoding="async"
                 className="h-24 w-auto object-contain opacity-90"
               />
             </div>
@@ -2686,6 +2722,7 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
+              <Breadcrumbs pageId="catalog" />
               <CatalogPage onNavigate={handleNavigate} onOpenProject={(slug) => { setOpenProjectSlug(slug); handleNavigate('projects') }} />
             </motion.div>
           )}
@@ -2699,6 +2736,7 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
+              <Breadcrumbs pageId="projects" />
               <ProjectsPage initialProjectSlug={openProjectSlug} onProjectOpened={() => setOpenProjectSlug(null)} />
             </motion.div>
           )}
@@ -2712,6 +2750,7 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
+              <Breadcrumbs pageId="about" />
               <AboutPage />
             </motion.div>
           )}
@@ -2725,6 +2764,7 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
+              <Breadcrumbs pageId="contacts" />
               <ContactsPage onNavigate={handleNavigate} />
             </motion.div>
           )}
@@ -2738,6 +2778,7 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
+              <Breadcrumbs pageId="privacy" />
               <PrivacyPage onNavigate={handleNavigate} />
             </motion.div>
           )}

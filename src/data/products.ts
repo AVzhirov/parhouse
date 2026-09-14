@@ -146,7 +146,7 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     id: 8,
     name: 'Каркасная баня 2,5×4',
     type: 'karkas-banya',
-    price: 'от 350 000 ₽',
+    price: 'от 450 000 ₽',
     size: '2,5×4 м',
     image: '/projects/karkasnaya-banya-25-4/main.webp',
     description: 'Каркасная баня с размерами 2,5 на 4 метра. Продуманная внутренняя планировка с парной и зоной отдыха.',
@@ -294,7 +294,7 @@ export const PROJECTS: Project[] = [
     description: 'Каркасная баня 2,5×4 под ключ.',
     image: '/projects/karkasnaya-banya-25-4/main.webp',
     year: 'n',
-    price: 'от 350 000 ₽',
+    price: 'от 450 000 ₽',
     gallery: [
       '/projects/karkasnaya-banya-25-4/gallery-1.webp',
       '/projects/karkasnaya-banya-25-4/gallery-2.webp',

@@ -23,8 +23,11 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
   # Permissions Policy — блокируем камеру, микрофон, геолокацию
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
-  # CSP — только свои скрипты + Яндекс.Метрика
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://mc.yandex.ru; connect-src 'self' https://vk.com https://mc.yandex.ru; frame-src https://yandex.ru/map-widget/ https://vk.com; worker-src 'self' blob:"
+  # CSP — только свои скрипты + Яндекс.Метрика + VK
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://mc.yandex.ru; connect-src 'self' https://vk.ru https://vk.com https://mc.yandex.ru; frame-src https://yandex.ru/map-widget/ https://vk.ru https://vk.com; worker-src 'self' blob:"
+  # Cross-Origin изоляция
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set Cross-Origin-Resource-Policy "same-origin"
 
   # ── Cache Control (статика на 1 год) ──
   <FilesMatch "\.(webp|jpg|jpeg|png|svg|ico|woff2|woff|ttf|eot|js|css)$">

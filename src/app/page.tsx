@@ -115,31 +115,7 @@ function injectJsonLd() {
   // Remove previously injected JSON-LD to avoid duplicates on re-renders
   document.head.querySelectorAll(`script[${JSONLD_ATTR}]`).forEach(el => el.remove())
 
-  // 1) LocalBusiness
-  const localBusiness: Record<string, unknown> = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    name: 'ПАР ХАУС',
-    description: 'Производство и монтаж бань и саун под ключ в Омске и Омской области',
-    url: 'https://parhouse55.ru',
-    telephone: '+79048220007',
-    email: 'parhouse_55@mail.ru',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Омск',
-      addressRegion: 'Омская область',
-      addressCountry: 'RU',
-    },
-    priceRange: 'от 125 000 ₽',
-  }
-
-  const lbScript = document.createElement('script')
-  lbScript.type = 'application/ld+json'
-  lbScript.setAttribute(JSONLD_ATTR, 'localbusiness')
-  lbScript.textContent = JSON.stringify(localBusiness)
-  document.head.appendChild(lbScript)
-
-  // 2) ItemList with Products
+  // ItemList with Products (LocalBusiness already in layout.tsx)
   const baseUrl = 'https://parhouse55.ru'
   const productList = liveCatalog.map((item, idx) => ({
     '@type': 'ListItem',
@@ -1463,7 +1439,7 @@ function VkVideoPlayer({ url }: { url: string }) {
       height="100%"
       allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
       frameBorder="0"
-      sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+      sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
       referrerPolicy="no-referrer-when-downgrade"
       className="absolute inset-0 w-full h-full"
       allowFullScreen
@@ -2324,7 +2300,7 @@ function ContactsPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
                   height="100%"
                   frameBorder="0"
                   title="Яндекс Карта — ПАР ХАУС"
-                  sandbox="allow-scripts allow-same-origin"
+                  sandbox="allow-scripts"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="grayscale hover:grayscale-0 transition-all duration-500"
                 />
@@ -2367,6 +2343,7 @@ function CookieBanner({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
   const handleAccept = useCallback(() => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted')
+    document.cookie = 'parhouse_cookie_consent=accepted; path=/; max-age=31536000; SameSite=Lax; Secure'
     window.__cookieConsent = 'accepted'
     setVisible(false)
     if (typeof window.__loadTrackers === 'function') {
@@ -2376,6 +2353,7 @@ function CookieBanner({ onNavigate }: { onNavigate: (page: PageId) => void }) {
 
   const handleReject = useCallback(() => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'rejected')
+    document.cookie = 'parhouse_cookie_consent=rejected; path=/; max-age=31536000; SameSite=Lax; Secure'
     window.__cookieConsent = 'rejected'
     setVisible(false)
   }, [])

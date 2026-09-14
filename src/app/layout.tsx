@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -8,11 +8,6 @@ const geistSans = Geist({
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://parhouse55.ru'),
@@ -67,11 +62,6 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
         <meta name="HandheldFriendly" content="true" />
         <meta name="MobileOptimized" content="width" />
-        <meta httpEquiv="X-Frame-Options" content="SAMEORIGIN" />
-        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-        <meta name="referrer" content="strict-origin-when-cross-origin" />
-        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://mc.yandex.ru; connect-src 'self' https://vk.com https://mc.yandex.ru; frame-src https://yandex.ru/map-widget/ https://vk.com; worker-src 'self' blob:" />
-        <style dangerouslySetInnerHTML={{ __html: `html { scroll-behavior: smooth; }` }} />
         <link rel="manifest" href="/manifest.json" />
         <link rel="preload" as="image" href="/logo.webp" type="image/webp" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -186,7 +176,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} antialiased`}
         suppressHydrationWarning
       >
         {/* Inline preloader - visible before React hydrates */}
@@ -330,7 +320,11 @@ export default function RootLayout({
                 if (localStorage.getItem("parhouse_cookie_consent") === "accepted") {
                   loadMetrika(44147844);
                 }
-                window.__loadTrackers = function() { loadMetrika(44147844); };
+                window.__loadTrackers = function() {
+                  if (localStorage.getItem("parhouse_cookie_consent") === "accepted") {
+                    loadMetrika(44147844);
+                  }
+                };
               });
             `,
           }}

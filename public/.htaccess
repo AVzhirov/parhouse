@@ -1,31 +1,43 @@
-# === Security Headers ===
+# ═══════════════════════════════════════════════════════
+# ПАР ХАУС — .htaccess для Beget (Apache)
+# ═══════════════════════════════════════════════════════
+
+# ── WWW → non-WWW 301 редирект ──
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.parhouse55\.ru$ [NC]
+RewriteRule ^(.*)$ https://parhouse55.ru/$1 [R=301,L]
+
+# ── HTTP → HTTPS 301 редирект ──
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# ── Security Headers ──
 <IfModule mod_headers.c>
-  Header set X-Frame-Options "SAMEORIGIN"
-  Header set X-Content-Type-Options "nosniff"
-  Header set X-XSS-Protection "1; mode=block"
-  Header set Referrer-Policy "strict-origin-when-cross-origin"
-  Header set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
-  Header set X-Permitted-Cross-Domain-Policies "none"
-  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # Защита от clickjacking
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Запрет MIME-type sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  # Referrer policy
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # HSTS — заставляет браузер всегда использовать HTTPS (1 год)
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  # Permissions Policy — блокируем камеру, микрофон, геолокацию
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  # CSP — только свои скрипты + Яндекс.Метрика
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://mc.yandex.ru; connect-src 'self' https://vk.com https://mc.yandex.ru; frame-src https://yandex.ru/map-widget/ https://vk.com; worker-src 'self' blob:"
+
+  # ── Cache Control (статика на 1 год) ──
+  <FilesMatch "\.(webp|jpg|jpeg|png|svg|ico|woff2|woff|ttf|eot|js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # HTML — не кешировать (чтобы обновления сразу были видны)
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
 </IfModule>
 
-# === Caching ===
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType text/html "access plus 1 hour"
-  ExpiresByType text/css "access plus 1 year"
-  ExpiresByType application/javascript "access plus 1 year"
-  ExpiresByType application/x-javascript "access plus 1 year"
-  ExpiresByType image/png "access plus 1 year"
-  ExpiresByType image/jpeg "access plus 1 year"
-  ExpiresByType image/svg+xml "access plus 1 year"
-  ExpiresByType image/webp "access plus 1 year"
-  ExpiresByType image/x-icon "access plus 1 year"
-  ExpiresByType font/woff2 "access plus 1 year"
-  ExpiresByType font/woff "access plus 1 year"
-</IfModule>
-
-# === Gzip Compression ===
+# ── Сжатие (gzip) ──
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/x-javascript application/json image/svg+xml
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
 </IfModule>

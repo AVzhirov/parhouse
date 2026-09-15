@@ -3,4 +3,3 @@ Allow: /
 Disallow: /api/
 
 Sitemap: https://parhouse55.ru/sitemap.xml
-Host: https://parhouse55.ru

@@ -1340,6 +1340,7 @@ function CatalogPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
   const { ref, visible } = useOnScreen(0.1)
   const [activeFilter, setActiveFilter] = useState('Все')
   const [selectedItem, setSelectedItem] = useState<typeof CATALOG_ITEMS[0] | null>(null)
+  const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null)
 
   const filtered = activeFilter === 'Все'
     ? liveCatalog
@@ -1448,6 +1449,17 @@ function CatalogPage({ onNavigate }: { onNavigate: (page: PageId) => void }) {
           <CatalogDetailModal
             item={selectedItem}
             onClose={() => setSelectedItem(null)}
+            onShowProject={(project) => { setSelectedItem(null); setSelectedProject(project) }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Project Detail overlay (replaces separate Projects page) */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectDetailPage
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
           />
         )}
       </AnimatePresence>
@@ -1502,7 +1514,7 @@ function VkVideoPlayer({ url }: { url: string }) {
 
 /* ───────────────────────── CATALOG DETAIL MODAL ───────────────────────── */
 
-function CatalogDetailModal({ item, onClose }: { item: typeof CATALOG_ITEMS[0]; onClose: () => void }) {
+function CatalogDetailModal({ item, onClose, onShowProject }: { item: typeof CATALOG_ITEMS[0]; onClose: () => void; onShowProject: (project: typeof PROJECTS[0]) => void }) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const normalize = (s: string) => s.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '')
@@ -1655,6 +1667,15 @@ function CatalogDetailModal({ item, onClose }: { item: typeof CATALOG_ITEMS[0]; 
                   <Mail className="w-4 h-4" />
                   Написать на почту
                 </a>
+                {matchedProject && (
+                  <button
+                    onClick={() => { onClose(); onShowProject(matchedProject) }}
+                    className="flex items-center justify-center gap-2 w-full py-3 border border-[#8090A0]/30 hover:border-[#8090A0] hover:bg-[#8090A0]/10 text-[#8090A0] hover:text-white font-semibold tracking-[0.05em] uppercase text-sm rounded-sm transition-colors"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    Смотреть проект ({matchedProject.gallery.length} фото)
+                  </button>
+                )}
               </div>
             </div>
             <div className="glass-card rounded-lg p-6">
